@@ -21,7 +21,7 @@ namespace Skripte
             _canvas = GameObject.Find("Canvas");
             
             //Add object button
-            var addObjectButton = Instantiate(Resources.Load("Button"), _canvas.transform) as GameObject;
+            var addObjectButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (!(addObjectButton is null))
             {
                 addObjectButton.transform.position = new Vector3(Screen.width/20f, (Screen.height / 10) * 7);
@@ -31,7 +31,7 @@ namespace Skripte
             }
 
             //Add quit button
-            var quitButton = Instantiate(Resources.Load("Button"), _canvas.transform) as GameObject;
+            var quitButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (quitButton is null) return;
             quitButton.transform.position = new Vector3((Screen.width / 20) * 18, (Screen.height / 10) * 1);
             quitButton.GetComponentInChildren<Text>().text = "Quit";
@@ -51,7 +51,7 @@ namespace Skripte
             //Create button for every .prefab file
             foreach (var file in files)
             {
-                var button = Instantiate(Resources.Load("Button"), _canvas.transform) as GameObject;
+                var button = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
 
                 if (button is null) continue;
                 button.transform.position = new Vector3(Screen.width / 20 + x, (Screen.height / 10) * 7);
