@@ -1,4 +1,8 @@
-﻿using MMICoSimulation;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using MMICoSimulation;
 using MMICSharp.MMIStandard.Utils;
 using MMIStandard;
 using MMIUnity.TargetEngine;
@@ -249,14 +253,21 @@ public class TestAvatarBehavior : AvatarBehavior
         {
             this.CoSimulator.Abort();
         }
-
-
-
+        
+        //Spawn a left hand and set it's parent
+        if (GUI.Button(new Rect(950, 10, 180, 50), "Place 1 hand"))
+        {
+            GameObject go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
+            Renderer rend = go.GetComponent<Renderer>();
+            Vector3 max =  rend.bounds.max;
+            Vector3 min =  rend.bounds.min;
+            
+            GameObject leftHandPrefab = Resources.Load("LeftHand") as GameObject;
+            GameObject leftHand = Instantiate(leftHandPrefab, new Vector3((max.x + min.x) / 2, max.y, (max.z + min.z) / 2), Quaternion.identity) as GameObject;
+            leftHand.transform.SetParent(go.transform);
+        }
     }
-
-
-
-
+    
     /// <summary>
     /// Callback for the co-simulation event handler
     /// </summary>
@@ -266,6 +277,4 @@ public class TestAvatarBehavior : AvatarBehavior
     {
         Debug.Log(e.Reference + " " + e.Name + " " + e.Type);
     }
-
-
 }
