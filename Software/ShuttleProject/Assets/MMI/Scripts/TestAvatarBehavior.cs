@@ -12,7 +12,7 @@ using UnityEngine;
 
 public class TestAvatarBehavior : AvatarBehavior
 {
-
+    private GameObject go;
     private string carryID;
 
     protected override void GUIBehaviorInput()
@@ -255,16 +255,89 @@ public class TestAvatarBehavior : AvatarBehavior
         }
         
         //Spawn a left hand and set it's parent
-        if (GUI.Button(new Rect(950, 10, 180, 50), "Place 1 hand"))
+        if (GUI.Button(new Rect(950, 10, 180, 50), "Place hand (small object)"))
         {
-            GameObject go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
-            Renderer rend = go.GetComponent<Renderer>();
-            Vector3 max =  rend.bounds.max;
-            Vector3 min =  rend.bounds.min;
+            //Acces data from the SelectObject script and change the GameObject's color back to normal 
+            try
+            {
+                go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
+                GameObject.Find("Main Camera").GetComponent<SelectObject>().resetColor();
+            }
+            catch (Exception)
+            {
+                SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.threeSecond);
+            }
             
-            GameObject leftHandPrefab = Resources.Load("LeftHand") as GameObject;
-            GameObject leftHand = Instantiate(leftHandPrefab, new Vector3((max.x + min.x) / 2, max.y, (max.z + min.z) / 2), Quaternion.identity) as GameObject;
-            leftHand.transform.SetParent(go.transform);
+            if (go != null)
+            {
+                if (go.transform.childCount == 0)
+                {
+                    //Get max and min values of the selected GameObject
+                    Renderer rend = go.GetComponent<Renderer>();
+                    Vector3 max = rend.bounds.max;
+                    Vector3 min = rend.bounds.min;
+
+                    //Spawn and place the hand on top of the GameObject
+                    GameObject leftHandPrefab = Resources.Load("LeftHand") as GameObject;
+                    GameObject leftHand = Instantiate(leftHandPrefab,
+                        new Vector3((max.x + min.x) / 2, max.y + 0.02f, (max.z + min.z) / 2),
+                        Quaternion.identity) as GameObject;
+                    leftHand.transform.SetParent(go.transform);
+
+                    //Rotate the hand to the correct position
+                    leftHand.transform.Rotate(0, 270, -90);
+                }
+                else
+                {
+                    SSTools.ShowMessage("Hand/s already placed", SSTools.Position.bottom, SSTools.Time.threeSecond);
+                }
+            }
+        }
+        
+        //Spawn two hands and set their parent
+        if (GUI.Button(new Rect(950, 70, 180, 50), "Place hands (big object)"))
+        {
+            //Acces data from the SelectObject script and change the GameObject's color back to normal
+            try
+            {
+                go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
+                GameObject.Find("Main Camera").GetComponent<SelectObject>().resetColor();
+            }
+            catch (Exception)
+            {
+                SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.threeSecond);
+            }
+            
+            if (go != null)
+            {
+                if (go.transform.childCount == 0)
+                {
+                    //Get max and min values of the selected GameObject
+                    Renderer rend = go.GetComponent<Renderer>();
+                    Vector3 max = rend.bounds.max;
+                    Vector3 min = rend.bounds.min;
+
+                    //Spawn and place the hands on the sides of the GameObject
+                    GameObject leftHandPrefab = Resources.Load("LeftHand") as GameObject;
+                    GameObject leftHand = Instantiate(leftHandPrefab,
+                        new Vector3(min.x - 0.02f, (max.y + min.y) / 2, (max.z + min.z) / 2),
+                        Quaternion.identity) as GameObject;
+                    leftHand.transform.SetParent(go.transform);
+                    GameObject rightHandPrefab = Resources.Load("RightHand") as GameObject;
+                    GameObject rightHand = Instantiate(leftHandPrefab,
+                        new Vector3(max.x + 0.02f, (max.y + min.y) / 2, (max.z + min.z) / 2),
+                        Quaternion.identity) as GameObject;
+                    rightHand.transform.SetParent(go.transform);
+
+                    //Rotate the hand to the correct position
+                    leftHand.transform.Rotate(90, 270, -90);
+                    rightHand.transform.Rotate(90, 270, -90);
+                }
+                else
+                {
+                    SSTools.ShowMessage("Hand/s already placed", SSTools.Position.bottom, SSTools.Time.threeSecond);
+                }
+            }
         }
     }
     
