@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
 using MMICoSimulation;
 using MMICSharp.MMIStandard.Utils;
 using MMIStandard;
+using MMIUnity;
 using MMIUnity.TargetEngine;
 using MMIUnity.TargetEngine.Scene;
 using UnityEngine;
@@ -13,7 +15,11 @@ using UnityEngine;
 public class TestAvatarBehavior : AvatarBehavior
 {
     private GameObject go;
+    private Vector3 hitPoint;
     private string carryID;
+    private BoxCollider boxColliderLeftHand;
+    private BoxCollider boxColliderRightHand;
+    private ObjectBounds objectBounds;
 
     protected override void GUIBehaviorInput()
     {
@@ -254,13 +260,14 @@ public class TestAvatarBehavior : AvatarBehavior
             this.CoSimulator.Abort();
         }
         
-        //Spawn a left hand and set it's parent
-        if (GUI.Button(new Rect(950, 10, 180, 50), "Place hand (small object)"))
+        //Spawn a left hand at the clicked position and set its parent
+        if (GUI.Button(new Rect(950, 10, 180, 50), "Place LeftHand"))
         {
             //Acces data from the SelectObject script and change the GameObject's color back to normal 
             try
             {
                 go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
+                hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().getHitPoint();
                 GameObject.Find("Main Camera").GetComponent<SelectObject>().resetColor();
             }
             catch (Exception)
@@ -270,37 +277,54 @@ public class TestAvatarBehavior : AvatarBehavior
             
             if (go != null)
             {
-                if (go.transform.childCount == 0)
+                if (!hasLeftHand(go))
                 {
                     //Get max and min values of the selected GameObject
-                    Renderer rend = go.GetComponent<Renderer>();
-                    Vector3 max = rend.bounds.max;
-                    Vector3 min = rend.bounds.min;
+                    objectBounds = new ObjectBounds(go);
+                    Vector3 max = objectBounds.getMaxBounds();
+                    Vector3 min = objectBounds.getMinBounds();
 
                     //Spawn and place the hand on top of the GameObject
                     GameObject leftHandPrefab = Resources.Load("LeftHand") as GameObject;
-                    GameObject leftHand = Instantiate(leftHandPrefab,
+                    /*GameObject leftHand = Instantiate(leftHandPrefab,
                         new Vector3((max.x + min.x) / 2, max.y + 0.02f, (max.z + min.z) / 2),
+                        Quaternion.identity) as GameObject;*/
+                    GameObject leftHand = Instantiate(leftHandPrefab,
+                        new Vector3(hitPoint.x, hitPoint.y, hitPoint.z),
                         Quaternion.identity) as GameObject;
                     leftHand.transform.SetParent(go.transform);
+                    //Add a BoxCollider to the hand
+                    boxColliderLeftHand = leftHand.AddComponent<BoxCollider>();
+                    adjustBoxCollider(boxColliderLeftHand, 0);
+                    
+                    /*addRigidBody(leftHand);
+                    addRigidBody(go);
+                    Rigidbody rb = go.GetComponent<Rigidbody>();
+                    
+                    float strengthOfAttraction = 5.0f;
+                    
+                    Vector3 direction = go.transform.position - leftHand.transform.position;
+                    rb.AddForce(strengthOfAttraction * direction);*/
+
 
                     //Rotate the hand to the correct position
-                    leftHand.transform.Rotate(0, 270, -90);
+                    //leftHand.transform.Rotate(0, 270, -90);
                 }
                 else
                 {
-                    SSTools.ShowMessage("Hand/s already placed", SSTools.Position.bottom, SSTools.Time.threeSecond);
+                    SSTools.ShowMessage("LeftHand already placed", SSTools.Position.bottom, SSTools.Time.threeSecond);
                 }
             }
         }
         
-        //Spawn two hands and set their parent
-        if (GUI.Button(new Rect(950, 70, 180, 50), "Place hands (big object)"))
+        //Spawn a RightHand at the clicked position and set its parents
+        if (GUI.Button(new Rect(920, 70, 180, 50), "Place RightHand"))
         {
             //Acces data from the SelectObject script and change the GameObject's color back to normal
             try
             {
                 go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
+                hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().getHitPoint();
                 GameObject.Find("Main Camera").GetComponent<SelectObject>().resetColor();
             }
             catch (Exception)
@@ -310,35 +334,86 @@ public class TestAvatarBehavior : AvatarBehavior
             
             if (go != null)
             {
-                if (go.transform.childCount == 0)
+                if (!hasRightHand(go))
                 {
                     //Get max and min values of the selected GameObject
-                    Renderer rend = go.GetComponent<Renderer>();
-                    Vector3 max = rend.bounds.max;
-                    Vector3 min = rend.bounds.min;
+                    objectBounds = new ObjectBounds(go);
+                    Vector3 max = objectBounds.getMaxBounds();
+                    Vector3 min = objectBounds.getMinBounds();
 
                     //Spawn and place the hands on the sides of the GameObject
-                    GameObject leftHandPrefab = Resources.Load("LeftHand") as GameObject;
+                    /*GameObject leftHandPrefab = Resources.Load("LeftHand") as GameObject;
                     GameObject leftHand = Instantiate(leftHandPrefab,
                         new Vector3(min.x - 0.02f, (max.y + min.y) / 2, (max.z + min.z) / 2),
                         Quaternion.identity) as GameObject;
                     leftHand.transform.SetParent(go.transform);
+                    //Add a BoxCollider to the hand
+                    boxColliderLeftHand = leftHand.AddComponent<BoxCollider>();
+                    adjustBoxCollider(boxColliderLeftHand, 0);*/
+                    
                     GameObject rightHandPrefab = Resources.Load("RightHand") as GameObject;
-                    GameObject rightHand = Instantiate(leftHandPrefab,
-                        new Vector3(max.x + 0.02f, (max.y + min.y) / 2, (max.z + min.z) / 2),
+                    GameObject rightHand = Instantiate(rightHandPrefab,
+                        new Vector3(hitPoint.x, hitPoint.y, hitPoint.z),
                         Quaternion.identity) as GameObject;
                     rightHand.transform.SetParent(go.transform);
-
+                    //Add a BoxCollider to the hand
+                    boxColliderRightHand = rightHand.AddComponent<BoxCollider>();
+                    adjustBoxCollider(boxColliderRightHand, 1);
+                    
                     //Rotate the hand to the correct position
-                    leftHand.transform.Rotate(90, 270, -90);
-                    rightHand.transform.Rotate(90, 270, -90);
+                    //leftHand.transform.Rotate(90, 270, -90);
+                    //rightHand.transform.Rotate(90, 270, -90);
                 }
                 else
                 {
-                    SSTools.ShowMessage("Hand/s already placed", SSTools.Position.bottom, SSTools.Time.threeSecond);
+                    SSTools.ShowMessage("RightHand already placed", SSTools.Position.bottom, SSTools.Time.threeSecond);
                 }
             }
         }
+    }
+
+    //Give an object a RigidBody
+    private void addRigidBody(GameObject obj)
+    {
+        Rigidbody rigidbody = obj.AddComponent<Rigidbody>();
+    }
+    
+    //Position the BoxCollider of the hand
+    //If position = 0 : LeftHand
+    //If position = 1 : RightHand
+    private void adjustBoxCollider(BoxCollider boxCollider, int position)
+    {
+        switch (position)
+        {
+            case 0:
+                boxCollider.size = new Vector3(0.04f, 0.2f, 0.15f);
+                boxCollider.center = new Vector3(-0.008f, 0.1f, -0.025f);
+                break;
+            case 1:
+                boxCollider.size = new Vector3(0.04f, 0.2f, 0.15f);
+                boxCollider.center = new Vector3(-0.008f, 0.1f, -0.025f);
+                break;
+        }
+    }
+
+    //Check if object has a LeftHand
+    private Boolean hasLeftHand(GameObject obj)
+    {
+        if (obj.transform.GetChildRecursiveByName("LeftHand(Clone)"))
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    //Check if object has a RightHand
+    private Boolean hasRightHand(GameObject obj)
+    {
+        if (obj.transform.GetChildRecursiveByName("RightHand(Clone)"))
+        {
+            return true;
+        }
+        return false;
     }
     
     /// <summary>
