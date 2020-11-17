@@ -107,6 +107,9 @@ namespace Scripts
 
         public void RemoveMenu()
         {
+            GameObject scene = GameObject.Find("Scene");
+            scene.GetComponent<ManageObject>().addPrefabPressed = false;
+            scene.GetComponent<ManageObject>().addObjectPressed = false;
             Destroy(_addObjectButton);
             Destroy(_removeButton);
             ClearButtons();
