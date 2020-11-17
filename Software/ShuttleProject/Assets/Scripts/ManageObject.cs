@@ -1,27 +1,21 @@
-﻿using System;
-using MMIUnity.TargetEngine.Scene;
+﻿using MMIUnity.TargetEngine.Scene;
 using UnityEngine;
 
-namespace Skripte
+namespace Scripts
 {
-    public class SpawnObject : MonoBehaviour
+    public class ManageObject : MonoBehaviour
     {
         [HideInInspector]
         public bool addObjectPressed;
         [HideInInspector]
+        public bool addPrefabPressed;
+        [HideInInspector]
         public string selectedPrefab;
-        
-        private GameObject _scene;
 
-        public void Start()
-        {
-            _scene = GameObject.Find("Scene");
-        }
-        
         public void Update()
         {
             
-            if (Input.GetButtonDown("Fire1") && addObjectPressed)
+            if (Input.GetButtonDown("Fire1") && addPrefabPressed)
                 // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
                 AddObject(Input.mousePosition);
         }
@@ -58,13 +52,15 @@ namespace Skripte
                 clickedObject.AddComponent<MMISceneObject>();
                 
                 //Set scene as parent
-                clickedObject.transform.parent = _scene.transform;
+                clickedObject.transform.parent = transform;
             }
-            addObjectPressed = false;
+            addPrefabPressed = false;
             // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
-            _scene.GetComponent<ButtonManager>().ClearButtons();
+            GetComponent<AddObjectMenu>().ClearButtons();
 
         }
+        
+        
         /*
          * Get next collider hit
          */

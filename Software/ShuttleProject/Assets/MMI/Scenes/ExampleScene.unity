@@ -2455,7 +2455,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67016249b57eec249bab10d4297bb718, type: 3}
   m_Name: 
@@ -2622,6 +2622,7 @@ GameObject:
   - component: {fileID: 573865598}
   - component: {fileID: 573865597}
   - component: {fileID: 573865596}
+  - component: {fileID: 573865600}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2708,6 +2709,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &573865600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 573865595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32cc906eb9bb491a9e1648deddd9de77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &582878394
 GameObject:
   m_ObjectHideFlags: 0
@@ -5661,11 +5674,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1635182282}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71098add44227e045a1d2063bec90bcd, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b89c7b498241e1901d190ee43b16ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  addObjectPressed: 0
-  selectedPrefab: 
 --- !u!114 &1635182285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5675,9 +5686,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1635182282}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2135003868239ce45a227418eca53708, type: 3}
+  m_Script: {fileID: 11500000, guid: 71098add44227e045a1d2063bec90bcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  addObjectPressed: 0
+  addPrefabPressed: 0
+  selectedPrefab: 
 --- !u!4 &1649885968 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 948265044574663426, guid: 9696c76540f925f488848d37521b7f5e,
@@ -7097,7 +7111,7 @@ Transform:
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &948265043918944285
 PrefabInstance:

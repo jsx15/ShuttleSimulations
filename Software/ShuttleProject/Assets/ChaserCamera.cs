@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Scripts;
 using UnityEngine;
 
 public class ChaserCamera : MonoBehaviour
@@ -18,6 +19,7 @@ public class ChaserCamera : MonoBehaviour
     {
         targetObject = GameObject.Find("Avatar").transform;
         initalOffset = new Vector3(0,2,-2) - targetObject.position;
+        MenuManager.ShowMainMenu();
     }
 
     // Update is called once per frame

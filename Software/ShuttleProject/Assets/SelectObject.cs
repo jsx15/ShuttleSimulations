@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using Scripts;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SelectObject : MonoBehaviour
 {
     //object
     private GameObject go;
+    
+    //Button manager
+    private AddObjectMenu _addObjectMenu;
     
     //selector variables
     private RaycastHit hit;
@@ -30,6 +31,12 @@ public class SelectObject : MonoBehaviour
     private float y;
     private float z;
     private Vector3 pos;
+    
+    
+    private void Start()
+    {
+        _addObjectMenu = GameObject.Find("Scene").GetComponent<AddObjectMenu>();
+    }
     
     // Update is called once per frame
     void Update()
@@ -59,6 +66,8 @@ public class SelectObject : MonoBehaviour
 
                     //set Offset for Drag
                     setOffset();
+                    
+                    _addObjectMenu.ObjectSelected(go);
                 }
             }
             else
@@ -68,6 +77,7 @@ public class SelectObject : MonoBehaviour
                 {
                     mRenderer.material.color = originalColor;
                     go = null;
+                    _addObjectMenu.ObjectSelected(go);
                 }  
             }
         }
