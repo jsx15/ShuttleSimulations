@@ -129,7 +129,7 @@ namespace Scripts
             // Add remove object button
             _removeButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (_removeButton is null) return;
-            _removeButton.transform.position = new Vector3((Screen.width / 20f), (Screen.height / 10) * 7);
+            _removeButton.transform.position = new Vector3((Screen.width / 20f), (Screen.height / 10) * 6);
             _removeButton.GetComponentInChildren<Text>().text = "Remove";
             _removeButton.GetComponent<Button>().onClick.AddListener(() =>
                 {
