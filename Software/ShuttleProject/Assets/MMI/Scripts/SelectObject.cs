@@ -28,6 +28,8 @@ public class SelectObject : MonoBehaviour
     private ObjectBounds objectBounds;
     private DragAndRotate dragAndRotate;
 
+    private HandMovement handMovement;
+    
     // Update is called once per frame
     void Update()
     {
@@ -67,6 +69,7 @@ public class SelectObject : MonoBehaviour
                     mRenderer.material.color = selectColor;
 
                     dragAndRotate = new DragAndRotate(go, lockY);
+                    if(isHand(go)) handMovement = new HandMovement(go);
                 }
             }
             else
@@ -86,9 +89,19 @@ public class SelectObject : MonoBehaviour
         }
         try
         {
-            //handle Rotate OR Drag
-            if (!Input.GetKey(KeyCode.M)) dragAndRotate.handleRotate();
-            if (!Input.GetKey(KeyCode.X) && !Input.GetKey(KeyCode.Y) && !Input.GetKey(KeyCode.Z)) dragAndRotate.handleDrag();
+            if (isHand(go))
+            {
+                handMovement.castRayFromObject();
+            }
+            else
+            {
+                //handle Rotate OR Drag
+                if (!Input.GetKey(KeyCode.M)) dragAndRotate.handleRotate();
+                if (!Input.GetKey(KeyCode.X) && !Input.GetKey(KeyCode.Y) && !Input.GetKey(KeyCode.Z)) dragAndRotate.handleDrag();
+            }
+
+            
+
         }
         catch (Exception)
         {

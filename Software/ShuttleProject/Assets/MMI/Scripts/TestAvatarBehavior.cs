@@ -20,6 +20,7 @@ public class TestAvatarBehavior : AvatarBehavior
     private BoxCollider boxColliderLeftHand;
     private BoxCollider boxColliderRightHand;
     private ObjectBounds objectBounds;
+    private float OffSetValue = 0.01f; 
 
     protected override void GUIBehaviorInput()
     {
@@ -283,32 +284,54 @@ public class TestAvatarBehavior : AvatarBehavior
                     objectBounds = new ObjectBounds(go);
                     Vector3 max = objectBounds.getMaxBounds();
                     Vector3 min = objectBounds.getMinBounds();
+                    
+                    Vector3 offsetLeft = new Vector3();
+                    Vector3 rotationLeft = new Vector3();
+                   
+                    
+                    //determine Offset vector and needed rotation in order to let the palm face the object
+                    if (hitPoint.x == max.x)
+                    {
+                        offsetLeft = new Vector3(OffSetValue,0,0);
+                        rotationLeft = new Vector3(0,180,0);
+                    }
+                    else if (hitPoint.x == min.x)
+                    {
+                        offsetLeft = new Vector3(-OffSetValue,0,0);
+                        rotationLeft = new Vector3(0,0,0);
+                    }
+                    else if (hitPoint.y == max.y)
+                    {
+                        offsetLeft = new Vector3(0,OffSetValue,0);
+                        rotationLeft = new Vector3(0,0,-90);
+                    } 
+                    else if (hitPoint.y == min.y)
+                    {
+                        offsetLeft = new Vector3(0,-OffSetValue,0);
+                        rotationLeft = new Vector3(0,0,90);
+                    } 
+                    else if (hitPoint.z == max.z)
+                    {
+                        offsetLeft = new Vector3(0,0,OffSetValue);
+                        rotationLeft = new Vector3(0,90,0);
+                    }
+                    else
+                    {
+                        offsetLeft = new Vector3(0,0,-OffSetValue);
+                        rotationLeft = new Vector3(0,-90,0);
+                    }
+                    
 
-                    //Spawn and place the hand on top of the GameObject
+                    //load leftHandPrefab and instantiate it with the predetermined parameters
                     GameObject leftHandPrefab = Resources.Load("LeftHand") as GameObject;
-                    /*GameObject leftHand = Instantiate(leftHandPrefab,
-                        new Vector3((max.x + min.x) / 2, max.y + 0.02f, (max.z + min.z) / 2),
-                        Quaternion.identity) as GameObject;*/
                     GameObject leftHand = Instantiate(leftHandPrefab,
-                        new Vector3(hitPoint.x, hitPoint.y, hitPoint.z),
-                        Quaternion.identity) as GameObject;
+                        new Vector3(hitPoint.x, hitPoint.y, hitPoint.z) + offsetLeft,
+                        Quaternion.Euler(rotationLeft)) as GameObject;
                     leftHand.transform.SetParent(go.transform);
+                    
                     //Add a BoxCollider to the hand
                     boxColliderLeftHand = leftHand.AddComponent<BoxCollider>();
                     adjustBoxCollider(boxColliderLeftHand, 0);
-                    
-                    /*addRigidBody(leftHand);
-                    addRigidBody(go);
-                    Rigidbody rb = go.GetComponent<Rigidbody>();
-                    
-                    float strengthOfAttraction = 5.0f;
-                    
-                    Vector3 direction = go.transform.position - leftHand.transform.position;
-                    rb.AddForce(strengthOfAttraction * direction);*/
-
-
-                    //Rotate the hand to the correct position
-                    //leftHand.transform.Rotate(0, 270, -90);
                 }
                 else
                 {
@@ -340,29 +363,51 @@ public class TestAvatarBehavior : AvatarBehavior
                     objectBounds = new ObjectBounds(go);
                     Vector3 max = objectBounds.getMaxBounds();
                     Vector3 min = objectBounds.getMinBounds();
-
-                    //Spawn and place the hands on the sides of the GameObject
-                    /*GameObject leftHandPrefab = Resources.Load("LeftHand") as GameObject;
-                    GameObject leftHand = Instantiate(leftHandPrefab,
-                        new Vector3(min.x - 0.02f, (max.y + min.y) / 2, (max.z + min.z) / 2),
-                        Quaternion.identity) as GameObject;
-                    leftHand.transform.SetParent(go.transform);
-                    //Add a BoxCollider to the hand
-                    boxColliderLeftHand = leftHand.AddComponent<BoxCollider>();
-                    adjustBoxCollider(boxColliderLeftHand, 0);*/
+                   
+                    Vector3 offsetRight = new Vector3();
+                    Vector3 rotationRight = new Vector3();
                     
+                    //determine Offset vector and needed rotation in order to let the palm face the object
+                    if (hitPoint.x == max.x)
+                    {
+                        offsetRight = new Vector3(OffSetValue,0,0);
+                        rotationRight = new Vector3(0,180,0);
+                    }
+                    else if (hitPoint.x == min.x)
+                    {
+                        offsetRight = new Vector3(-OffSetValue,0,0);
+                        rotationRight = new Vector3(0,0,0);
+                    }
+                    else if (hitPoint.y == max.y)
+                    {
+                        offsetRight = new Vector3(0,OffSetValue,0);
+                        rotationRight = new Vector3(0,0,-90);
+                    } 
+                    else if (hitPoint.y == min.y)
+                    {
+                        offsetRight = new Vector3(0,-OffSetValue,0);
+                        rotationRight = new Vector3(0,0,90);
+                    } 
+                    else if (hitPoint.z == max.z)
+                    {
+                        offsetRight = new Vector3(0,0,OffSetValue);
+                        rotationRight = new Vector3(0,90,0);
+                    }
+                    else
+                    {
+                        offsetRight = new Vector3(0,0,-OffSetValue);
+                        rotationRight = new Vector3(0,-90,0);
+                    }
+                    //load rightHandPrefab and instantiate it with the predetermined parameters
                     GameObject rightHandPrefab = Resources.Load("RightHand") as GameObject;
                     GameObject rightHand = Instantiate(rightHandPrefab,
-                        new Vector3(hitPoint.x, hitPoint.y, hitPoint.z),
-                        Quaternion.identity) as GameObject;
+                        new Vector3(hitPoint.x, hitPoint.y, hitPoint.z) + offsetRight,
+                        Quaternion.Euler(rotationRight)) as GameObject;
                     rightHand.transform.SetParent(go.transform);
+                    
                     //Add a BoxCollider to the hand
                     boxColliderRightHand = rightHand.AddComponent<BoxCollider>();
                     adjustBoxCollider(boxColliderRightHand, 1);
-                    
-                    //Rotate the hand to the correct position
-                    //leftHand.transform.Rotate(90, 270, -90);
-                    //rightHand.transform.Rotate(90, 270, -90);
                 }
                 else
                 {
@@ -415,6 +460,7 @@ public class TestAvatarBehavior : AvatarBehavior
         }
         return false;
     }
+    
     
     /// <summary>
     /// Callback for the co-simulation event handler
