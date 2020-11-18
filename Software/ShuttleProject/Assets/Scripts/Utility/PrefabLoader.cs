@@ -2,7 +2,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace Skripte
+namespace Scripts
 {
     public class PrefabLoader
     {
