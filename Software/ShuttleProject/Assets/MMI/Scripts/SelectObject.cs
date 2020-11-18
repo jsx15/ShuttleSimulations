@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
 using MMIUnity;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,7 +27,7 @@ public class SelectObject : MonoBehaviour
     //Class objects
     private ObjectBounds objectBounds;
     private DragAndRotate dragAndRotate;
-    
+
     // Update is called once per frame
     void Update()
     {
@@ -56,7 +57,7 @@ public class SelectObject : MonoBehaviour
                     //Mark the selected object as red
                     mRenderer = go.GetComponent<MeshRenderer>();
                     originalColor = mRenderer.material.color;
-                    
+
                     if (isHand(go))
                     {
                         child = go.transform.GetChild(0);
@@ -64,7 +65,7 @@ public class SelectObject : MonoBehaviour
                         mRendererChild.material.color = selectColor;
                     }
                     mRenderer.material.color = selectColor;
-                    
+
                     dragAndRotate = new DragAndRotate(go, lockY);
                 }
             }
@@ -121,4 +122,5 @@ public class SelectObject : MonoBehaviour
 
     //Return the selected point
     public Vector3 getHitPoint() => hitPoint;
+    
 }

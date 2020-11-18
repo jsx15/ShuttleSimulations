@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor.Playables;
+using UnityEngine;
 
 namespace DefaultNamespace
 {
@@ -12,7 +13,7 @@ namespace DefaultNamespace
         private float mZCoord;
         private bool lockY;
         private float yPos;
-    
+
         //rotate variables
         private bool gravity;
         private bool collider;
@@ -21,28 +22,36 @@ namespace DefaultNamespace
         private float y;
         private float z;
         private Vector3 pos;
+        
+        //classes
+        private ShowAxis showAxis;
+
 
         //objectBounds object to get max and min values of x,y & z
         private ObjectBounds objectBounds;
-        
+
         public DragAndRotate(GameObject go, bool lockY)
         {
             this.go = go;
             this.lockY = lockY;
-            
+
             //safe settings
             safeGravityAndCollider();
 
             //set Offset for Drag
             setOffset();
+            
+            showAxis = new ShowAxis(go);
         }
-        
+
         //-------------------rotate-------------------
 
         public void handleRotate()
         {
             if (Input.GetKey(KeyCode.X))
             {
+
+                showAxis.showX();
                 //disable gravity and collider
                 disableGravityAndCollider();
 
@@ -50,11 +59,12 @@ namespace DefaultNamespace
                 x = speed * Input.GetAxis("Mouse X");
 
                 //rotate object
-                go.transform.Rotate(x, 0, 0);
+                go.transform.Rotate(x, 0, 0, Space.World);
             }
 
             else if (Input.GetKey(KeyCode.Y))
             {
+                showAxis.showY();
                 //disable gravity and collider
                 disableGravityAndCollider();
 
@@ -62,11 +72,12 @@ namespace DefaultNamespace
                 y = -1 * speed * Input.GetAxis("Mouse X");
 
                 //rotate object
-                go.transform.Rotate(0, y, 0);
+                go.transform.Rotate(0, y, 0, Space.World);
             }
 
             else if (Input.GetKey(KeyCode.Z))
             {
+                showAxis.showZ();
                 //disable gravity and collider
                 disableGravityAndCollider();
 
@@ -74,11 +85,14 @@ namespace DefaultNamespace
                 z = speed * Input.GetAxis("Mouse X");
 
                 //rotate object
-                go.transform.Rotate(0, 0, z);
+                go.transform.Rotate(0, 0, z, Space.World);
             }
             else
             {
                 restoreGravityAndCollider();
+                showAxis.hideX();
+                showAxis.hideY();
+                showAxis.hideZ();
             }
         }
 
@@ -120,7 +134,7 @@ namespace DefaultNamespace
                         GetMouseAsWorldPoint().z + mOffset.z);
                 }
                 //change height with mouse
-                else 
+                else
                 {
                     go.transform.position = GetMouseAsWorldPoint() + mOffset;
                     if (go.transform.position.y < 0)
