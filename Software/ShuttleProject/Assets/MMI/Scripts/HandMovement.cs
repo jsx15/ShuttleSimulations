@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using DefaultNamespace;
 using MMIStandard;
 using MMIUnity.TargetEngine.Scene;
 using UnityEngine;

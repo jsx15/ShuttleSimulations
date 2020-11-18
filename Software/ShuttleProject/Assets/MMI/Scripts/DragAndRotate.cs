@@ -1,8 +1,6 @@
 ﻿using UnityEditor.Playables;
 using UnityEngine;
 
-namespace DefaultNamespace
-{
     public class DragAndRotate
     {
         //The GameObject
@@ -190,4 +188,3 @@ namespace DefaultNamespace
             }
         }
     }
-}
