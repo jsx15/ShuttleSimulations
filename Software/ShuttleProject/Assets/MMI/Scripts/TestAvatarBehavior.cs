@@ -20,7 +20,7 @@ public class TestAvatarBehavior : AvatarBehavior
     private BoxCollider boxColliderLeftHand;
     private BoxCollider boxColliderRightHand;
     private ObjectBounds objectBounds;
-    private float OffSetValue = 0.01f; 
+    private float OffSetValue = 0.005f; 
 
     protected override void GUIBehaviorInput()
     {
