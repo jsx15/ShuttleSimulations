@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace UI.MenuMB
 {
-    public class PlaceHandsMenu  : MonoBehaviour, Menu
+    public class PlaceHandsMenu : MonoBehaviour, Menu
     {
         /*
         * Canvas for GUI
@@ -34,7 +34,8 @@ namespace UI.MenuMB
         private BoxCollider _boxColliderLeftHand;
         private BoxCollider _boxColliderRightHand;
         private ObjectBounds _objectBounds;
-        private const float OffSetValue = 0.005f;
+        private const float OffSetValue = 0.010f;
+        private Rigidbody _rigidbody;
 
 
         public void RemoveMenu()
@@ -95,6 +96,9 @@ namespace UI.MenuMB
                         _go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
                         _hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().getHitPoint();
                         GameObject.Find("Main Camera").GetComponent<SelectObject>().resetColor();
+                        
+                        //Disable the Rigidbody of the parent GameObject
+                        _rigidbody = _go.GetComponent<Rigidbody>();
                     }
                     catch (Exception)
                     {
@@ -105,6 +109,8 @@ namespace UI.MenuMB
                     {
                         if (!HandChecker.HasLeftHand(_go))
                         {
+                            //Destroy the RigidBody
+                            Destroy(_go.GetComponent<Rigidbody>());
                             //Get max and min values of the selected GameObject
                             _objectBounds = new ObjectBounds(_go);
                             Vector3 max = _objectBounds.getMaxBounds();
@@ -181,6 +187,9 @@ namespace UI.MenuMB
                             _go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
                             _hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().getHitPoint();
                             GameObject.Find("Main Camera").GetComponent<SelectObject>().resetColor();
+                            
+                            //Disable the Rigidbody of the parent GameObject
+                            _rigidbody = _go.GetComponent<Rigidbody>();
                         }
                         catch (Exception)
                         {
@@ -192,6 +201,8 @@ namespace UI.MenuMB
                         {
                             if (!HandChecker.HasRightHand(_go))
                             {
+                                //Destroy the RigidBody
+                                Destroy(_go.GetComponent<Rigidbody>());
                                 //Get max and min values of the selected GameObject
                                 _objectBounds = new ObjectBounds(_go);
                                 Vector3 max = _objectBounds.getMaxBounds();

@@ -26,6 +26,7 @@ namespace Scripts
             return false;
         }
         
+        //Check if object is a Hand
         public static Boolean IsHand(GameObject obj)
         {
             if (obj.name == "RightHand(Clone)" || obj.name == "LeftHand(Clone)")
