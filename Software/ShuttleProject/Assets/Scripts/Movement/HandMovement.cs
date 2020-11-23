@@ -4,22 +4,21 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using MMIStandard;
 using MMIUnity.TargetEngine.Scene;
-
 using Movement;
 using UnityEngine;
 
-public class HandMovement 
+public class HandMovement
 {
     private readonly GameObject _go;
     private readonly GameObject _parent;
     private List<UnityBone> _bones;
-    
+
     //rotate variables
     private bool _gravity;
     private bool _collider;
     private float _x;
     private float _speed = 5.0F;
-    
+
     //classes
     private ShowAxis showAxis;
 
@@ -29,7 +28,6 @@ public class HandMovement
         _parent = go.transform.parent.gameObject;
         _bones = new List<UnityBone>(go.GetComponentsInChildren<UnityBone>());
         SafeCollider();
-
 
         foreach (UnityBone bone in _bones.Skip(1))
         {
@@ -54,28 +52,27 @@ public class HandMovement
 
             //rotate object
             _go.transform.Rotate(_x, 0, 0, Space.Self);
-            
-            RestoreCollider();
 
+            RestoreCollider();
         }
     }
-    
+
     //casts a Ray from Object in predetermined direction
     //colliders from originating object have to be disabled in order to let the rays not hit the objects own collider 
     public void CastRayFromObject()
     {
         if (Input.GetKey(KeyCode.M))
-        {    
+        {
             DisableCollider();
-            
+
             //cast ray from object in direction  
-            Ray rayHand = new Ray(_go.transform.position ,_go.transform.right);
+            Ray rayHand = new Ray(_go.transform.position, _go.transform.right);
             RaycastHit hitInfoHand;
-            
+
             //cast ray from camera position to mouse position
             Ray rayMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfoMouse;
-            
+
             if (Physics.Raycast(rayHand, out hitInfoHand, 0.2f))
             {
                 if (Physics.Raycast(rayMouse, out hitInfoMouse))
@@ -85,7 +82,6 @@ public class HandMovement
                     {
                         _go.transform.position = hitInfoMouse.point + hitInfoMouse.normal * 0.02f;
                         _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoMouse.normal);
-                        
                     }
                 }
                 else
@@ -95,11 +91,10 @@ public class HandMovement
                 }
             }
             RestoreCollider();
-
         }
     }
     
-    //-------------------safe, restore and disable Settings-------------------
+//-------------------safe, restore and disable Settings-------------------
 
     //safe gravity and collider settings
     private void SafeCollider()
@@ -108,7 +103,6 @@ public class HandMovement
         {
             _collider = _go.GetComponent<Collider>().enabled;
             //_gravity = _go.GetComponent<Rigidbody>().useGravity;
-
         }
         catch
         {
@@ -141,4 +135,3 @@ public class HandMovement
         }
     }
 }
-

@@ -123,6 +123,7 @@ namespace UI.MenuMB
                             Vector3 min = _objectBounds.getMinBounds();
 
                             Vector3 offsetLeft = new Vector3();
+
                             Vector3 rotationLeft = new Vector3() ;
                             
                             //load leftHandPrefab and instantiate it with the predetermined parameters
