@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using MMICoSimulation;
 using MMICSharp.MMIStandard.Utils;
 using MMIStandard;
 using MMIUnity;
 using MMIUnity.TargetEngine;
 using MMIUnity.TargetEngine.Scene;
+using Scripts;
 using UnityEngine;
 
 
@@ -20,7 +19,8 @@ public class TestAvatarBehavior : AvatarBehavior
     private BoxCollider boxColliderRightHand;
     private ObjectBounds objectBounds;
     private float OffSetValue = 0.005f; 
-
+    
+    /*
     protected override void GUIBehaviorInput()
     {
         if (GUI.Button(new Rect(10, 10, 120, 50), "Idle"))
@@ -460,6 +460,72 @@ public class TestAvatarBehavior : AvatarBehavior
         return false;
     }
     
+    */
+
+
+
+    public void WalkTo(String s)
+    {
+        //First create the walk instruction to walk to the specific object
+        MInstruction walkInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Walk", "walk")
+        {
+            Properties = PropertiesCreator.Create("TargetID", UnitySceneAccess.Instance.GetSceneObjectByName(s).ID)
+        };
+
+        //Abort all current tasks
+        this.CoSimulator.Abort();
+
+        //Assign walk and idle instruction
+        this.CoSimulator.AssignInstruction(walkInstruction, null);
+  
+
+        this.CoSimulator.MSimulationEventHandler += this.CoSimulator_MSimulationEventHandler;
+    }
+
+    public void ReachObject(String s, GameObject go)
+    {
+        Dictionary<string, string> handCount = new Dictionary<string, string>();
+        if (HandChecker.HasBothHands(go))
+        {
+            handCount.Add("Hand", "Both");
+        }
+        else if (HandChecker.HasLeftHand(go))
+        {
+            handCount.Add("Hand", "Left");
+        }
+        else if (HandChecker.HasRightHand(go))
+        {
+            handCount.Add("Hand", "Right");
+        }
+            
+        //As always create an idle instruction first
+        MInstruction idleInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Idle", "idle");
+
+        //Now create a specific instruction to reach with the right hand
+        MInstruction reachRight = new MInstruction(MInstructionFactory.GenerateID(), "reach right", "Pose/Reach")
+        {
+            Properties = new Dictionary<string, string>()
+            {
+                //The object that describes the reach posture
+                { "TargetID", UnitySceneAccess.Instance["GraspTargetR"].ID},
+                //The hand that is used
+                { "Hand","Right"}
+            }
+        };
+        
+
+        //this.CoSimulator.Abort();
+        this.CoSimulator.AssignInstruction(idleInstruction, null);
+        this.CoSimulator.AssignInstruction(reachRight, null);
+    }
+
+    public void runInstruction(List<MInstruction> list)
+    {
+        foreach (var inst in list)
+        {
+            CoSimulator.AssignInstruction(inst, null);
+        }
+    }
     
     /// <summary>
     /// Callback for the co-simulation event handler
