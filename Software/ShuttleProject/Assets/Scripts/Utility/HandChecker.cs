@@ -38,7 +38,7 @@ namespace Scripts
         
         public static Boolean IsHand(GameObject obj)
         {
-            if (obj.name == "RightHand(Clone)" || obj.name == "LeftHand(Clone)")
+            if (obj.name == "RightHand(Clone)" || obj.name == "LeftHand(Clone)" )
             {
                 return true;
             }
