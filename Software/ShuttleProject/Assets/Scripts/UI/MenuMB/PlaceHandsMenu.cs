@@ -121,8 +121,8 @@ namespace UI.MenuMB
                             Vector3 max = _objectBounds.getMaxBounds();
                             Vector3 min = _objectBounds.getMinBounds();
 
-                            Vector3 offsetLeft;
-                            Vector3 rotationLeft;
+                            Vector3 offsetLeft = new Vector3();
+                            Vector3 rotationLeft = new Vector3();
 
                             /*
                             //determine Offset vector and needed rotation in order to let the palm face the object

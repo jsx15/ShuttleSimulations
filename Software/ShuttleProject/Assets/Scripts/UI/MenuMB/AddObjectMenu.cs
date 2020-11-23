@@ -20,6 +20,7 @@ namespace Scripts
          */
         private GameObject _removeButton;
         private GameObject _addObjectButton;
+        private GameObject _parent;
 
         public void Start()
         {
@@ -133,22 +134,18 @@ namespace Scripts
             _removeButton.GetComponentInChildren<Text>().text = "Remove";
             _removeButton.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    if (HandChecker.IsHand(gameObject))
-                    {
-                        GameObject parent = gameObject.transform.parent.gameObject;
-                        Destroy(gameObject);
-                        if (!HandChecker.HasLeftHand(parent) && !HandChecker.HasLeftHand(parent))
-                        {
-                            parent.AddComponent<Rigidbody>();
-                        }
-                        Destroy(_removeButton);
-                        return;
-                    }    
+                    if (HandChecker.IsHand(gameObject)) _parent = gameObject.transform.parent.gameObject;
                     Destroy(gameObject);
+                    if (_parent != null)
+                    {
+                        if (!(HandChecker.HasLeftHand(_parent) && HandChecker.HasRightHand(_parent)))
+                        {
+                            _parent.AddComponent<Rigidbody>();
+                        }
+                    }    
                     Destroy(_removeButton);
                 });
 
         }
-        
     }
 }
