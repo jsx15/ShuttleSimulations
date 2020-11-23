@@ -98,14 +98,16 @@ public class SelectObject : MonoBehaviour
                     mRenderer.material.color = originalColor;
                     go = null;
                     _addObjectMenu.ObjectSelected(go);
-                }  
+                }
             }
         }
         try
         {
             if (HandChecker.IsHand(go))
             {
-                handMovement.castRayFromObject();
+                //Handle rotate OR Drag for a hand object
+                if (!Input.GetKey(KeyCode.X)) handMovement.CastRayFromObject();
+                if (!Input.GetKey(KeyCode.M)) handMovement.HandleRotateHand();
             }
             else
             {
@@ -113,9 +115,6 @@ public class SelectObject : MonoBehaviour
                 if (!Input.GetKey(KeyCode.M)) dragAndRotate.handleRotate();
                 if (!Input.GetKey(KeyCode.X) && !Input.GetKey(KeyCode.Y) && !Input.GetKey(KeyCode.Z)) dragAndRotate.handleDrag();
             }
-
-
-
         }
         catch (Exception)
         {

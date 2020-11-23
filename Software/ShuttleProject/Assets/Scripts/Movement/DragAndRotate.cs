@@ -1,37 +1,35 @@
-﻿using UnityEditor.Playables;
+﻿using Scripts;
+using UnityEditor.Playables;
 using UnityEngine;
 
     public class DragAndRotate
     {
         //The GameObject
-        private GameObject go;
+        private GameObject _go;
 
         //drag variables
-        private Vector3 mOffset;
-        private float mZCoord;
-        private bool lockY;
-        private float yPos;
+        private Vector3 _mOffset;
+        private float _mZCoord;
+        private readonly bool _lockY;
+        private float _yPos;
 
         //rotate variables
-        private bool gravity;
-        private bool collider;
-        private float speed = 5.0F;
-        private float x;
-        private float y;
-        private float z;
-        private Vector3 pos;
+        private bool _gravity;
+        private bool _collider;
+        private float _speed = 5.0F;
+        private float _x;
+        private float _y;
+        private float _z;
+        private Vector3 _pos;
         
         //classes
         private ShowAxis showAxis;
-
-
-        //objectBounds object to get max and min values of x,y & z
-        private ObjectBounds objectBounds;
+        private ObjectBounds _objectBounds;
 
         public DragAndRotate(GameObject go, bool lockY)
         {
-            this.go = go;
-            this.lockY = lockY;
+            _go = go;
+            _lockY = lockY;
 
             //safe settings
             safeGravityAndCollider();
@@ -54,10 +52,10 @@ using UnityEngine;
                 disableGravityAndCollider();
 
                 //get mouse position on x axis
-                x = speed * Input.GetAxis("Mouse X");
+                _x = _speed * Input.GetAxis("Mouse X");
 
                 //rotate object
-                go.transform.Rotate(x, 0, 0, Space.World);
+                _go.transform.Rotate(_x, 0, 0, Space.World);
             }
 
             else if (Input.GetKey(KeyCode.Y))
@@ -67,10 +65,10 @@ using UnityEngine;
                 disableGravityAndCollider();
 
                 //get mouse position on x axis
-                y = -1 * speed * Input.GetAxis("Mouse X");
+                _y = -1 * _speed * Input.GetAxis("Mouse X");
 
                 //rotate object
-                go.transform.Rotate(0, y, 0, Space.World);
+                _go.transform.Rotate(0, _y, 0, Space.World);
             }
 
             else if (Input.GetKey(KeyCode.Z))
@@ -80,10 +78,10 @@ using UnityEngine;
                 disableGravityAndCollider();
 
                 //get mouse position on x axis
-                z = speed * Input.GetAxis("Mouse X");
+                _z = _speed * Input.GetAxis("Mouse X");
 
                 //rotate object
-                go.transform.Rotate(0, 0, z, Space.World);
+                _go.transform.Rotate(0, 0, _z, Space.World);
             }
             else
             {
@@ -98,11 +96,11 @@ using UnityEngine;
 
         private void setOffset()
         {
-            mZCoord = Camera.main.WorldToScreenPoint(go.transform.position).z;
-            yPos = go.transform.position.y;
+            _mZCoord = Camera.main.WorldToScreenPoint(_go.transform.position).z;
+            _yPos = _go.transform.position.y;
 
             // Store offset = gameobject world pos - mouse world pos
-            mOffset = go.transform.position - GetMouseAsWorldPoint();
+            _mOffset = _go.transform.position - GetMouseAsWorldPoint();
         }
 
 
@@ -112,7 +110,7 @@ using UnityEngine;
             Vector3 mousePoint = Input.mousePosition;
 
             // z coordinate of game object on screen
-            mousePoint.z = mZCoord;
+            mousePoint.z = _mZCoord;
 
             // Convert it to world points
             return Camera.main.ScreenToWorldPoint(mousePoint);
@@ -126,18 +124,18 @@ using UnityEngine;
                 disableGravityAndCollider();
 
                 //stay at this height
-                if (lockY)
+                if (_lockY)
                 {
-                    go.transform.position = new Vector3(GetMouseAsWorldPoint().x + mOffset.x, yPos,
-                        GetMouseAsWorldPoint().z + mOffset.z);
+                    _go.transform.position = new Vector3(GetMouseAsWorldPoint().x + _mOffset.x, _yPos,
+                        GetMouseAsWorldPoint().z + _mOffset.z);
                 }
                 //change height with mouse
                 else
                 {
-                    go.transform.position = GetMouseAsWorldPoint() + mOffset;
-                    if (go.transform.position.y < 0)
+                    _go.transform.position = GetMouseAsWorldPoint() + _mOffset;
+                    if (_go.transform.position.y < 0)
                     {
-                        go.transform.position = new Vector3(go.transform.position.x, 0, go.transform.position.z);
+                        _go.transform.position = new Vector3(_go.transform.position.x, 0, _go.transform.position.z);
                     }
                 }
             }
@@ -146,16 +144,17 @@ using UnityEngine;
                 restoreGravityAndCollider();
             }
         }
-
-        //-------------------safe, restore and disable settings-------------------
+        
+        //-------------------safe, restore and disable Settings-------------------
 
         //safe gravity and collider settings
         private void safeGravityAndCollider()
         {
             try
             {
-                gravity = go.GetComponent<Rigidbody>().useGravity;
-                collider = go.GetComponent<Collider>().enabled;
+                _collider = _go.GetComponent<Collider>().enabled;
+                _gravity = _go.GetComponent<Rigidbody>().useGravity;
+
             }
             catch
             {
@@ -167,8 +166,8 @@ using UnityEngine;
         {
             try
             {
-                go.GetComponent<Rigidbody>().useGravity = gravity;
-                go.GetComponent<Collider>().enabled = collider;
+                _go.GetComponent<Rigidbody>().useGravity = _gravity;
+                _go.GetComponent<Collider>().enabled = _collider;
             }
             catch
             {
@@ -176,12 +175,12 @@ using UnityEngine;
         }
 
         //disable gravity and collider settings
-        private void disableGravityAndCollider()
+        public void disableGravityAndCollider()
         {
             try
             {
-                go.GetComponent<Rigidbody>().useGravity = false;
-                go.GetComponent<Collider>().enabled = false;
+                _go.GetComponent<Rigidbody>().useGravity = false;
+                _go.GetComponent<Collider>().enabled = false;
             }
             catch
             {

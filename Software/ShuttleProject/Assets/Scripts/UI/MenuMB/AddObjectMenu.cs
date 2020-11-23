@@ -133,6 +133,17 @@ namespace Scripts
             _removeButton.GetComponentInChildren<Text>().text = "Remove";
             _removeButton.GetComponent<Button>().onClick.AddListener(() =>
                 {
+                    if (HandChecker.IsHand(gameObject))
+                    {
+                        GameObject parent = gameObject.transform.parent.gameObject;
+                        Destroy(gameObject);
+                        if (!HandChecker.HasLeftHand(parent) && !HandChecker.HasLeftHand(parent))
+                        {
+                            parent.AddComponent<Rigidbody>();
+                        }
+                        Destroy(_removeButton);
+                        return;
+                    }    
                     Destroy(gameObject);
                     Destroy(_removeButton);
                 });
