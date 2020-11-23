@@ -100,6 +100,7 @@ namespace UI.MenuMB
                     {
                         _go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
                         _hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().getHitPoint();
+                        _hitPointNormal = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPointNormal();
                         GameObject.Find("Main Camera").GetComponent<SelectObject>().resetColor();
                         
                         //Disable the Rigidbody of the parent GameObject
@@ -121,50 +122,17 @@ namespace UI.MenuMB
                             Vector3 max = _objectBounds.getMaxBounds();
                             Vector3 min = _objectBounds.getMinBounds();
 
-                            Vector3 offsetLeft;
-                            Vector3 rotationLeft;
-
-                            /*
-                            //determine Offset vector and needed rotation in order to let the palm face the object
-                            if (_hitPoint.x == max.x)
-                            {
-                                offsetLeft = new Vector3(OffSetValue, 0, 0);
-                                rotationLeft = new Vector3(0, 180, 0);
-                            }
-                            else if (_hitPoint.x == min.x)
-                            {
-                                offsetLeft = new Vector3(-OffSetValue, 0, 0);
-                                rotationLeft = new Vector3(0, 0, 0);
-                            }
-                            else if (_hitPoint.y == max.y)
-                            {
-                                offsetLeft = new Vector3(0, OffSetValue, 0);
-                                rotationLeft = new Vector3(0, 0, -90);
-                            }
-                            else if (_hitPoint.y == min.y)
-                            {
-                                offsetLeft = new Vector3(0, -OffSetValue, 0);
-                                rotationLeft = new Vector3(0, 0, 90);
-                            }
-                            else if (_hitPoint.z == max.z)
-                            {
-                                offsetLeft = new Vector3(0, 0, OffSetValue);
-                                rotationLeft = new Vector3(0, 90, 0);
-                            }
-                            else
-                            {
-                                offsetLeft = new Vector3(0, 0, -OffSetValue);
-                                rotationLeft = new Vector3(0, -90, 0);
-                            }
-                            */
-
+                            Vector3 offsetLeft = new Vector3();
+                            Vector3 rotationLeft = new Vector3() ;
+                            
                             //load leftHandPrefab and instantiate it with the predetermined parameters
                             GameObject leftHandPrefab =
                                 Resources.Load("HandPrefab" + Path.DirectorySeparatorChar + "LeftHand") as GameObject;
                             GameObject leftHand = Instantiate(leftHandPrefab,
-                                new Vector3(_hitPoint.x, _hitPoint.y, _hitPoint.z) + offsetLeft ,
+                                _hitPoint + _hitPointNormal * OffSetValue ,
                                 Quaternion.Euler(rotationLeft));
                             leftHand.transform.SetParent(_go.transform);
+                            leftHand.transform.rotation = Quaternion.FromToRotation(-leftHand.transform.right, _hitPointNormal);
                             
                             //Add a BoxCollider to the hand
                             _boxColliderLeftHand = leftHand.AddComponent<BoxCollider>();
@@ -216,38 +184,6 @@ namespace UI.MenuMB
 
                                 Vector3 offsetRight = new Vector3();
                                 Vector3 rotationRight = new Vector3();
-
-                                //determine Offset vector and needed rotation in order to let the palm face the object
-                                /*if (Mathf.Approximately(_hitPoint.x , max.x))
-                                {
-                                    offsetRight = new Vector3(OffSetValue, 0, 0);
-                                    rotationRight = new Vector3(0, 180, 0);
-                                }
-                                else if (Mathf.Approximately(_hitPoint.x, min.x))
-                                {
-                                    offsetRight = new Vector3(-OffSetValue, 0, 0);
-                                    rotationRight = new Vector3(0, 0, 0);
-                                }
-                                else if (Mathf.Approximately(_hitPoint.y,max.y))
-                                {
-                                    offsetRight = new Vector3(0, OffSetValue, 0);
-                                    rotationRight = new Vector3(0, 0, -90);
-                                }
-                                else if (Mathf.Approximately(_hitPoint.y, min.y))
-                                {
-                                    offsetRight = new Vector3(0, -OffSetValue, 0);
-                                    rotationRight = new Vector3(0, 0, 90);
-                                }
-                                else if (Mathf.Approximately(_hitPoint.z,max.z))
-                                {
-                                    offsetRight = new Vector3(0, 0, OffSetValue);
-                                    rotationRight = new Vector3(0, 90, 0);
-                                }
-                                else 
-                                {
-                                    offsetRight = new Vector3(0, 0, -OffSetValue);
-                                    rotationRight = new Vector3(0, -90, 0);
-                                }*/
                                 
                                 //load rightHandPrefab and instantiate it with the predetermined parameters
                                 GameObject rightHandPrefab =
@@ -257,7 +193,6 @@ namespace UI.MenuMB
                                     _hitPoint +  _hitPointNormal * OffSetValue,
                                     Quaternion.Euler(rotationRight));
                                 rightHand.transform.SetParent(_go.transform);
-                                rightHand.transform.LookAt(_hitPoint,rightHand.transform.up);
                                 rightHand.transform.rotation = Quaternion.FromToRotation(-rightHand.transform.right, _hitPointNormal);
 
                                 //Add a BoxCollider to the hand

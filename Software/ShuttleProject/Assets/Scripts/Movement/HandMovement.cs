@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using DitzelGames.FastIK;
 using MMIStandard;
 using MMIUnity.TargetEngine.Scene;
 
-using Scripts;
+using Movement;
 using UnityEngine;
 
 public class HandMovement 
@@ -30,18 +29,17 @@ public class HandMovement
         _parent = go.transform.parent.gameObject;
         _bones = new List<UnityBone>(go.GetComponentsInChildren<UnityBone>());
         SafeCollider();
-        
 
-        foreach (UnityBone bone in bones.Skip(1))
+
+        foreach (UnityBone bone in _bones.Skip(1))
         {
-            if (bone.name.Contains("Proximal")||bone.name.Contains("ThumbMid"))
+            if (bone.name.Contains("Proximal") || bone.name.Contains("ThumbMid"))
             {
                 bone.gameObject.AddComponent<IKManager>();
             }
-
-        
+        }
     }
-    
+
     //Handle the rotation of the hand
     public void HandleRotateHand()
     {
@@ -82,28 +80,17 @@ public class HandMovement
             {
                 if (Physics.Raycast(rayMouse, out hitInfoMouse))
                 {
-
-                    go.transform.position = hitInfoMouse.point + hitInfoMouse.normal * 0.02f;
-                    go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoMouse.normal);
-                }
-            }
-            else
-            {
-                go.transform.position = hitInfoHand.point + hitInfoHand.normal * 0.02f;
-                go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoHand.normal);
-            }
-
                     // check if hitInfoMouse points to parent object of hand
                     if (hitInfoMouse.collider.gameObject.GetInstanceID().Equals(_parent.GetInstanceID()))
                     {
-                        _go.transform.position = hitInfoMouse.point + hitInfoMouse.normal * 0.005f;
+                        _go.transform.position = hitInfoMouse.point + hitInfoMouse.normal * 0.02f;
                         _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoMouse.normal);
                         
                     }
                 }
                 else
                 {
-                    _go.transform.position = hitInfoHand.point + hitInfoHand.normal * 0.005f;
+                    _go.transform.position = hitInfoHand.point + hitInfoHand.normal * 0.02f;
                     _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoHand.normal);
                 }
             }

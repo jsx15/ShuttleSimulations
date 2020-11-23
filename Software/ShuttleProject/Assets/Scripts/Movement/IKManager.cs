@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using MMIUnity.TargetEngine.Scene;
 using UnityEngine;
-
+/*
+ * This Class is derived by a Youtube tutorial in inverse kinematics that i have rewritten for our purposes.
+ * Link to the tutorial:https://www.youtube.com/watch?v=VdJGouwViPs 
+ */
 namespace Movement
 {
     public class IKManager : MonoBehaviour
