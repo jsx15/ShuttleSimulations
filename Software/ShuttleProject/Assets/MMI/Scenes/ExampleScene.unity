@@ -1018,6 +1018,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 890030667}
     m_Modifications:
+    - target: {fileID: 4405179620917691484, guid: 06afd2fd43af462479bab8fdba9ac521,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6129534404736574845, guid: 06afd2fd43af462479bab8fdba9ac521,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7303811503737852918, guid: 06afd2fd43af462479bab8fdba9ac521,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -2474,30 +2484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e99495a5231c524bb09e503e5ef1dd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  go: {fileID: 0}
-  _addObjectMenu: {fileID: 0}
-  originalColor:
-    r: 0
-    g: 0
-    b: 0
-    a: 0
-  selectColor:
-    r: 1
-    g: 0
-    b: 0
-    a: 1
-  mRenderer: {fileID: 0}
-  mOffset: {x: 0, y: 0, z: 0}
-  mZCoord: 0
-  lockY: 1
-  yPos: 0
-  gravity: 0
-  collider: 0
-  speed: 5
-  x: 0
-  y: 0
-  z: 0
-  pos: {x: 0, y: 0, z: 0}
 --- !u!114 &534669910
 MonoBehaviour:
   m_ObjectHideFlags: 0

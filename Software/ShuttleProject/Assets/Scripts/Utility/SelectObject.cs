@@ -18,6 +18,7 @@ public class SelectObject : MonoBehaviour
     private GameObject go;
     private Transform child;
     private Vector3 hitPoint;
+    private Vector3 hitPointNormal;
     
     //selector variables
     private RaycastHit hit;
@@ -63,6 +64,7 @@ public class SelectObject : MonoBehaviour
                     
                     //Get object and Hit Point
                     hitPoint = hit.point;
+                    hitPointNormal = hit.normal;
                     go = hit.transform.gameObject;
 
                     //Mark the selected object as red
@@ -140,4 +142,11 @@ public class SelectObject : MonoBehaviour
     //Return the selected point
     public Vector3 getHitPoint() => hitPoint;
     
+    //Return the selected points normal
+    public Vector3 GetHitPointNormal()
+    {
+        return hitPointNormal;
+    }
+
+
 }
