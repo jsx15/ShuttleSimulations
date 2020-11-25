@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MMIUnity;
 using Scripts;
+using UI.MenuMB;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,8 @@ using UnityEngine.UI;
 public class SelectObject : MonoBehaviour
 {
     public bool lockY;
+    
+    public event EventHandler ObjectSelected;
     
     //Button manager
     private AddObjectMenu _addObjectMenu;
@@ -32,6 +35,8 @@ public class SelectObject : MonoBehaviour
     private DragAndRotate dragAndRotate;
 
     private HandMovement handMovement;
+    
+    private WalkToMenu.WalkToHandler _walkToHandler = new WalkToMenu.WalkToHandler();
     
     
     private void Start()
@@ -70,6 +75,13 @@ public class SelectObject : MonoBehaviour
                     originalColor = mRenderer.material.color;
                     
                     _addObjectMenu.ObjectSelected(go);
+                    
+                    ObjectSelected += delegate(object sender, EventArgs args)
+                    {
+                        _walkToHandler.ObjectSelectedHandler(sender, args, go.name);
+                    };
+                    
+                    // ObjectSelected(this, new EventArgs());
 
                     if (HandChecker.IsHand(go))
                     {
