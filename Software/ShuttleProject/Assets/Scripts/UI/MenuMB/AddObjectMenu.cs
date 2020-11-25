@@ -118,10 +118,10 @@ namespace Scripts
         /*
          * Toggles remove button
          */
-        public void ObjectSelected(GameObject gameObject)
+        public void ObjectSelected(GameObject go)
         {
             _canvas = GameObject.Find("Canvas");
-            if (gameObject is null)
+            if (go is null)
             {
                 Destroy(_removeButton);
                 return;
@@ -129,11 +129,11 @@ namespace Scripts
             // Add remove object button
             _removeButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (_removeButton is null) return;
-            _removeButton.transform.position = new Vector3((Screen.width / 20f), (Screen.height / 10) * 6);
+            _removeButton.transform.position = new Vector3((Screen.width / 20f), (Screen.height / 10) * 1);
             _removeButton.GetComponentInChildren<Text>().text = "Remove";
             _removeButton.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    Destroy(gameObject);
+                    Destroy(go);
                     Destroy(_removeButton);
                 });
 
