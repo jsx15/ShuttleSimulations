@@ -43,6 +43,7 @@ namespace Scripts
 
                 MenuManager.ShowAddObjectMenu();
                 MenuManager.ShowPlaceHandMenu();
+                MenuManager.ShowWalkTo();
                 _showing = true;
             });
 
