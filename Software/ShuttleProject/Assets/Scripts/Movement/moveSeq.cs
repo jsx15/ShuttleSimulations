@@ -6,41 +6,37 @@ public class moveSeq : MonoBehaviour
 {
     public bool start = false;
 
+
     void Update()
     {
+        TestAvatarBehavior beh = GetComponent<TestAvatarBehavior>();
         if (start)
         {
-            TestAvatarBehavior beh = GetComponent<TestAvatarBehavior>();
-
+            
             MInstruction walk5 = beh.WalkTo("WalkTargetSphere");
 
-
-            List<MInstruction> list = new List<MInstruction> {walk5};
-
-
-            List<MInstruction> reachList = new List<MInstruction>();
-            //reachList.AddRange(beh.ReachObject(GameObject.Find("Sphere")));
-
-            //reachList.AddRange(beh.MoveObject(GameObject.Find("Sphere"), GameObject.Find("SphereTarget")));
-
-            // reachList.AddRange(beh.ReleaseObject());
+            List<MInstruction> list = new List<MInstruction> ();
             
-            reachList.AddRange(beh.PickUp(GameObject.Find("Sphere")));
+            
+            list.Add(walk5);
+            
+            //list.AddRange(beh.ReachObject(GameObject.Find("Sphere")));
 
-            //reachList.AddRange(beh.MoveObject(GameObject.Find("Sphere"), GameObject.Find("SphereTarget")));
+            //list.AddRange(beh.MoveObject(GameObject.Find("Sphere"), GameObject.Find("SphereTarget")));
             
-            //reachList.Add(beh.WalkTo("WalkTarget"));
             
-            reachList.AddRange(beh.ReleaseObject());
+            list.AddRange(beh.PickUp(GameObject.Find("Sphere")));
+
+            //list.AddRange(beh.MoveObject(GameObject.Find("Sphere"), GameObject.Find("SphereTarget")));
             
-            list.AddRange(reachList);
+            list.Add(beh.WalkTo("WalkTarget"));
+            
+            list.AddRange(beh.ReleaseObject());
+            
             beh.RunInstruction(list);
-            
-            
 
             start = false;
-
-
+            
         }
     }
 }

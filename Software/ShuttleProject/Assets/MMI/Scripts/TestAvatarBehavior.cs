@@ -20,7 +20,7 @@ public class TestAvatarBehavior : AvatarBehavior
     private ObjectBounds objectBounds;
     private float OffSetValue = 0.005f;
 
-
+/*
     protected override void GUIBehaviorInput()
     {
         if (GUI.Button(new Rect(10, 10, 120, 50), "Idle"))
@@ -136,14 +136,15 @@ public class TestAvatarBehavior : AvatarBehavior
 
             MInstruction reachInstruction = new MInstruction(MInstructionFactory.GenerateID(), "reach", "Pose/Reach")
             {
-                Properties = PropertiesCreator.Create("TargetID", UnitySceneAccess.Instance["GraspTargetR"].ID, "Hand",
+                Properties = PropertiesCreator.Create("TargetID", UnitySceneAccess.Instance["RightHand(Clone)"].ID,
+                    "Hand",
                     "Right"),
             };
 
             carryID = MInstructionFactory.GenerateID();
             MInstruction carryInstruction = new MInstruction(carryID, "carry object", "Object/Carry")
             {
-                Properties = PropertiesCreator.Create("TargetID", UnitySceneAccess.Instance["GraspObject"].ID, "Hand",
+                Properties = PropertiesCreator.Create("TargetID", UnitySceneAccess.Instance["Sphere"].ID, "Hand",
                     "Right"),
                 StartCondition = reachInstruction.ID + ":" + mmiConstants.MSimulationEvent_End + "+ 0.01"
             };
@@ -486,7 +487,7 @@ public class TestAvatarBehavior : AvatarBehavior
 
         return false;
     }
-
+*/
     public MInstruction WalkTo(String s)
     {
         MInstruction walkInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Walk", "walk")
@@ -505,8 +506,8 @@ public class TestAvatarBehavior : AvatarBehavior
         {
             //Get UnitySceneAccess ID of hand
             GameObject hand = go.transform.GetChildRecursiveByName("LeftHand(Clone)").gameObject;
-            String objectID =  hand.GetComponent<MMISceneObject>().MSceneObject.ID;
-            
+            String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
+
             //Now create a specific instruction to reach with the right hand
             MInstruction reachLeft = new MInstruction(MInstructionFactory.GenerateID(), "reach left", "Pose/Reach")
             {
@@ -521,7 +522,7 @@ public class TestAvatarBehavior : AvatarBehavior
         {
             //Get UnitySceneAccess ID of hand
             GameObject hand = go.transform.GetChildRecursiveByName("RightHand(Clone)").gameObject;
-            String objectID =  hand.GetComponent<MMISceneObject>().MSceneObject.ID;
+            String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
             //Now create a specific instruction to reach with the right hand
             MInstruction reachRight = new MInstruction(MInstructionFactory.GenerateID(), "reach right", "Pose/Reach")
             {
@@ -536,27 +537,24 @@ public class TestAvatarBehavior : AvatarBehavior
 
     public List<MInstruction> ReleaseObject()
     {
-        
         List<MInstruction> list = new List<MInstruction>();
-        
-        
+
         MInstruction releaseLeft =
             new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
             {
                 Properties = PropertiesCreator.Create("Hand", "Left", CoSimTopic.OnStart,
-                    carryID + ":" + CoSimAction.EndInstruction)
+                    carryID + ":" + CoSimAction.EndInstruction),
             };
-        
+
         list.Add(releaseLeft);
         MInstruction releaseRight =
             new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
             {
                 Properties = PropertiesCreator.Create("Hand", "Right", CoSimTopic.OnStart,
-                    carryID + ":" + CoSimAction.EndInstruction)
+                    carryID + ":" + CoSimAction.EndInstruction),
             };
-        
-        list.Add(releaseRight);
 
+        list.Add(releaseRight);
 
         return list;
     }
@@ -565,15 +563,15 @@ public class TestAvatarBehavior : AvatarBehavior
     {
         List<MInstruction> list = new List<MInstruction>();
 
-        String objectID =  obj.GetComponent<MMISceneObject>().MSceneObject.ID;
+        String objectID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
         String targetPositionID = positionTarget.GetComponent<MMISceneObject>().MSceneObject.ID;
 
         MInstruction moveObject = new MInstruction(MInstructionFactory.GenerateID(), "move object", "Object/Move")
         {
             Properties = PropertiesCreator.Create("SubjectID", objectID, "Hand",
-                "Right", "TargetID",targetPositionID)
+                "Right", "TargetID", targetPositionID)
         };
-        
+
         list.Add(moveObject);
         return list;
     }
@@ -584,65 +582,75 @@ public class TestAvatarBehavior : AvatarBehavior
         list.AddRange(ReachObject(obj));
 
         String objID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
-        
-        List<MInstruction> pickUpList = new List<MInstruction>();
+
+        carryID = MInstructionFactory.GenerateID();
 
         if (list.Count == 2)
         {
-            MInstruction carryInstruction = new MInstruction(MInstructionFactory.GenerateID(), "carry object", "Object/Carry")
-            {
-                Properties = PropertiesCreator.Create("TargetID", objID, "Hand",
-                    "Both")
-                // StartCondition = inst.ID + ":" + mmiConstants.MSimulationEvent_End + "+ 0.01"
-            };
-                
-            pickUpList.Add(carryInstruction);
+            MInstruction carryInstruction =
+                new MInstruction(MInstructionFactory.GenerateID(), "carry object", "Object/Carry")
+                {
+                    Properties = PropertiesCreator.Create("TargetID", objID, "Hand",
+                        "Both")
+                    // StartCondition = inst.ID + ":" + mmiConstants.MSimulationEvent_End + "+ 0.01"
+                };
+            list.Add(carryInstruction);
         }
         else if (list[0].Name.Equals("reach right"))
         {
-            MInstruction carryInstruction = new MInstruction(MInstructionFactory.GenerateID(), "carry object", "Object/Carry")
-            {
-                Properties = PropertiesCreator.Create("TargetID", objID, "Hand",
-                    "Right"),
-                // StartCondition = inst.ID + ":" + mmiConstants.MSimulationEvent_End + "+ 0.01"
-            };
-                
-            pickUpList.Add(carryInstruction);
+            MInstruction carryInstruction =
+                new MInstruction(MInstructionFactory.GenerateID(), "carry object", "Object/Carry")
+                {
+                    Properties = PropertiesCreator.Create("TargetID", objID, "Hand",
+                        "Right"),
+                    //StartCondition = list[0].ID + ":" + mmiConstants.MSimulationEvent_End + "+ 0.01"
+                };
+            list.Add(carryInstruction);
         }
         else
         {
-            MInstruction carryInstruction = new MInstruction(MInstructionFactory.GenerateID(), "carry object", "Object/Carry")
-            {
-                Properties = PropertiesCreator.Create("TargetID", objID, "Hand",
-                    "Left"),
-                // StartCondition = inst.ID + ":" + mmiConstants.MSimulationEvent_End + "+ 0.01"
-            };
-            pickUpList.Add(carryInstruction);
+            MInstruction carryInstruction =
+                new MInstruction(MInstructionFactory.GenerateID(), "carry object", "Object/Carry")
+                {
+                    Properties = PropertiesCreator.Create("TargetID", objID, "Hand",
+                        "Left"),
+                    // StartCondition = inst.ID + ":" + mmiConstants.MSimulationEvent_End + "+ 0.01"
+                };
+            list.Add(carryInstruction);
         }
 
-        list.AddRange(pickUpList);
         return list;
     }
-
 
     public void RunInstruction(List<MInstruction> list)
     {
         MInstruction idleInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Idle", "idle");
-        int counter = 0;
-        foreach (var inst in list)
+
+        for (int i = 0; i < list.Count; i++)
         {
-            print(inst.Name);
-            if (counter > 0)
+            if (i > 0)
             {
-                inst.StartCondition = list[counter - 1].ID + ":" + mmiConstants.MSimulationEvent_End + "+ 0.01";
+                if (list[i - 1].Name.Equals("carry object"))
+                {
+                    list[i].StartCondition = list[i - 1].StartCondition + ":" + mmiConstants.MSimulationEvent_End + "+ 0.1";
+                }
+                else
+                {
+                    list[i].StartCondition = list[i - 1].ID + ":" + mmiConstants.MSimulationEvent_End + "+ 0.1";
+                }
+
+                print(list[i].Name + " hat die StartCondition: " + list[i].StartCondition);
             }
 
-            CoSimulator.AssignInstruction(idleInstruction, new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
-            CoSimulator.AssignInstruction(inst,new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
-            counter++;
+            CoSimulator.AssignInstruction(idleInstruction,
+                new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
+            CoSimulator.AssignInstruction(list[i],
+                new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
         }
+
+
         CoSimulator.AssignInstruction(idleInstruction, null);
-        this.CoSimulator.MSimulationEventHandler += this.CoSimulator_MSimulationEventHandler;
+        //this.CoSimulator.MSimulationEventHandler += this.CoSimulator_MSimulationEventHandler;
     }
 
 
