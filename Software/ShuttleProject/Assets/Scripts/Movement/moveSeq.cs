@@ -18,20 +18,17 @@ public class moveSeq : MonoBehaviour
             List<MInstruction> list = new List<MInstruction> ();
             
             
-            //list.Add(walk5);
-            
-            //list.AddRange(beh.ReachObject(GameObject.Find("Sphere")));
+            list.Add(walk5);
 
-            //list.AddRange(beh.MoveObject(GameObject.Find("Sphere"), GameObject.Find("SphereTarget")));
-            
-            
-            list.AddRange(beh.PickUp(GameObject.Find("Shere")));
+            list.AddRange(beh.PickUp(GameObject.Find("Sphere")));
 
-            //list.AddRange(beh.MoveObject(GameObject.Find("Sphere"), GameObject.Find("SphereTarget")));
+
+            list.Add(beh.WalkTo("WalkTarget"));
             
-            //list.Add(beh.WalkTo("WalkTarget"));
+            list.AddRange(beh.ReleaseObject());
             
-            //list.AddRange(beh.ReleaseObject());
+            list.Add(beh.WalkTo("WalkTargetSphere"));
+            
             
             beh.RunInstruction(list);
 
