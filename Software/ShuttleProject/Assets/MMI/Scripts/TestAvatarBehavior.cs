@@ -20,7 +20,7 @@ public class TestAvatarBehavior : AvatarBehavior
     private ObjectBounds objectBounds;
     private float OffSetValue = 0.005f;
 
-/*
+
     protected override void GUIBehaviorInput()
     {
         if (GUI.Button(new Rect(10, 10, 120, 50), "Idle"))
@@ -103,8 +103,6 @@ public class TestAvatarBehavior : AvatarBehavior
                     Properties = PropertiesCreator.Create("Hand", "Left", CoSimTopic.OnStart,
                         carryID + ":" + CoSimAction.EndInstruction),
                 };
-
-
             this.CoSimulator.AssignInstruction(releaseRight,
                 new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
             this.CoSimulator.AssignInstruction(releaseLeft,
@@ -487,7 +485,7 @@ public class TestAvatarBehavior : AvatarBehavior
 
         return false;
     }
-*/
+
     public MInstruction WalkTo(String s)
     {
         MInstruction walkInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Walk", "walk")
@@ -618,7 +616,6 @@ public class TestAvatarBehavior : AvatarBehavior
                 };
             list.Add(carryInstruction);
         }
-
         return list;
     }
 
@@ -632,14 +629,12 @@ public class TestAvatarBehavior : AvatarBehavior
             {
                 if (list[i - 1].Name.Equals("carry object"))
                 {
-                    list[i].StartCondition = list[i - 1].StartCondition + ":" + mmiConstants.MSimulationEvent_End + "+ 0.1";
+                    list[i].StartCondition = list[i - 1].StartCondition;
                 }
                 else
                 {
                     list[i].StartCondition = list[i - 1].ID + ":" + mmiConstants.MSimulationEvent_End + "+ 0.1";
                 }
-
-                print(list[i].Name + " hat die StartCondition: " + list[i].StartCondition);
             }
 
             CoSimulator.AssignInstruction(idleInstruction,
@@ -647,8 +642,6 @@ public class TestAvatarBehavior : AvatarBehavior
             CoSimulator.AssignInstruction(list[i],
                 new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
         }
-
-
         CoSimulator.AssignInstruction(idleInstruction, null);
         //this.CoSimulator.MSimulationEventHandler += this.CoSimulator_MSimulationEventHandler;
     }
