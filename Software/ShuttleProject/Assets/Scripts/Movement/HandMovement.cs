@@ -65,7 +65,7 @@ public class HandMovement
         {
             DisableCollider();
 
-            //cast ray from object in direction  
+            //cast ray from object in direction
             Ray rayHand = new Ray(_go.transform.position, _go.transform.right);
             RaycastHit hitInfoHand;
 

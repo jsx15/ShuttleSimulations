@@ -47,7 +47,7 @@ using UnityEngine;
             if (Input.GetKey(KeyCode.X))
             {
 
-                showAxis.showX();
+                showAxis.ShowX();
                 //disable gravity and collider
                 disableGravityAndCollider();
 
@@ -60,7 +60,7 @@ using UnityEngine;
 
             else if (Input.GetKey(KeyCode.Y))
             {
-                showAxis.showY();
+                showAxis.ShowY();
                 //disable gravity and collider
                 disableGravityAndCollider();
 
@@ -73,7 +73,7 @@ using UnityEngine;
 
             else if (Input.GetKey(KeyCode.Z))
             {
-                showAxis.showZ();
+                showAxis.ShowZ();
                 //disable gravity and collider
                 disableGravityAndCollider();
 
@@ -86,9 +86,9 @@ using UnityEngine;
             else
             {
                 restoreGravityAndCollider();
-                showAxis.hideX();
-                showAxis.hideY();
-                showAxis.hideZ();
+                showAxis.HideX();
+                showAxis.HideY();
+                showAxis.HideZ();
             }
         }
 

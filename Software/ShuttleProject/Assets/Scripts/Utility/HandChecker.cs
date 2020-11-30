@@ -1,5 +1,4 @@
-﻿using System;
-using MMIUnity;
+﻿using MMIUnity;
 using UnityEngine;
 
 namespace Scripts
@@ -7,9 +6,9 @@ namespace Scripts
     public static class HandChecker
     {
         //Check if object has a LeftHand
-        public static Boolean HasLeftHand(GameObject obj)
+        public static bool HasLeftHand(GameObject go)
         {
-            if (obj.transform.GetChildRecursiveByName("LeftHand(Clone)"))
+            if (go.transform.GetChildRecursiveByName("LeftHand(Clone)"))
             {
                 return true;
             }
@@ -17,9 +16,9 @@ namespace Scripts
         }
     
         //Check if object has a RightHand
-        public static Boolean HasRightHand(GameObject obj)
+        public static bool HasRightHand(GameObject go)
         {
-            if (obj.transform.GetChildRecursiveByName("RightHand(Clone)"))
+            if (go.transform.GetChildRecursiveByName("RightHand(Clone)"))
             {
                 return true;
             }
@@ -27,9 +26,9 @@ namespace Scripts
         }
         
         //Check if object is a Hand
-        public static Boolean IsHand(GameObject obj)
+        public static bool IsHand(GameObject go)
         {
-            if (obj.name == "RightHand(Clone)" || obj.name == "LeftHand(Clone)")
+            if (go.name == "RightHand(Clone)" || go.name == "LeftHand(Clone)")
             {
                 return true;
             }

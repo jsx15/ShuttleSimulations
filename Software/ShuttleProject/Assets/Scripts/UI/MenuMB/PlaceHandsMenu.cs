@@ -23,7 +23,7 @@ namespace UI.MenuMB
         private GameObject _placeRightHandPinchButton;
         private bool _menuShowing;
 
-        private List<GameObject> _buttonList = new List<GameObject>();
+        private readonly List<GameObject> _buttonList = new List<GameObject>();
         
         /*
          * Necessary game object variables
@@ -35,13 +35,10 @@ namespace UI.MenuMB
         private BoxCollider _boxColliderLeftHand;
         private BoxCollider _boxColliderRightHand;
         private ObjectBounds _objectBounds;
-
+        
         private const float OffSetValue = 0.02f;
 
         
-        private Rigidbody _rigidbody;
-
-
 
         public void RemoveMenu()
         {
@@ -98,13 +95,10 @@ namespace UI.MenuMB
                     //Access data from the SelectObject script and change the GameObject's color back to normal 
                     try
                     {
-                        _go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
-                        _hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().getHitPoint();
+                        _go = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetObject();
+                        _hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPoint();
                         _hitPointNormal = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPointNormal();
-                        GameObject.Find("Main Camera").GetComponent<SelectObject>().resetColor();
-                        
-                        //Disable the Rigidbody of the parent GameObject
-                        _rigidbody = _go.GetComponent<Rigidbody>();
+                        GameObject.Find("Main Camera").GetComponent<SelectObject>().ResetColor();
                     }
                     catch (Exception)
                     {
@@ -118,11 +112,11 @@ namespace UI.MenuMB
                             //Destroy the RigidBody
                             Destroy(_go.GetComponent<Rigidbody>());
                             //Get max and min values of the selected GameObject
-                            _objectBounds = new ObjectBounds(_go);
-                            Vector3 max = _objectBounds.getMaxBounds();
-                            Vector3 min = _objectBounds.getMinBounds();
+                            //_objectBounds = new ObjectBounds(_go);
+                            //Vector3 max = _objectBounds.GetMaxBounds();
+                            //Vector3 min = _objectBounds.GetMinBounds();
 
-                            Vector3 offsetLeft = new Vector3();
+                            //Vector3 offsetLeft = new Vector3();
 
                             Vector3 rotationLeft = new Vector3() ;
                             
@@ -158,13 +152,10 @@ namespace UI.MenuMB
                         //Access data from the SelectObject script and change the GameObject's color back to normal
                         try
                         {
-                            _go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
-                            _hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().getHitPoint();
+                            _go = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetObject();
+                            _hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPoint();
                             _hitPointNormal = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPointNormal();
-                            GameObject.Find("Main Camera").GetComponent<SelectObject>().resetColor();
-                            
-                            //Disable the Rigidbody of the parent GameObject
-                            _rigidbody = _go.GetComponent<Rigidbody>();
+                            GameObject.Find("Main Camera").GetComponent<SelectObject>().ResetColor();
                         }
                         catch (Exception)
                         {
@@ -179,11 +170,12 @@ namespace UI.MenuMB
                                 //Destroy the RigidBody
                                 Destroy(_go.GetComponent<Rigidbody>());
                                 //Get max and min values of the selected GameObject
-                                _objectBounds = new ObjectBounds(_go);
-                                Vector3 max = _objectBounds.getMaxBounds();
-                                Vector3 min = _objectBounds.getMinBounds();
+                                //_objectBounds = new ObjectBounds(_go);
+                                //Vector3 max = _objectBounds.GetMaxBounds();
+                                //Vector3 min = _objectBounds.GetMinBounds();
 
-                                Vector3 offsetRight = new Vector3();
+                                //Vector3 offsetRight = new Vector3();
+                                
                                 Vector3 rotationRight = new Vector3();
                                 
                                 //load rightHandPrefab and instantiate it with the predetermined parameters

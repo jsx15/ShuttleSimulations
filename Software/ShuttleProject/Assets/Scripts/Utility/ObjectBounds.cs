@@ -2,18 +2,16 @@
 
 public class ObjectBounds
 {
-    private GameObject go;
-    private Renderer rend;
+    private readonly Renderer _rend;
         
     public ObjectBounds(GameObject go)
     {
-        this.go = go;
-        rend = go.GetComponent<Renderer>();
+        _rend = go.GetComponent<Renderer>();
     }
         
     //Return the max bounds
-    public Vector3 getMaxBounds() => rend.bounds.max;
+    public Vector3 GetMaxBounds() => _rend.bounds.max;
     
     //Return the min bounds
-    public Vector3 getMinBounds() => rend.bounds.min;
+    public Vector3 GetMinBounds() => _rend.bounds.min;
 }
