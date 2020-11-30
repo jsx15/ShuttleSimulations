@@ -19,7 +19,9 @@ public class SelectObject : MonoBehaviour
     private RaycastHit _hit;
     private Ray _ray;
     private Color _originalColor;
-    private readonly Color _selectColor = Color.red;
+    private Color _selectColor = Color.red;
+    private Material _defaultMaterial;
+    private Material _materialTransparent;
     private MeshRenderer _mRenderer;
     private MeshRenderer _mRendererChild;
     
@@ -33,6 +35,7 @@ public class SelectObject : MonoBehaviour
     private void Start()
     {
         _addObjectMenu = GameObject.Find("Scene").GetComponent<AddObjectMenu>();
+        _materialTransparent = (Material) Resources.Load("Materials/SelectedMoveTarget", typeof(Material));
     }
     
     // Update is called once per frame
@@ -49,10 +52,16 @@ public class SelectObject : MonoBehaviour
                     //If an object was already selected change it to it's original color
                     if (!(_go is null))
                     {
+                        //Look after the child if the object is a hand
                         if (HandChecker.IsHand(_go))
                         {
                             _mRendererChild.material.color = _originalColor;
                             _child = null;
+                        }
+                        //Change of the material if the object is a moveTarget
+                        else if (MoveTargetChecker.IsMoveTarget(_go))
+                        {
+                            _mRenderer.material = _defaultMaterial;
                         }    
                         _mRenderer.material.color = _originalColor;
                     }
@@ -65,16 +74,27 @@ public class SelectObject : MonoBehaviour
                     //Mark the selected object as red
                     _mRenderer = _go.GetComponent<MeshRenderer>();
                     _originalColor = _mRenderer.material.color;
-                    
+
                     _addObjectMenu.ObjectSelected(_go);
 
+                    //Look after the child if the object is a hand 
                     if (HandChecker.IsHand(_go))
                     {
                         _child = _go.transform.GetChild(0);
                         _mRendererChild = _child.GetComponent<MeshRenderer>();
                         _mRendererChild.material.color = _selectColor;
                     }
-                    _mRenderer.material.color = _selectColor;
+                    //Change of the material if the object is a moveTarget
+                    else if (MoveTargetChecker.IsMoveTarget(_go))
+                    {
+                        _defaultMaterial = _mRenderer.material;
+                        _mRenderer.material = _materialTransparent;
+                    }
+                    //Standard procedure for normal GameObjects
+                    else
+                    {
+                        _mRenderer.material.color = _selectColor;   
+                    }
 
                     _dragAndRotate = new DragAndRotate(_go, lockY);
                     if(HandChecker.IsHand(_go)) _handMovement = new HandMovement(_go);
@@ -85,10 +105,16 @@ public class SelectObject : MonoBehaviour
                 //If an object was already selected change it to it's original color and set the object to null
                 if (!(_go is null))
                 {
+                    //Look after the child if the object is a hand
                     if (HandChecker.IsHand(_go))
                     {
                         _mRendererChild.material.color = _originalColor;
                         _child = null;
+                    }    
+                    //Change of the material if the object is a moveTarget
+                    else if (MoveTargetChecker.IsMoveTarget(_go))
+                    {
+                        _mRenderer.material = _defaultMaterial;
                     }    
                     _mRenderer.material.color = _originalColor;
                     _go = null;
@@ -122,10 +148,17 @@ public class SelectObject : MonoBehaviour
     //Change color back to the original one
     public void ResetColor()
     {
+        //Look after the child if the object is a hand
         if (!(_child is null))
         {
             _mRendererChild.material.color = _originalColor;
+            _child = null;
         }
+        //Change of the material if the object is a moveTarget
+        else if (MoveTargetChecker.IsMoveTarget(_go))
+        {
+            _mRenderer.material = _defaultMaterial;
+        }  
         _mRenderer.material.color = _originalColor;
         _go = null;
         _addObjectMenu.ObjectSelected(_go);
