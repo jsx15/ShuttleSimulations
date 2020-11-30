@@ -289,9 +289,9 @@ public class TestAvatarBehavior : AvatarBehavior
             //Acces data from the SelectObject script and change the GameObject's color back to normal 
             try
             {
-                go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
-                hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().getHitPoint();
-                GameObject.Find("Main Camera").GetComponent<SelectObject>().resetColor();
+                go = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetObject();
+                hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPoint();
+                GameObject.Find("Main Camera").GetComponent<SelectObject>().ResetColor();
             }
             catch (Exception)
             {
@@ -304,9 +304,10 @@ public class TestAvatarBehavior : AvatarBehavior
                 {
                     //Get max and min values of the selected GameObject
                     objectBounds = new ObjectBounds(go);
-                    Vector3 max = objectBounds.getMaxBounds();
-                    Vector3 min = objectBounds.getMinBounds();
 
+                    Vector3 max = objectBounds.GetMaxBounds();
+                    Vector3 min = objectBounds.GetMinBounds();
+                    
                     Vector3 offsetLeft = new Vector3();
                     Vector3 rotationLeft = new Vector3();
 
@@ -368,9 +369,9 @@ public class TestAvatarBehavior : AvatarBehavior
             //Acces data from the SelectObject script and change the GameObject's color back to normal
             try
             {
-                go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
-                hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().getHitPoint();
-                GameObject.Find("Main Camera").GetComponent<SelectObject>().resetColor();
+                go = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetObject();
+                hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPoint();
+                GameObject.Find("Main Camera").GetComponent<SelectObject>().ResetColor();
             }
             catch (Exception)
             {
@@ -383,8 +384,9 @@ public class TestAvatarBehavior : AvatarBehavior
                 {
                     //Get max and min values of the selected GameObject
                     objectBounds = new ObjectBounds(go);
-                    Vector3 max = objectBounds.getMaxBounds();
-                    Vector3 min = objectBounds.getMinBounds();
+
+                    Vector3 max = objectBounds.GetMaxBounds();
+                    Vector3 min = objectBounds.GetMinBounds();
 
                     Vector3 offsetRight = new Vector3();
                     Vector3 rotationRight = new Vector3();

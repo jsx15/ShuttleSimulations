@@ -4,110 +4,134 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using MMIStandard;
 using MMIUnity.TargetEngine.Scene;
+using Movement;
 using UnityEngine;
 
-public class HandMovement 
+public class HandMovement
 {
-    private GameObject go;
-    private bool collider;
-    private GameObject parent;
+    private readonly GameObject _go;
+    private readonly GameObject _parent;
+    private List<UnityBone> _bones;
 
-    private List<UnityBone> bones; 
-    
+    //rotate variables
+    private bool _gravity;
+    private bool _collider;
+    private float _x;
+    private float _speed = 5.0F;
+
+    //classes
+    private ShowAxis showAxis;
 
     public HandMovement(GameObject go)
     {
-        this.go = go;
-        parent = go.transform.parent.gameObject;
-        safeCollider();
-        bones = new List<UnityBone>(go.GetComponentsInChildren<UnityBone>());
-        
+        _go = go;
+        _parent = go.transform.parent.gameObject;
+        _bones = new List<UnityBone>(go.GetComponentsInChildren<UnityBone>());
+        SafeCollider();
+
+        foreach (UnityBone bone in _bones.Skip(1))
+        {
+            if (bone.name.Contains("Proximal") || bone.name.Contains("ThumbMid"))
+            {
+                bone.gameObject.AddComponent<IKManager>();
+            }
+        }
     }
-    
+
+    //Handle the rotation of the hand
+    public void HandleRotateHand()
+    {
+        if (Input.GetKey(KeyCode.X))
+        {
+            //showAxis.showY();
+            //disable gravity and collider
+            DisableCollider();
+
+            //get mouse position on x axis
+            _x = _speed * Input.GetAxis("Mouse X");
+
+            //rotate object
+            _go.transform.Rotate(_x, 0, 0, Space.Self);
+
+            RestoreCollider();
+        }
+    }
+
     //casts a Ray from Object in predetermined direction
     //colliders from originating object have to be disabled in order to let the rays not hit the objects own collider 
-    public void castRayFromObject()
+    public void CastRayFromObject()
     {
-        disableCollider();
-        
-        //cast ray from object in direction  
-        Ray rayHand = new Ray(go.transform.position ,go.transform.right);
-        RaycastHit hitInfoHand;
-        
-        //cast ray from camera position to mouse position
-        Ray rayMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfoMouse;
-        
-        if (Physics.Raycast(rayHand, out hitInfoHand, 0.2f))
+        if (Input.GetKey(KeyCode.M))
         {
-            if (Input.GetKey(KeyCode.M) && Physics.Raycast(rayMouse, out hitInfoMouse))
+            DisableCollider();
+
+            //cast ray from object in direction
+            Ray rayHand = new Ray(_go.transform.position, _go.transform.right);
+            RaycastHit hitInfoHand;
+
+            //cast ray from camera position to mouse position
+            Ray rayMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfoMouse;
+
+            if (Physics.Raycast(rayHand, out hitInfoHand, 0.2f))
             {
-                // check if hitInfoMouse points to parent object of hand
-                if (hitInfoMouse.collider.gameObject.GetInstanceID().Equals(parent.GetInstanceID()))
+                if (Physics.Raycast(rayMouse, out hitInfoMouse))
                 {
-                    go.transform.position = hitInfoMouse.point + hitInfoMouse.normal * 0.005f;
-                    go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoMouse.normal);
-                    
-                    /*foreach (UnityBone bone in bones.Skip(1))
+                    // check if hitInfoMouse points to parent object of hand
+                    if (hitInfoMouse.collider.gameObject.GetInstanceID().Equals(_parent.GetInstanceID()))
                     {
-                         Ray rayBone = new Ray(bone.transform.position ,bone.transform.right);
-                        RaycastHit hitInfoBone;
-
-                        if (Physics.Raycast(rayBone, out hitInfoBone, 0.2f))
-                        {
-                            bone.transform.rotation = Quaternion.FromToRotation(hitInfoBone.transform, hitInfoBone.normal);
-                        }
-                        else
-                        {
-                            bone.transform.rotation = Quaternion.Euler(0,0,-60);
-                        }
-                        
-
-                    }*/
+                        _go.transform.position = hitInfoMouse.point + hitInfoMouse.normal * 0.02f;
+                        _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoMouse.normal);
+                    }
+                }
+                else
+                {
+                    _go.transform.position = hitInfoHand.point + hitInfoHand.normal * 0.02f;
+                    _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoHand.normal);
                 }
             }
-            else
-            {
-                go.transform.position = hitInfoHand.point + hitInfoHand.normal * 0.005f;
-                go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoHand.normal);
-            }
+            RestoreCollider();
         }
-        restoreCollider();
     }
     
-    private void safeCollider()
+//-------------------safe, restore and disable Settings-------------------
+
+    //safe gravity and collider settings
+    private void SafeCollider()
     {
         try
         {
-            collider = go.GetComponent<Collider>().enabled;
+            _collider = _go.GetComponent<Collider>().enabled;
+            //_gravity = _go.GetComponent<Rigidbody>().useGravity;
         }
         catch
         {
         }
     }
 
-    //restore collider settings
-    private void restoreCollider()
+    //restore gravity and collider settings
+    private void RestoreCollider()
     {
         try
         {
-            go.GetComponent<Collider>().enabled = collider;
+            //_go.GetComponent<Rigidbody>().useGravity = _gravity;
+            _go.GetComponent<Collider>().enabled = _collider;
         }
         catch
         {
         }
     }
 
-    //disable collider settings
-    private void disableCollider()
+    //disable gravity and collider settings
+    public void DisableCollider()
     {
         try
         {
-            go.GetComponent<Collider>().enabled = false;
+            //_go.GetComponent<Rigidbody>().useGravity = false;
+            _go.GetComponent<Collider>().enabled = false;
         }
         catch
         {
         }
     }
 }
-

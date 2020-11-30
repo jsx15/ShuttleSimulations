@@ -1,104 +1,104 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-//using DefaultNamespace;
+﻿//using DefaultNamespace;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 
 public class ShowAxis
 {
-    private GameObject obj;
-    private GameObject xAxis;
-    private GameObject yAxis;
-    private GameObject zAxis;
+    private readonly GameObject _obj;
+    private GameObject _xAxis;
+    private GameObject _yAxis;
+    private GameObject _zAxis;
 
-    private ObjectBounds bounds;
+    private readonly ObjectBounds _bounds;
 
     public ShowAxis(GameObject obj)
     {
-        this.obj = obj;
-        bounds = new ObjectBounds(obj);
+        this._obj = obj;
+        _bounds = new ObjectBounds(obj);
     }
 
-    public void showX()
+    public void ShowX()
     {
-        if (xAxis == null)
+        if (_xAxis == null)
         {
-            xAxis = new GameObject();
+            _xAxis = new GameObject();
         }
 
-        if (xAxis.GetComponent<LineRenderer>() == null)
+        if (_xAxis.GetComponent<LineRenderer>() == null)
         {
-            float max = 0.4f + bounds.getMaxBounds().x;
-            float min = bounds.getMinBounds().x - 0.4f;
-            Vector3 start = new Vector3(max, obj.transform.position.y, obj.transform.position.z);
-            Vector3 end = new Vector3(min, obj.transform.position.y, obj.transform.position.z);
-            DrawLine(xAxis, start, end, Color.red);
+            var max = 0.4f + _bounds.GetMaxBounds().x;
+            var min = _bounds.GetMinBounds().x - 0.4f;
+            var start = new Vector3(max, _obj.transform.position.y, _obj.transform.position.z);
+            var end = new Vector3(min, _obj.transform.position.y, _obj.transform.position.z);
+            DrawLine(_xAxis, start, end, Color.red);
         }
 
-        xAxis.GetComponent<LineRenderer>().enabled = true;
+        _xAxis.GetComponent<LineRenderer>().enabled = true;
     }
 
-    public void hideX()
+    public void HideX()
     {
-        GameObject.Destroy(xAxis);
+        Object.Destroy(_xAxis);
     }
 
-    public void showY()
+    public void ShowY()
     {
-        if (yAxis == null)
+        if (_yAxis == null)
         {
-            yAxis = new GameObject();
+            _yAxis = new GameObject();
         }
 
-        if (yAxis.GetComponent<LineRenderer>() == null)
+        if (_yAxis.GetComponent<LineRenderer>() == null)
         {
-            float max = 0.4f + bounds.getMaxBounds().y;
-            float min = bounds.getMinBounds().y - 0.4f;
-            Vector3 start = new Vector3(obj.transform.position.x, max, obj.transform.position.z);
-            Vector3 end = new Vector3(obj.transform.position.x, min, obj.transform.position.z);
-            DrawLine(yAxis, start, end, Color.green);
+            var max = 0.4f + _bounds.GetMaxBounds().y;
+            var min = _bounds.GetMinBounds().y - 0.4f;
+            var start = new Vector3(_obj.transform.position.x, max, _obj.transform.position.z);
+            var end = new Vector3(_obj.transform.position.x, min, _obj.transform.position.z);
+            DrawLine(_yAxis, start, end, Color.green);
         }
 
-        yAxis.GetComponent<LineRenderer>().enabled = true;
+        _yAxis.GetComponent<LineRenderer>().enabled = true;
     }
 
-    public void hideY()
+    public void HideY()
     {
-        GameObject.Destroy(yAxis);
+        Object.Destroy(_yAxis);
     }
 
-    public void showZ()
+    public void ShowZ()
     {
-        if (zAxis == null)
+        if (_zAxis == null)
         {
-            zAxis = new GameObject();
+            _zAxis = new GameObject();
         }
 
-        if (zAxis.GetComponent<LineRenderer>() == null)
+        if (_zAxis.GetComponent<LineRenderer>() == null)
         {
-            float max = 0.4f + bounds.getMaxBounds().z;
-            float min = bounds.getMinBounds().z - 0.4f;
-            Vector3 start = new Vector3(obj.transform.position.x, obj.transform.position.y, max);
-            Vector3 end = new Vector3(obj.transform.position.x, obj.transform.position.y, min);
-            DrawLine(zAxis, start, end, Color.blue);
+            var max = 0.4f + _bounds.GetMaxBounds().z;
+            var min = _bounds.GetMinBounds().z - 0.4f;
+            var start = new Vector3(_obj.transform.position.x, _obj.transform.position.y, max);
+            var end = new Vector3(_obj.transform.position.x, _obj.transform.position.y, min);
+            DrawLine(_zAxis, start, end, Color.blue);
         }
 
-        zAxis.GetComponent<LineRenderer>().enabled = true;
+        _zAxis.GetComponent<LineRenderer>().enabled = true;
     }
 
-    public void hideZ()
+    public void HideZ()
     {
-        GameObject.Destroy(zAxis);
+        Object.Destroy(_zAxis);
     }
 
-    void DrawLine(GameObject axis, Vector3 start, Vector3 end, Color color, float duration = 0.2f)
+    private static void DrawLine(GameObject axis, Vector3 start, Vector3 end, Color color, float duration = 0.2f)
     {
         axis.transform.position = start;
         axis.AddComponent<LineRenderer>();
         LineRenderer lr = axis.GetComponent<LineRenderer>();
         lr.material.color = color;
+#pragma warning disable 618
         lr.SetWidth(0.015f, 0.015f);
+#pragma warning restore 618
         lr.SetPosition(0, start);
         lr.SetPosition(1, end);
         //GameObject.Destroy(axis, duration);

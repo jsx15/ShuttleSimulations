@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Scripts;
+﻿using Scripts;
 using UnityEngine;
 
 public class ChaserCamera : MonoBehaviour
@@ -9,16 +6,16 @@ public class ChaserCamera : MonoBehaviour
     
     public float smoothness;
     public Transform targetObject;
-    private Vector3 initalOffset;
-    private Vector3 cameraPosition;
-    private bool followMode ;
+    private Vector3 _initalOffset;
+    private Vector3 _cameraPosition;
+    private bool _followMode ;
     
    
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         targetObject = GameObject.Find("Avatar").transform;
-        initalOffset = new Vector3(0,2,-2) - targetObject.position;
+        _initalOffset = new Vector3(0,2,-2) - targetObject.position;
         MenuManager.ShowMainMenu();
     }
 
@@ -27,16 +24,16 @@ public class ChaserCamera : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            followMode = !followMode;
+            _followMode = !_followMode;
         }
         
-        if (followMode) {
+        if (_followMode) {
             
         }
         else
         {
-            cameraPosition = targetObject.position + initalOffset;
-            transform.position = Vector3.Lerp(transform.position, cameraPosition, smoothness*Time.fixedDeltaTime);
+            _cameraPosition = targetObject.position + _initalOffset;
+            transform.position = Vector3.Lerp(transform.position, _cameraPosition, smoothness*Time.fixedDeltaTime);
         }
     }
 }

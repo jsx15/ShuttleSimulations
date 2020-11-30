@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace UI.MenuMB
 {
-    public class PlaceHandsMenu  : MonoBehaviour, Menu
+    public class PlaceHandsMenu : MonoBehaviour, Menu
     {
         /*
         * Canvas for GUI
@@ -23,19 +23,22 @@ namespace UI.MenuMB
         private GameObject _placeRightHandPinchButton;
         private bool _menuShowing;
 
-        private List<GameObject> _buttonList = new List<GameObject>();
+        private readonly List<GameObject> _buttonList = new List<GameObject>();
         
         /*
          * Necessary game object variables
          */
         private GameObject _go;
         private Vector3 _hitPoint;
+        private Vector3 _hitPointNormal;
         private string _carryID;
         private BoxCollider _boxColliderLeftHand;
         private BoxCollider _boxColliderRightHand;
         private ObjectBounds _objectBounds;
-        private const float OffSetValue = 0.005f;
+        
+        private const float OffSetValue = 0.02f;
 
+        
 
         public void RemoveMenu()
         {
@@ -92,9 +95,10 @@ namespace UI.MenuMB
                     //Access data from the SelectObject script and change the GameObject's color back to normal 
                     try
                     {
-                        _go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
-                        _hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().getHitPoint();
-                        GameObject.Find("Main Camera").GetComponent<SelectObject>().resetColor();
+                        _go = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetObject();
+                        _hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPoint();
+                        _hitPointNormal = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPointNormal();
+                        GameObject.Find("Main Camera").GetComponent<SelectObject>().ResetColor();
                     }
                     catch (Exception)
                     {
@@ -105,56 +109,26 @@ namespace UI.MenuMB
                     {
                         if (!HandChecker.HasLeftHand(_go))
                         {
+                            //Destroy the RigidBody
+                            Destroy(_go.GetComponent<Rigidbody>());
                             //Get max and min values of the selected GameObject
-                            _objectBounds = new ObjectBounds(_go);
-                            Vector3 max = _objectBounds.getMaxBounds();
-                            Vector3 min = _objectBounds.getMinBounds();
+                            //_objectBounds = new ObjectBounds(_go);
+                            //Vector3 max = _objectBounds.GetMaxBounds();
+                            //Vector3 min = _objectBounds.GetMinBounds();
 
-                            Vector3 offsetLeft;
-                            Vector3 rotationLeft;
+                            //Vector3 offsetLeft = new Vector3();
 
-
-                            //determine Offset vector and needed rotation in order to let the palm face the object
-                            if (_hitPoint.x == max.x)
-                            {
-                                offsetLeft = new Vector3(OffSetValue, 0, 0);
-                                rotationLeft = new Vector3(0, 180, 0);
-                            }
-                            else if (_hitPoint.x == min.x)
-                            {
-                                offsetLeft = new Vector3(-OffSetValue, 0, 0);
-                                rotationLeft = new Vector3(0, 0, 0);
-                            }
-                            else if (_hitPoint.y == max.y)
-                            {
-                                offsetLeft = new Vector3(0, OffSetValue, 0);
-                                rotationLeft = new Vector3(0, 0, -90);
-                            }
-                            else if (_hitPoint.y == min.y)
-                            {
-                                offsetLeft = new Vector3(0, -OffSetValue, 0);
-                                rotationLeft = new Vector3(0, 0, 90);
-                            }
-                            else if (_hitPoint.z == max.z)
-                            {
-                                offsetLeft = new Vector3(0, 0, OffSetValue);
-                                rotationLeft = new Vector3(0, 90, 0);
-                            }
-                            else
-                            {
-                                offsetLeft = new Vector3(0, 0, -OffSetValue);
-                                rotationLeft = new Vector3(0, -90, 0);
-                            }
-
-
+                            Vector3 rotationLeft = new Vector3() ;
+                            
                             //load leftHandPrefab and instantiate it with the predetermined parameters
                             GameObject leftHandPrefab =
                                 Resources.Load("HandPrefab" + Path.DirectorySeparatorChar + "LeftHand") as GameObject;
                             GameObject leftHand = Instantiate(leftHandPrefab,
-                                new Vector3(_hitPoint.x, _hitPoint.y, _hitPoint.z) + offsetLeft,
+                                _hitPoint + _hitPointNormal * OffSetValue ,
                                 Quaternion.Euler(rotationLeft));
                             leftHand.transform.SetParent(_go.transform);
-
+                            leftHand.transform.rotation = Quaternion.FromToRotation(-leftHand.transform.right, _hitPointNormal);
+                            
                             //Add a BoxCollider to the hand
                             _boxColliderLeftHand = leftHand.AddComponent<BoxCollider>();
                             adjustBoxCollider(_boxColliderLeftHand, 0);
@@ -178,9 +152,10 @@ namespace UI.MenuMB
                         //Access data from the SelectObject script and change the GameObject's color back to normal
                         try
                         {
-                            _go = GameObject.Find("Main Camera").GetComponent<SelectObject>().getObject();
-                            _hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().getHitPoint();
-                            GameObject.Find("Main Camera").GetComponent<SelectObject>().resetColor();
+                            _go = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetObject();
+                            _hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPoint();
+                            _hitPointNormal = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPointNormal();
+                            GameObject.Find("Main Camera").GetComponent<SelectObject>().ResetColor();
                         }
                         catch (Exception)
                         {
@@ -192,54 +167,26 @@ namespace UI.MenuMB
                         {
                             if (!HandChecker.HasRightHand(_go))
                             {
+                                //Destroy the RigidBody
+                                Destroy(_go.GetComponent<Rigidbody>());
                                 //Get max and min values of the selected GameObject
-                                _objectBounds = new ObjectBounds(_go);
-                                Vector3 max = _objectBounds.getMaxBounds();
-                                Vector3 min = _objectBounds.getMinBounds();
+                                //_objectBounds = new ObjectBounds(_go);
+                                //Vector3 max = _objectBounds.GetMaxBounds();
+                                //Vector3 min = _objectBounds.GetMinBounds();
 
-                                Vector3 offsetRight;
-                                Vector3 rotationRight;
-
-                                //determine Offset vector and needed rotation in order to let the palm face the object
-                                if (_hitPoint.x == max.x)
-                                {
-                                    offsetRight = new Vector3(OffSetValue, 0, 0);
-                                    rotationRight = new Vector3(0, 180, 0);
-                                }
-                                else if (_hitPoint.x == min.x)
-                                {
-                                    offsetRight = new Vector3(-OffSetValue, 0, 0);
-                                    rotationRight = new Vector3(0, 0, 0);
-                                }
-                                else if (_hitPoint.y == max.y)
-                                {
-                                    offsetRight = new Vector3(0, OffSetValue, 0);
-                                    rotationRight = new Vector3(0, 0, -90);
-                                }
-                                else if (_hitPoint.y == min.y)
-                                {
-                                    offsetRight = new Vector3(0, -OffSetValue, 0);
-                                    rotationRight = new Vector3(0, 0, 90);
-                                }
-                                else if (_hitPoint.z == max.z)
-                                {
-                                    offsetRight = new Vector3(0, 0, OffSetValue);
-                                    rotationRight = new Vector3(0, 90, 0);
-                                }
-                                else
-                                {
-                                    offsetRight = new Vector3(0, 0, -OffSetValue);
-                                    rotationRight = new Vector3(0, -90, 0);
-                                }
-
+                                //Vector3 offsetRight = new Vector3();
+                                
+                                Vector3 rotationRight = new Vector3();
+                                
                                 //load rightHandPrefab and instantiate it with the predetermined parameters
                                 GameObject rightHandPrefab =
                                     Resources.Load("HandPrefab" + Path.DirectorySeparatorChar + "RightHand") as
                                         GameObject;
                                 GameObject rightHand = Instantiate(rightHandPrefab,
-                                    new Vector3(_hitPoint.x, _hitPoint.y, _hitPoint.z) + offsetRight,
+                                    _hitPoint +  _hitPointNormal * OffSetValue,
                                     Quaternion.Euler(rotationRight));
                                 rightHand.transform.SetParent(_go.transform);
+                                rightHand.transform.rotation = Quaternion.FromToRotation(-rightHand.transform.right, _hitPointNormal);
 
                                 //Add a BoxCollider to the hand
                                 _boxColliderRightHand = rightHand.AddComponent<BoxCollider>();
@@ -275,7 +222,7 @@ namespace UI.MenuMB
                     break;
                 case 1:
                     boxCollider.size = new Vector3(0.04f, 0.2f, 0.15f);
-                    boxCollider.center = new Vector3(-0.008f, 0.1f, -0.025f);
+                    boxCollider.center = new Vector3(-0.008f, 0.1f, 0.025f);
                     break;
             }
         }

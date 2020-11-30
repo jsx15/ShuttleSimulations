@@ -21,11 +21,7 @@ namespace Scripts
         private GameObject _removeButton;
         private GameObject _addObjectButton;
         private GameObject _createTargetButton;
-
-        public void Start()
-        {
-        }
-
+        private GameObject _parent;
 
         public void ShowMenu()
         {
@@ -126,19 +122,10 @@ namespace Scripts
             if (go is null)
             {
                 Destroy(_removeButton);
+                _removeButton = null;
                 return;
             }
-            // Add remove object button
-            _removeButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
-            if (_removeButton is null) return;
-            _removeButton.transform.position = new Vector3((Screen.width / 20f), (Screen.height / 10) * 1);
-            _removeButton.GetComponentInChildren<Text>().text = "Remove";
-            _removeButton.GetComponent<Button>().onClick.AddListener(() =>
-                {
-                    Destroy(go);
-                    Destroy(_removeButton);
-                });
-            
+
             _createTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (_createTargetButton is null) return;
             _createTargetButton.transform.position = new Vector3((Screen.width / 20f) + 150, (Screen.height / 10) * 1);
@@ -153,7 +140,28 @@ namespace Scripts
                 target.AddComponent<HoldPos>();
             });
 
+            if (_removeButton is null)
+            {
+                // Add remove object button
+                _removeButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
+                if (_removeButton is null) return;
+                _removeButton.transform.position = new Vector3((Screen.width / 20f), (Screen.height / 10) * 6);
+                _removeButton.GetComponentInChildren<Text>().text = "Remove";
+                _removeButton.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    if (HandChecker.IsHand(go)) _parent = go.transform.parent.gameObject;
+                    Destroy(go);
+                    if (_parent != null)
+                    {
+                        if (!(HandChecker.HasLeftHand(_parent) && HandChecker.HasRightHand(_parent)))
+                        {
+                            _parent.AddComponent<Rigidbody>();
+                        }
+                    }
+
+                    Destroy(_removeButton);
+                });
+            }
         }
-        
     }
 }
