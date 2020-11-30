@@ -20,11 +20,7 @@ namespace Scripts
          */
         private GameObject _removeButton;
         private GameObject _addObjectButton;
-
-        public void Start()
-        {
-        }
-
+        private GameObject _parent;
 
         public void ShowMenu()
         {
@@ -118,26 +114,38 @@ namespace Scripts
         /*
          * Toggles remove button
          */
-        public void ObjectSelected(GameObject gameObject)
+        public void ObjectSelected(GameObject go)
         {
             _canvas = GameObject.Find("Canvas");
-            if (gameObject is null)
+            if (go is null)
             {
                 Destroy(_removeButton);
+                _removeButton = null;
                 return;
             }
-            // Add remove object button
-            _removeButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
-            if (_removeButton is null) return;
-            _removeButton.transform.position = new Vector3((Screen.width / 20f), (Screen.height / 10) * 6);
-            _removeButton.GetComponentInChildren<Text>().text = "Remove";
-            _removeButton.GetComponent<Button>().onClick.AddListener(() =>
+
+            if (_removeButton is null)
+            {
+                // Add remove object button
+                _removeButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
+                if (_removeButton is null) return;
+                _removeButton.transform.position = new Vector3((Screen.width / 20f), (Screen.height / 10) * 6);
+                _removeButton.GetComponentInChildren<Text>().text = "Remove";
+                _removeButton.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    Destroy(gameObject);
+                    if (HandChecker.IsHand(go)) _parent = go.transform.parent.gameObject;
+                    Destroy(go);
+                    if (_parent != null)
+                    {
+                        if (!(HandChecker.HasLeftHand(_parent) && HandChecker.HasRightHand(_parent)))
+                        {
+                            _parent.AddComponent<Rigidbody>();
+                        }
+                    }
+
                     Destroy(_removeButton);
                 });
-
+            }
         }
-        
     }
 }
