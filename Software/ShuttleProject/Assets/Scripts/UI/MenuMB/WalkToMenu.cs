@@ -30,7 +30,7 @@ namespace UI.MenuMB
             _walkTo = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (_walkTo is null) return;
             _walkTo.GetComponentInChildren<Text>().text = "Walk to";
-            _walkTo.transform.position = new Vector3(Screen.width / 20f, (Screen.height / 10f) * 6f);
+            _walkTo.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width), MenuManager.HeightDistance(Screen.height, 6));
             _walkTo.GetComponent<Button>().onClick.AddListener(() =>
             {
                 SSTools.ShowMessage("Select object to walk to", SSTools.Position.bottom,

@@ -28,9 +28,8 @@ namespace Scripts
             _canvas = GameObject.Find("Canvas");
             var mainMenuButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (mainMenuButton is null) return;
-            mainMenuButton.transform.position = new Vector3(Screen.width / 20f, (Screen.height / 10) * 9);
+            mainMenuButton.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width), MenuManager.HeightDistance(Screen.height, 9));
             mainMenuButton.GetComponentInChildren<Text>().text = "Main menu";
-            // mainMenuButton.GetComponent<Button>().onClick.AddListener(MenuManager.ShowAddObjectMenu);
             mainMenuButton.GetComponent<Button>().onClick.AddListener(() =>
             {
                 if (_showing)
@@ -44,13 +43,14 @@ namespace Scripts
                 MenuManager.ShowAddObjectMenu();
                 MenuManager.ShowPlaceHandMenu();
                 MenuManager.ShowWalkTo();
+                MenuManager.ShowQueue();
                 _showing = true;
             });
 
             //Add quit button
             var quitButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (quitButton is null) return;
-            quitButton.transform.position = new Vector3((Screen.width / 20) * 18, (Screen.height / 10) * 1);
+            quitButton.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width, "right"), MenuManager.HeightDistance(Screen.height, 1));
             quitButton.GetComponentInChildren<Text>().text = "Quit";
             // Click listener
             quitButton.GetComponent<Button>().onClick.AddListener(() => { Application.Quit(0); });

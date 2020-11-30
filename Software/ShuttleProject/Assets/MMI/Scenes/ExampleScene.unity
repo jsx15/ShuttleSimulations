@@ -6085,6 +6085,7 @@ GameObject:
   - component: {fileID: 1635182284}
   - component: {fileID: 1635182286}
   - component: {fileID: 1635182287}
+  - component: {fileID: 1635182288}
   m_Layer: 0
   m_Name: Scene
   m_TagString: Untagged
@@ -6165,6 +6166,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7ecbb434e034fb1a01401e01c10a336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1635182288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635182282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e690f99f1d354da2b7e828e14725a067, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  beh: {fileID: 7341640644656884277}
 --- !u!4 &1649885968 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 948265044574663426, guid: 9696c76540f925f488848d37521b7f5e,
