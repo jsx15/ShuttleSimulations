@@ -143,6 +143,15 @@ namespace Scripts
             if (_createTargetButton is null) return;
             _createTargetButton.transform.position = new Vector3((Screen.width / 20f) + 150, (Screen.height / 10) * 1);
             _createTargetButton.GetComponentInChildren<Text>().text = "Create Target";
+            _createTargetButton.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                GameObject target = Instantiate(go, go.transform.position, go.transform.rotation);
+                target.transform.parent = go.transform;
+                target.name = "moveTarget";
+                Material material = (Material) Resources.Load("Materials/targetMaterial",typeof(Material));
+                target.GetComponent<Renderer>().material = material;
+                target.AddComponent<HoldPos>();
+            });
 
         }
         
