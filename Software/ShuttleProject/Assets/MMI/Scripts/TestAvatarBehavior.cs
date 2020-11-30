@@ -596,7 +596,7 @@ public class TestAvatarBehavior : AvatarBehavior
         {
             MInstruction carryInstruction = new MInstruction(carryID, "carry object", "Object/Carry")
             {
-                Properties = PropertiesCreator.Create("TargetID", obj.GetComponent<MMISceneObject>().MSceneObject.ID, "Hand",
+                Properties = PropertiesCreator.Create("TargetID", objID, "Hand",
                     "Right"),
             };
             list.Add(carryInstruction);

@@ -20,6 +20,7 @@ namespace Scripts
          */
         private GameObject _removeButton;
         private GameObject _addObjectButton;
+        private GameObject _createTargetButton;
 
         public void Start()
         {
@@ -112,6 +113,7 @@ namespace Scripts
             scene.GetComponent<ManageObject>().addObjectPressed = false;
             Destroy(_addObjectButton);
             Destroy(_removeButton);
+            Destroy(_createTargetButton);
             ClearButtons();
         }
 
@@ -136,6 +138,11 @@ namespace Scripts
                     Destroy(go);
                     Destroy(_removeButton);
                 });
+            
+            _createTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
+            if (_createTargetButton is null) return;
+            _createTargetButton.transform.position = new Vector3((Screen.width / 20f) + 150, (Screen.height / 10) * 1);
+            _createTargetButton.GetComponentInChildren<Text>().text = "Create Target";
 
         }
         
