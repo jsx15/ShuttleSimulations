@@ -35,7 +35,7 @@ namespace Scripts
             _addObjectButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (!(_addObjectButton is null))
             {
-                _addObjectButton.transform.position = new Vector3(Screen.width/20f, (Screen.height / 10f) * 8f);
+                _addObjectButton.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width), MenuManager.HeightDistance(Screen.height, 8));
                 _addObjectButton.GetComponentInChildren<Text>().text = "Add object";
                 // Click listener
                 
