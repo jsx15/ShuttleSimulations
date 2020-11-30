@@ -14,7 +14,7 @@ public class HoldPos : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ()
+       /* if ()
         {
             
             this.transform.position = pos;
@@ -23,7 +23,7 @@ public class HoldPos : MonoBehaviour
         {
             pos = this.transform.position;
         }
-
+*/
         
     }
 }
