@@ -26,7 +26,7 @@ namespace Scripts
         }
         
         //Check if object has both hands
-        public static Boolean HasBothHands(GameObject obj)
+        public static bool HasBothHands(GameObject obj)
         {
             if (obj.transform.GetChildRecursiveByName("RightHand(Clone)") && obj.transform.GetChildRecursiveByName("LeftHand(Clone)"))
             {
@@ -35,9 +35,6 @@ namespace Scripts
             return false;
         }
         
-        public static Boolean IsHand(GameObject obj)
-        {
-            if (obj.name == "RightHand(Clone)" || obj.name == "LeftHand(Clone)" )
         //Check if object is a Hand
         public static bool IsHand(GameObject go)
         {

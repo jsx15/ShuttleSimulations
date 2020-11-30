@@ -138,6 +138,10 @@ namespace Scripts
                 Material material = (Material) Resources.Load("Materials/targetMaterial",typeof(Material));
                 target.GetComponent<Renderer>().material = material;
                 target.AddComponent<HoldPos>();
+                ObjectBounds _bounds = new ObjectBounds(go.transform.gameObject);
+                float size = _bounds.GetMaxBounds().x - _bounds.GetMinBounds().x;
+                Vector3 newPos = new Vector3(go.transform.position.x + size + 0.25f*size, go.transform.position.y, go.transform.position.z);
+                target.transform.position = newPos;
             });
 
             if (_removeButton is null)
