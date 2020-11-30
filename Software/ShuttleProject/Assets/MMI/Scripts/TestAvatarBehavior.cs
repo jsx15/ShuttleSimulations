@@ -620,7 +620,7 @@ public class TestAvatarBehavior : AvatarBehavior
     public void RunInstruction(List<MInstruction> list)
     {
         MInstruction idleInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Idle", "idle");
-        //this.CoSimulator.MSimulationEventHandler += this.CoSimulator_MSimulationEventHandler;
+        this.CoSimulator.MSimulationEventHandler += this.CoSimulator_MSimulationEventHandler;
         for (int i = 0; i < list.Count; i++)
         {
             if (i > 0)

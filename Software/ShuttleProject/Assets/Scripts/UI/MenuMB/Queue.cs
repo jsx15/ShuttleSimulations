@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MMIStandard;
+using MMIUnity;
 using Scripts;
 using UnityEngine;
 using UnityEngine.UI;
@@ -70,6 +71,7 @@ namespace UI.MenuMB
             {
                 ClearButtons();
                 beh.RunInstruction(_mInstructions);
+                MenuManager.CloseAllMenues();
             });
             _buttonList.Add(play);
         }
@@ -112,7 +114,7 @@ namespace UI.MenuMB
                 _move.GetComponentInChildren<Text>().text = "Move";
                 _move.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    _mInstructions.AddRange(beh.MoveObject(GameObject.Find("Sphere"), GameObject.Find("SphereTarget")));
+                    _mInstructions.AddRange(beh.MoveObject(GameObject.Find("Sphere"), GameObject.Find("Sphere").transform.GetChildRecursiveByName("moveTarget").gameObject));
                 });
                 _buttonList.Add(_move);
             }

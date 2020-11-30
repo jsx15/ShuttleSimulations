@@ -122,34 +122,43 @@ namespace Scripts
             if (go is null)
             {
                 Destroy(_removeButton);
+                Destroy(_createTargetButton);
+                _createTargetButton = null;
                 _removeButton = null;
                 return;
-            }
-
-            _createTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
-            if (_createTargetButton is null) return;
-            _createTargetButton.transform.position = new Vector3((Screen.width / 20f) + 150, (Screen.height / 10) * 1);
-            _createTargetButton.GetComponentInChildren<Text>().text = "Create Target";
-            _createTargetButton.GetComponent<Button>().onClick.AddListener(() =>
+            }   
+            if (_createTargetButton is null)
             {
-                GameObject target = Instantiate(go, go.transform.position, go.transform.rotation);
-                target.transform.parent = go.transform;
-                target.name = "moveTarget";
-                Material material = (Material) Resources.Load("Materials/targetMaterial",typeof(Material));
-                target.GetComponent<Renderer>().material = material;
-                target.AddComponent<HoldPos>();
-                ObjectBounds _bounds = new ObjectBounds(go.transform.gameObject);
-                float size = _bounds.GetMaxBounds().x - _bounds.GetMinBounds().x;
-                Vector3 newPos = new Vector3(go.transform.position.x + size + 0.25f*size, go.transform.position.y, go.transform.position.z);
-                target.transform.position = newPos;
-            });
+                _createTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
+                if (_createTargetButton is null) return;
+                _createTargetButton.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width) + 150, MenuManager.HeightDistance(Screen.height, 1));
+                _createTargetButton.GetComponentInChildren<Text>().text = "Create Target";
+                _buttonList.Add(_createTargetButton);
+                _createTargetButton.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    GameObject target = Instantiate(go, go.transform.position, go.transform.rotation);
+                    target.transform.parent = go.transform;
+                    target.name = "moveTarget";
+                    Material material = (Material) Resources.Load("Materials/targetMaterial",typeof(Material));
+                    target.GetComponent<Renderer>().material = material;
+                    target.AddComponent<HoldPos>();
+                    ObjectBounds _bounds = new ObjectBounds(go.transform.gameObject);
+                    float size = _bounds.GetMaxBounds().x - _bounds.GetMinBounds().x;
+                    Vector3 newPos = new Vector3(go.transform.position.x + size + 0.25f*size, go.transform.position.y, go.transform.position.z);
+                    target.transform.position = newPos;
+                    Destroy(_createTargetButton);
+                    Destroy(_removeButton);
+                });
+                _buttonList.Add(_createTargetButton);
+            }
+            
 
             if (_removeButton is null)
             {
                 // Add remove object button
                 _removeButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
                 if (_removeButton is null) return;
-                _removeButton.transform.position = new Vector3((Screen.width / 20f), (Screen.height / 10) * 6);
+                _removeButton.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width), MenuManager.HeightDistance(Screen.height, 1));
                 _removeButton.GetComponentInChildren<Text>().text = "Remove";
                 _removeButton.GetComponent<Button>().onClick.AddListener(() =>
                 {
@@ -164,6 +173,7 @@ namespace Scripts
                     }
 
                     Destroy(_removeButton);
+                    Destroy(_createTargetButton);
                 });
             }
         }
