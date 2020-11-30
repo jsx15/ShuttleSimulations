@@ -6,7 +6,7 @@ namespace Scripts
     {
         public static bool IsMoveTarget(GameObject go)
         {
-            if (go.name == "moveTarget")
+            if ( go != null && go.name == "moveTarget")
             {
                 return true;
             }
