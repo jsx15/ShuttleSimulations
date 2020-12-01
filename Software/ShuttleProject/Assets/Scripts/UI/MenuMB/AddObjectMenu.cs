@@ -22,6 +22,7 @@ namespace Scripts
         private GameObject _addObjectButton;
         private GameObject _createTargetButton;
         private GameObject _parent;
+        private GameObject _oldGameObject;
 
         public void ShowMenu()
         {
@@ -114,7 +115,7 @@ namespace Scripts
         }
 
         /*
-         * Toggles remove button
+         * Toggles remove button and Create Target button
          */
         public void ObjectSelected(GameObject go)
         {
@@ -126,9 +127,10 @@ namespace Scripts
                 _createTargetButton = null;
                 _removeButton = null;
                 return;
-            }   
-            if (_createTargetButton is null)
+            }
+            if (_createTargetButton is null || _oldGameObject != go)
             {
+                Destroy(_createTargetButton);
                 _createTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
                 if (_createTargetButton is null) return;
                 _createTargetButton.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width) + 150, MenuManager.HeightDistance(Screen.height, 1));
@@ -153,8 +155,9 @@ namespace Scripts
             }
             
 
-            if (_removeButton is null)
+            if (_removeButton is null || _oldGameObject != go)
             {
+                Destroy(_removeButton);
                 // Add remove object button
                 _removeButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
                 if (_removeButton is null) return;
@@ -176,6 +179,7 @@ namespace Scripts
                     Destroy(_createTargetButton);
                 });
             }
+            _oldGameObject = go;
         }
     }
 }
