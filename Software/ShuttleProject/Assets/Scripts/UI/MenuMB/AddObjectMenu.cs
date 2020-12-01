@@ -20,6 +20,7 @@ namespace Scripts
          */
         private GameObject _removeButton;
         private GameObject _addObjectButton;
+        private GameObject _createTargetButton;
         private GameObject _parent;
 
         public void ShowMenu()
@@ -30,7 +31,7 @@ namespace Scripts
             _addObjectButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (!(_addObjectButton is null))
             {
-                _addObjectButton.transform.position = new Vector3(Screen.width/20f, (Screen.height / 10f) * 8f);
+                _addObjectButton.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width), MenuManager.HeightDistance(Screen.height, 8));
                 _addObjectButton.GetComponentInChildren<Text>().text = "Add object";
                 // Click listener
                 
@@ -108,6 +109,7 @@ namespace Scripts
             scene.GetComponent<ManageObject>().addObjectPressed = false;
             Destroy(_addObjectButton);
             Destroy(_removeButton);
+            Destroy(_createTargetButton);
             ClearButtons();
         }
 
@@ -120,16 +122,43 @@ namespace Scripts
             if (go is null)
             {
                 Destroy(_removeButton);
+                Destroy(_createTargetButton);
+                _createTargetButton = null;
                 _removeButton = null;
                 return;
+            }   
+            if (_createTargetButton is null)
+            {
+                _createTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
+                if (_createTargetButton is null) return;
+                _createTargetButton.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width) + 150, MenuManager.HeightDistance(Screen.height, 1));
+                _createTargetButton.GetComponentInChildren<Text>().text = "Create Target";
+                _buttonList.Add(_createTargetButton);
+                _createTargetButton.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    GameObject target = Instantiate(go, go.transform.position, go.transform.rotation);
+                    target.transform.parent = go.transform;
+                    target.name = "moveTarget";
+                    Material material = (Material) Resources.Load("Materials/targetMaterial",typeof(Material));
+                    target.GetComponent<Renderer>().material = material;
+                    target.AddComponent<HoldPos>();
+                    ObjectBounds _bounds = new ObjectBounds(go.transform.gameObject);
+                    float size = _bounds.GetMaxBounds().x - _bounds.GetMinBounds().x;
+                    Vector3 newPos = new Vector3(go.transform.position.x + size + 0.25f*size, go.transform.position.y, go.transform.position.z);
+                    target.transform.position = newPos;
+                    Destroy(_createTargetButton);
+                    Destroy(_removeButton);
+                });
+                _buttonList.Add(_createTargetButton);
             }
+            
 
             if (_removeButton is null)
             {
                 // Add remove object button
                 _removeButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
                 if (_removeButton is null) return;
-                _removeButton.transform.position = new Vector3((Screen.width / 20f), (Screen.height / 10) * 6);
+                _removeButton.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width), MenuManager.HeightDistance(Screen.height, 1));
                 _removeButton.GetComponentInChildren<Text>().text = "Remove";
                 _removeButton.GetComponent<Button>().onClick.AddListener(() =>
                 {
@@ -144,6 +173,7 @@ namespace Scripts
                     }
 
                     Destroy(_removeButton);
+                    Destroy(_createTargetButton);
                 });
             }
         }

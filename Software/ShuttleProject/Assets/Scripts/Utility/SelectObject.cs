@@ -2,9 +2,12 @@
 using Scripts;
 using UnityEngine;
 
+
 public class SelectObject : MonoBehaviour
 {
     public bool lockY;
+    
+    public event EventHandler ObjectSelected;
     
     //Button manager
     private AddObjectMenu _addObjectMenu;
@@ -30,6 +33,8 @@ public class SelectObject : MonoBehaviour
     private DragAndRotate _dragAndRotate;
 
     private HandMovement _handMovement;
+    
+    //private WalkToMenu.WalkToHandler _walkToHandler = new WalkToMenu.WalkToHandler();
     
     
     private void Start()
@@ -74,7 +79,14 @@ public class SelectObject : MonoBehaviour
                     //Mark the selected object as red
                     _mRenderer = _go.GetComponent<MeshRenderer>();
                     _originalColor = _mRenderer.material.color;
-
+                    
+                    _addObjectMenu.ObjectSelected(_go);
+                    
+                  /*  ObjectSelected += delegate(object sender, EventArgs args)
+                    {
+                        _walkToHandler.ObjectSelectedHandler(sender, args, _go.name);
+                    };
+                    */
                     _addObjectMenu.ObjectSelected(_go);
 
                     //Look after the child if the object is a hand 

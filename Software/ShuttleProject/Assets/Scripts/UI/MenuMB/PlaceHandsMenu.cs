@@ -57,7 +57,7 @@ namespace UI.MenuMB
             _placeHandsButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (!(_placeHandsButton is null))
             {
-                _placeHandsButton.transform.position = new Vector3(Screen.width/20f, (Screen.height / 10f) * 7f);
+                _placeHandsButton.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width), MenuManager.HeightDistance(Screen.height, 7));
                 _placeHandsButton.GetComponentInChildren<Text>().text = "Place Hand";
                 _menuShowing = false;
                 
