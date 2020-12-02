@@ -35,6 +35,7 @@ namespace UI.MenuMB
         private BoxCollider _boxColliderLeftHand;
         private BoxCollider _boxColliderRightHand;
         private ObjectBounds _objectBounds;
+        private bool _hasRigidBody = false;
         
         private const float OffSetValue = 0.02f;
 
@@ -109,14 +110,12 @@ namespace UI.MenuMB
                     {
                         if (!HandChecker.HasLeftHand(_go))
                         {
-                            //Destroy the RigidBody
-                            Destroy(_go.GetComponent<Rigidbody>());
-                            //Get max and min values of the selected GameObject
-                            //_objectBounds = new ObjectBounds(_go);
-                            //Vector3 max = _objectBounds.GetMaxBounds();
-                            //Vector3 min = _objectBounds.GetMinBounds();
-
-                            //Vector3 offsetLeft = new Vector3();
+                            if (_go.GetComponent<Rigidbody>() != null)
+                            {
+                                //Destroy the RigidBody
+                                Destroy(_go.GetComponent<Rigidbody>());
+                                _hasRigidBody = true;
+                            }
 
                             Vector3 rotationLeft = new Vector3() ;
                             
@@ -167,14 +166,12 @@ namespace UI.MenuMB
                         {
                             if (!HandChecker.HasRightHand(_go))
                             {
-                                //Destroy the RigidBody
-                                Destroy(_go.GetComponent<Rigidbody>());
-                                //Get max and min values of the selected GameObject
-                                //_objectBounds = new ObjectBounds(_go);
-                                //Vector3 max = _objectBounds.GetMaxBounds();
-                                //Vector3 min = _objectBounds.GetMinBounds();
-
-                                //Vector3 offsetRight = new Vector3();
+                                if (_go.GetComponent<Rigidbody>() != null)
+                                {
+                                    //Destroy the RigidBody
+                                    Destroy(_go.GetComponent<Rigidbody>());
+                                    _hasRigidBody = true;
+                                }
                                 
                                 Vector3 rotationRight = new Vector3();
                                 
@@ -227,6 +224,12 @@ namespace UI.MenuMB
             }
         }
         
-        
+        //Return _hasRigidBody and reset it back to false
+        public bool GetRigidBody()
+        {
+            bool temp = _hasRigidBody;
+            _hasRigidBody = false;
+            return temp;   
+        }
     }
 }

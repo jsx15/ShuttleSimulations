@@ -55,7 +55,7 @@ public class SelectObject : MonoBehaviour
                 if (_hit.transform)
                 {
                     //If an object was already selected change it to it's original color
-                    if (!(_go is null))
+                    if (_go != null)
                     {
                         //Look after the child if the object is a hand
                         if (HandChecker.IsHand(_go))
@@ -115,13 +115,14 @@ public class SelectObject : MonoBehaviour
             else
             {
                 //If an object was already selected change it to it's original color and set the object to null
-                if (!(_go is null))
+                if (_go != null)
                 {
                     //Look after the child if the object is a hand
                     if (HandChecker.IsHand(_go))
                     {
                         _mRendererChild.material.color = _originalColor;
                         _child = null;
+                        _mRendererChild = null;
                     }    
                     //Change of the material if the object is a moveTarget
                     else if (MoveTargetChecker.IsMoveTarget(_go))
@@ -130,6 +131,7 @@ public class SelectObject : MonoBehaviour
                     }    
                     _mRenderer.material.color = _originalColor;
                     _go = null;
+                    _mRenderer = null;
                     _addObjectMenu.ObjectSelected(_go);
                 }
             }
@@ -161,10 +163,11 @@ public class SelectObject : MonoBehaviour
     public void ResetColor()
     {
         //Look after the child if the object is a hand
-        if (!(_child is null))
+        if (_child != null)
         {
             _mRendererChild.material.color = _originalColor;
             _child = null;
+            _mRendererChild = null;
         }
         //Change of the material if the object is a moveTarget
         else if (MoveTargetChecker.IsMoveTarget(_go))
@@ -173,6 +176,7 @@ public class SelectObject : MonoBehaviour
         }  
         _mRenderer.material.color = _originalColor;
         _go = null;
+        _mRenderer = null;
         _addObjectMenu.ObjectSelected(_go);
     }
     

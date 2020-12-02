@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UI.MenuMB;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -166,8 +167,9 @@ namespace Scripts
                 _removeButton.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     if (HandChecker.IsHand(go)) _parent = go.transform.parent.gameObject;
+                    GameObject.Find("Main Camera").GetComponent<SelectObject>().ResetColor();
                     Destroy(go);
-                    if (_parent != null)
+                    if (_parent != null && GameObject.Find("Scene").GetComponent<PlaceHandsMenu>().GetRigidBody())
                     {
                         if (!(HandChecker.HasLeftHand(_parent) && HandChecker.HasRightHand(_parent)))
                         {
