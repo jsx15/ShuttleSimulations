@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MMIStandard;
 using MMIUnity;
 using Scripts;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
 
 namespace UI.MenuMB
 {
@@ -26,7 +29,7 @@ namespace UI.MenuMB
         
         private List<MInstruction> _mInstructions = new List<MInstruction>();
         private TestAvatarBehavior beh;
-        
+        private Transform scrollView;
         
         
         public void RemoveMenu()
@@ -41,6 +44,7 @@ namespace UI.MenuMB
 
         public void ShowMenu()
         {
+            scrollView = GameObject.Find("Content").transform;
             beh = GameObject.Find("Avatar").GetComponent<TestAvatarBehavior>();
             _menuShowing = false;
             _canvas = GameObject.Find("Canvas");
@@ -72,6 +76,11 @@ namespace UI.MenuMB
                 ClearButtons();
                 beh.RunInstruction(_mInstructions);
                 MenuManager.CloseAllMenues();
+                _mInstructions.Clear();
+                foreach (Transform child in scrollView) {
+                    GameObject.Destroy(child.gameObject);
+                }
+                
             });
             _buttonList.Add(play);
         }
@@ -88,6 +97,7 @@ namespace UI.MenuMB
                 _walk.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     _mInstructions.Add(beh.WalkTo("WalkTarget"));
+                    addToList("Walk to start");
                 });
                 _buttonList.Add(_walk);
             }
@@ -101,6 +111,7 @@ namespace UI.MenuMB
                 _walkSphere.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     _mInstructions.Add(beh.WalkTo("WalkTargetSphere"));
+                    addToList("Walk to sphere");
                 });
                 _buttonList.Add(_walkSphere);
             }
@@ -114,7 +125,17 @@ namespace UI.MenuMB
                 _move.GetComponentInChildren<Text>().text = "Move";
                 _move.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    _mInstructions.AddRange(beh.MoveObject(GameObject.Find("Sphere"), GameObject.Find("Sphere").transform.GetChildRecursiveByName("moveTarget").gameObject));
+                    try
+                    {
+                        _mInstructions.AddRange(beh.MoveObject(GameObject.Find("Sphere"),
+                            GameObject.Find("Sphere").transform.GetChildRecursiveByName("moveTarget").gameObject));
+                        addToList("Move object");
+                    }
+                    catch (Exception ex)
+                    {
+                        SSTools.ShowMessage("Move target not defined", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                    }
+                    
                 });
                 _buttonList.Add(_move);
             }
@@ -128,6 +149,7 @@ namespace UI.MenuMB
                 _reach.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     _mInstructions.AddRange(beh.ReachObject(GameObject.Find("Sphere")));
+                    addToList("Reach object");
                 });
                 _buttonList.Add(_reach);
             }
@@ -140,17 +162,19 @@ namespace UI.MenuMB
             _pickUp.GetComponent<Button>().onClick.AddListener(() =>
             {
                 _mInstructions.AddRange(beh.PickUp(GameObject.Find("Sphere")));
+                addToList("Pick Up object");
             });
             _buttonList.Add(_pickUp);
             
             _release = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (_release is null) return;
-            _release.transform.position = new Vector3(Screen.width / 20f + x, (Screen.height / 10f) * 5f);
+            _release.transform.position = new Vector3(Screen.width / 20f + 200, (Screen.height / 10f) * 4f);
             // x += 150;
             _release.GetComponentInChildren<Text>().text = "Release";
             _release.GetComponent<Button>().onClick.AddListener(() =>
             {
                 _mInstructions.AddRange(beh.ReleaseObject());
+                addToList("Release");
             });
             _buttonList.Add(_release);
         }
@@ -162,6 +186,13 @@ namespace UI.MenuMB
                 Destroy(button);
             }
             _buttonList.Clear();
+        }
+
+        private void addToList(string instruction)
+        {
+            GameObject textItem = Instantiate(Resources.Load("UI/Text"), GameObject.Find("Content").transform) as GameObject;
+            textItem.GetComponent<Text>().text = instruction;
+
         }
     }
 }
