@@ -79,12 +79,23 @@ namespace Scripts
 
         public static float WidthDistance(float width, String side)
         {
-            return width/ 25 * 22;
+            if (side.Equals("right"))
+            {
+                return width/ 25 * 22;    
+            }
+
+            return 0.0f;
+
         }
 
         public static float HeightDistance(float height, int prio)
         {
             return height / 10 * prio;
+        }
+
+        public static float SubMenuStart()
+        {
+            return Screen.width / 25 * 5;
         }
     }
 }

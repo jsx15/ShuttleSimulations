@@ -19,8 +19,12 @@ public class TestAvatarBehavior : AvatarBehavior
     private BoxCollider boxColliderRightHand;
     private ObjectBounds objectBounds;
     private float OffSetValue = 0.005f;
+    protected override void GUIBehaviorInput()
+    {
+        //base.GUIBehaviorInput();
+    }
 
-/*
+    /*
     protected override void GUIBehaviorInput()
     {
         if (GUI.Button(new Rect(10, 10, 120, 50), "Idle"))

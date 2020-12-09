@@ -87,7 +87,7 @@ namespace UI.MenuMB
 
         private void ShowQueueButton()
         {
-            var x = 200;
+            var x = MenuManager.SubMenuStart();
             _walk = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (!(_walk is null))
             {
@@ -148,8 +148,17 @@ namespace UI.MenuMB
                 _reach.GetComponentInChildren<Text>().text = "Reach";
                 _reach.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    _mInstructions.AddRange(beh.ReachObject(GameObject.Find("Sphere")));
-                    addToList("Reach object");
+                    if (HandChecker.HasLeftHand(GameObject.Find("Sphere")) ||
+                        HandChecker.HasRightHand(GameObject.Find("Sphere")))
+                    {
+                        _mInstructions.AddRange(beh.ReachObject(GameObject.Find("Sphere")));
+                        addToList("Reach object"); 
+                    }
+                    else
+                    {
+                        SSTools.ShowMessage("Place hands first", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                    }
+                    
                 });
                 _buttonList.Add(_reach);
             }
@@ -168,7 +177,7 @@ namespace UI.MenuMB
             
             _release = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (_release is null) return;
-            _release.transform.position = new Vector3(Screen.width / 20f + 200, (Screen.height / 10f) * 4f);
+            _release.transform.position = new Vector3(Screen.width / 20f + MenuManager.SubMenuStart(), (Screen.height / 10f) * 4f);
             // x += 150;
             _release.GetComponentInChildren<Text>().text = "Release";
             _release.GetComponent<Button>().onClick.AddListener(() =>
