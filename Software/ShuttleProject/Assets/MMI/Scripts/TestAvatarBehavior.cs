@@ -494,7 +494,7 @@ public class TestAvatarBehavior : AvatarBehavior
 */
     public MInstruction WalkTo(String s)
     {
-        MInstruction walkInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Walk", "walk")
+        MInstruction walkInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Walk", "Locomotion/Walk")
         {
             Properties = PropertiesCreator.Create("TargetID", UnitySceneAccess.Instance.GetSceneObjectByName(s).ID)
         };
@@ -623,7 +623,7 @@ public class TestAvatarBehavior : AvatarBehavior
 
     public void RunInstruction(List<MInstruction> list)
     {
-        MInstruction idleInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Idle", "idle");
+        MInstruction idleInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Idle", "Pose/Idle");
         this.CoSimulator.MSimulationEventHandler += this.CoSimulator_MSimulationEventHandler;
         for (int i = 0; i < list.Count; i++)
         {

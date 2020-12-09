@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,8 +24,7 @@ public class FlyCamera : MonoBehaviour
 
     private Vector3 lastMouse = new Vector3(255, 255, 255); //kind of in the middle of the screen, rather than at the top (play)
     private float totalRun = 1.0f;
-   
-    public GameObject go;
+
     void Awake()
     {
     }
@@ -34,13 +32,8 @@ public class FlyCamera : MonoBehaviour
 
     void Update()
     {
-        // Zoom onto Object selected by click
-        if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.G))
-        {
-           Zoom();
-        }
-        
-        if (Input.GetMouseButtonDown(1)) 
+
+        if (Input.GetMouseButtonDown(1))
         {
             lastMouse = Input.mousePosition; // $CTK reset when we begin
         }
@@ -110,30 +103,5 @@ public class FlyCamera : MonoBehaviour
         }
         return p_Velocity;
     }
-    
-    // zooms the Camera to an Object with Collider
-    private void Zoom()
-    {
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out hit, 100.0f))
-        {
-            if (hit.transform)
-            {
-                go = hit.transform.gameObject;
-            }
-
-            float objectDistance ;
-            float zoomDistance = (go.GetComponent<Collider>().bounds.size.x +
-                                  go.GetComponent<Collider>().bounds.size.y +
-                                  go.GetComponent<Collider>().bounds.size.z) / 1.5f ; 
-            do
-            { 
-                objectDistance = Vector3.Distance(transform.position, go.transform.position);
-                transform.position = Vector3.Lerp(transform.position, go.transform.position, Time.deltaTime);
-            } while (objectDistance > zoomDistance);
-
-        }
-    }
 }
