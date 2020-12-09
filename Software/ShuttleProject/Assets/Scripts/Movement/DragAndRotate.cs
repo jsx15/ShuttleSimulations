@@ -1,6 +1,4 @@
-﻿using Scripts;
-using UnityEditor.Playables;
-using UnityEngine;
+﻿using UnityEngine;
 
     public class DragAndRotate
     {

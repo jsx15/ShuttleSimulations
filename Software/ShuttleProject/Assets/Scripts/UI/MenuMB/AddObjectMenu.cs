@@ -56,7 +56,7 @@ namespace Scripts
             var loader = new PrefabLoader();
             var files = loader.getPrefab();
             //Gap between buttons
-            var x = 200;
+            var x = MenuManager.SubMenuStart();
             
             //Create button for every .prefab file
             foreach (var file in files)

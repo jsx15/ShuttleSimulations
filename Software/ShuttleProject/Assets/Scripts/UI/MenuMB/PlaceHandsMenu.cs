@@ -85,7 +85,7 @@ namespace UI.MenuMB
 
         private void CreateSubMenu()
         {
-            var x = 200;
+            var x = MenuManager.SubMenuStart();
             _placeLeftHandButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (!(_placeLeftHandButton is null))
             {
