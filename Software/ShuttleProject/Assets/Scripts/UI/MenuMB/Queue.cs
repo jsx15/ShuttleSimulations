@@ -24,14 +24,19 @@ namespace UI.MenuMB
          * 
          */
         private GameObject _queue, _walk, _move, _reach, _pickUp, _walkSphere, _release;
+        private SelectObject _selectObject;
 
         private bool _menuShowing;
         
         private List<MInstruction> _mInstructions = new List<MInstruction>();
         private TestAvatarBehavior beh;
         private Transform scrollView;
-        
-        
+
+        public void Start()
+        {
+            _selectObject = GameObject.Find("Main Camera").GetComponent<SelectObject>();
+        }
+
         public void RemoveMenu()
         {
             Destroy(_queue);
@@ -96,12 +101,12 @@ namespace UI.MenuMB
                 _walk.GetComponentInChildren<Text>().text = "Walk";
                 _walk.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    _mInstructions.Add(beh.WalkTo("WalkTarget"));
-                    addToList("Walk to start");
+                    _mInstructions.Add(beh.WalkTo(_selectObject.GetObject()));
+                    addToList("Walk to " + _selectObject.GetObject().name);
                 });
                 _buttonList.Add(_walk);
             }
-            
+            /*
             _walkSphere = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             if (!(_walkSphere is null))
             {
@@ -110,11 +115,11 @@ namespace UI.MenuMB
                 _walkSphere.GetComponentInChildren<Text>().text = "Walk Sphere";
                 _walkSphere.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    _mInstructions.Add(beh.WalkTo("WalkTargetSphere"));
+                    _mInstructions.Add(beh.WalkTo(_selectObject.GetObject()));
                     addToList("Walk to sphere");
                 });
                 _buttonList.Add(_walkSphere);
-            }
+            }*/
 
 
             _move = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
@@ -127,9 +132,9 @@ namespace UI.MenuMB
                 {
                     try
                     {
-                        _mInstructions.AddRange(beh.MoveObject(GameObject.Find("Sphere"),
-                            GameObject.Find("Sphere").transform.GetChildRecursiveByName("moveTarget").gameObject));
-                        addToList("Move object");
+                        _mInstructions.AddRange(beh.MoveObject(_selectObject.GetObject(),
+                            _selectObject.GetObject().transform.GetChildRecursiveByName("moveTarget").gameObject));
+                        addToList("Move " + _selectObject.GetObject().name);
                     }
                     catch (Exception ex)
                     {
@@ -148,11 +153,11 @@ namespace UI.MenuMB
                 _reach.GetComponentInChildren<Text>().text = "Reach";
                 _reach.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    if (HandChecker.HasLeftHand(GameObject.Find("Sphere")) ||
-                        HandChecker.HasRightHand(GameObject.Find("Sphere")))
+                    if (HandChecker.HasLeftHand(_selectObject.GetObject()) ||
+                        HandChecker.HasRightHand(_selectObject.GetObject()))
                     {
-                        _mInstructions.AddRange(beh.ReachObject(GameObject.Find("Sphere")));
-                        addToList("Reach object"); 
+                        _mInstructions.AddRange(beh.ReachObject(_selectObject.GetObject()));
+                        addToList("Reach " + _selectObject.GetObject().name); 
                     }
                     else
                     {
