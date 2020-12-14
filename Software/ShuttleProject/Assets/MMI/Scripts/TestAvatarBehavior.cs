@@ -21,6 +21,7 @@ public class TestAvatarBehavior : AvatarBehavior
     private BoxCollider boxColliderRightHand;
     private ObjectBounds objectBounds;
     private float OffSetValue = 0.005f;
+    private CarryIDManager _carryIDManager = new CarryIDManager();
     protected override void GUIBehaviorInput()
     {
         //base.GUIBehaviorInput();
@@ -525,7 +526,7 @@ public class TestAvatarBehavior : AvatarBehavior
             // this.CoSimulator.AssignInstruction(reachLeft, null);
             list.Add(reachLeft);
         }
-
+        print("Gameobject: " + go);
         if (HandChecker.HasRightHand(go))
         {
             //Get UnitySceneAccess ID of hand
@@ -550,9 +551,8 @@ public class TestAvatarBehavior : AvatarBehavior
         MInstruction releaseLeft =
             new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
             {
-                Properties = PropertiesCreator.Create("Hand", "Left", CoSimTopic.OnEnd, 
-                    carryIDL + ":" + CoSimAction.EndInstruction)
-                //Properties = PropertiesCreator.Create("Hand", "Left")
+                Properties = PropertiesCreator.Create("Hand", "Left", CoSimTopic.OnStart, 
+                    _carryIDManager.CurrentCarryIdLeft + ":" + CoSimAction.EndInstruction)
             };
 
         list.Add(releaseLeft);
@@ -560,7 +560,7 @@ public class TestAvatarBehavior : AvatarBehavior
             new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
             {
                 Properties = PropertiesCreator.Create("Hand", "Right", CoSimTopic.OnStart,
-                    carryIDR + ":" + CoSimAction.EndInstruction),
+                    _carryIDManager.CurrentCarryIdRight + ":" + CoSimAction.EndInstruction),
             };
 
         list.Add(releaseRight);
@@ -572,6 +572,7 @@ public class TestAvatarBehavior : AvatarBehavior
     {
         List<MInstruction> list = new List<MInstruction>();
 
+        
         String objectID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
         String targetPositionID = positionTarget.GetComponent<MMISceneObject>().MSceneObject.ID;
         if (HandChecker.HasBothHands(obj))
@@ -579,7 +580,8 @@ public class TestAvatarBehavior : AvatarBehavior
             MInstruction moveObject = new MInstruction(MInstructionFactory.GenerateID(), "move object", "Object/Move")
             {
                 Properties = PropertiesCreator.Create("SubjectID", objectID, "Hand",
-                    "Both" , "TargetID", targetPositionID)
+                    "Both" , "TargetID", targetPositionID, CoSimTopic.OnStart, 
+                    _carryIDManager.CurrentCarryIdBoth + ":" + CoSimAction.EndInstruction)
             };
             list.Add(moveObject);
         }
@@ -588,7 +590,8 @@ public class TestAvatarBehavior : AvatarBehavior
             MInstruction moveObject = new MInstruction(MInstructionFactory.GenerateID(), "move object", "Object/Move")
             {
                 Properties = PropertiesCreator.Create("SubjectID", objectID, "Hand",
-                    "Right" , "TargetID", targetPositionID)
+                    "Right" , "TargetID", targetPositionID, CoSimTopic.OnStart, 
+                    _carryIDManager.CurrentCarryIdRight + ":" + CoSimAction.EndInstruction)
             };
             list.Add(moveObject);
         }
@@ -597,7 +600,8 @@ public class TestAvatarBehavior : AvatarBehavior
             MInstruction moveObject = new MInstruction(MInstructionFactory.GenerateID(), "move object", "Object/Move")
             {
                 Properties = PropertiesCreator.Create("SubjectID", objectID, "Hand",
-                    "Left", "TargetID", targetPositionID)
+                    "Left", "TargetID", targetPositionID, CoSimTopic.OnStart, 
+                    _carryIDManager.CurrentCarryIdLeft + ":" + CoSimAction.EndInstruction)
             };
             list.Add(moveObject);
         }
@@ -615,10 +619,11 @@ public class TestAvatarBehavior : AvatarBehavior
 
         String objID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
 
-        
+        print("listengröße: " + list.Count);
         if (list.Count == 2)
         {
             carryIDB = MInstructionFactory.GenerateID();
+            _carryIDManager.CurrentCarryIdBoth = carryIDB;
             MInstruction carryInstruction =
                 new MInstruction(carryIDB, "carry object", "Object/Carry")
                 {
@@ -630,6 +635,7 @@ public class TestAvatarBehavior : AvatarBehavior
         else if (list[0].Name.Equals("reach right"))
         {
             carryIDR = MInstructionFactory.GenerateID();
+            _carryIDManager.CurrentCarryIdRight = carryIDR;
             MInstruction carryInstruction = new MInstruction(carryIDR, "carry object", "Object/Carry")
             {
                 Properties = PropertiesCreator.Create("TargetID", objID, "Hand",
@@ -640,6 +646,7 @@ public class TestAvatarBehavior : AvatarBehavior
         else
         {
             carryIDL = MInstructionFactory.GenerateID();
+            _carryIDManager.CurrentCarryIdLeft = carryIDL;
             MInstruction carryInstruction =
                 new MInstruction(carryIDL, "carry object", "Object/Carry")
                 {
@@ -663,7 +670,7 @@ public class TestAvatarBehavior : AvatarBehavior
                 
                 if (list[i - 1].Name.Equals("carry object"))
                 {
-                    list[i].StartCondition = list[i - 1].ID + ":" + "PositioningFinished + 0.1";
+                    list[i].StartCondition = list[i - 1].ID + ":" + "PositioningFinished" + " + 0.1";
                 }
                 else
                 {
