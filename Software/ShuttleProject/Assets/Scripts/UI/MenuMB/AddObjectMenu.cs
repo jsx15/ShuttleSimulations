@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MMIUnity;
 using UI.MenuMB;
 using UnityEngine;
 using UnityEngine.UI;
@@ -149,6 +150,16 @@ namespace Scripts
                     float size = _bounds.GetMaxBounds().x - _bounds.GetMinBounds().x;
                     Vector3 newPos = new Vector3(go.transform.position.x + size + 0.25f*size, go.transform.position.y, go.transform.position.z);
                     target.transform.position = newPos;
+                    if (target.transform.GetChildRecursiveByName("RightHand(Clone)") || target.transform.GetChildRecursiveByName("LeftHand(Clone)"))
+                    {
+                        foreach (Transform child in target.transform)
+                        {
+                            if (child.name.Equals("RightHand(Clone)") || child.name.Equals("LeftHand(Clone)"))
+                            {
+                                Destroy(child.gameObject);
+                            }
+                        }
+                    }
                     Destroy(_createTargetButton);
                     Destroy(_removeButton);
                 });

@@ -13,17 +13,16 @@ using UnityEngine;
 public class TestAvatarBehavior : AvatarBehavior
 {
 
-    
-    public WalkTrajectory WalkTrajectory;
-    public MMISceneObject WalkTrajectoryTarget;
-    
-    private Vector3 _hitPoint;
-    private string _carryID;
-    private BoxCollider _boxColliderLeftHand;
-    private BoxCollider _boxColliderRightHand;
-    private ObjectBounds _objectBounds;
-    private float _offSetValue = 0.005f;
-    private String _tempEvent;
+    private GameObject go;
+    private Vector3 hitPoint;
+    private string carryIDR;
+    private string carryIDL;
+    private string carryIDB;
+    private BoxCollider boxColliderLeftHand;
+    private BoxCollider boxColliderRightHand;
+    private ObjectBounds objectBounds;
+    private float OffSetValue = 0.005f;
+    private CarryIDManager _carryIDManager = new CarryIDManager();
 
     protected override void GUIBehaviorInput()
     {
@@ -350,13 +349,20 @@ public class TestAvatarBehavior : AvatarBehavior
         {
             this.CoSimulator.Abort();
         }
-    }*/
+    }
 
-    public MInstruction WalkTo(String s)
+
+        return false;
+    }
+*/
+    public MInstruction WalkTo(GameObject go)
+
     {
+        String objectID = go.GetComponent<MMISceneObject>().MSceneObject.ID;
+        
         MInstruction walkInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Walk", "Locomotion/Walk")
         {
-            Properties = PropertiesCreator.Create("TargetID", UnitySceneAccess.Instance.GetSceneObjectByName(s).ID)
+            Properties = PropertiesCreator.Create("TargetID", objectID, "ForcePath", "true")
         };
         
         return walkInstruction;
@@ -407,7 +413,7 @@ public class TestAvatarBehavior : AvatarBehavior
             // this.CoSimulator.AssignInstruction(moveFingersInstructions, null);
             list.Add(moveFingersInstructions);*/
         }
-
+        
         if (HandChecker.HasRightHand(go))
         {
             //Get UnitySceneAccess ID of hand
@@ -461,8 +467,9 @@ public class TestAvatarBehavior : AvatarBehavior
         MInstruction releaseLeft =
             new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
             {
-                Properties = PropertiesCreator.Create("Hand", "Left", CoSimTopic.OnStart,
-                    _carryID + ":" + CoSimAction.EndInstruction),
+
+                Properties = PropertiesCreator.Create("Hand", "Left", CoSimTopic.OnStart, 
+                    _carryIDManager.CurrentCarryIdLeft + ":" + CoSimAction.EndInstruction)
             };
 
         list.Add(releaseLeft);
@@ -471,7 +478,9 @@ public class TestAvatarBehavior : AvatarBehavior
             new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
             {
                 Properties = PropertiesCreator.Create("Hand", "Right", CoSimTopic.OnStart,
-                    _carryID + ":" + CoSimAction.EndInstruction),
+
+                    _carryIDManager.CurrentCarryIdRight + ":" + CoSimAction.EndInstruction),
+
             };
 
         list.Add(releaseRight);
@@ -483,16 +492,45 @@ public class TestAvatarBehavior : AvatarBehavior
     {
         List<MInstruction> list = new List<MInstruction>();
 
+        
         String objectID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
         String targetPositionID = positionTarget.GetComponent<MMISceneObject>().MSceneObject.ID;
-
-        MInstruction moveObject = new MInstruction(MInstructionFactory.GenerateID(), "move object", "Object/Move")
+        if (HandChecker.HasBothHands(obj))
         {
-            Properties = PropertiesCreator.Create("SubjectID", objectID, "Hand",
-                "Left", "TargetID", targetPositionID)
-        };
 
-        list.Add(moveObject);
+            MInstruction moveObject = new MInstruction(MInstructionFactory.GenerateID(), "move object", "Object/Move")
+            {
+                Properties = PropertiesCreator.Create("SubjectID", objectID, "Hand",
+                    "Both" , "TargetID", targetPositionID, CoSimTopic.OnStart, 
+                    _carryIDManager.CurrentCarryIdBoth + ":" + CoSimAction.EndInstruction)
+            };
+            list.Add(moveObject);
+        }
+        else if (HandChecker.HasRightHand(obj))
+        {
+            MInstruction moveObject = new MInstruction(MInstructionFactory.GenerateID(), "move object", "Object/Move")
+            {
+                Properties = PropertiesCreator.Create("SubjectID", objectID, "Hand",
+                    "Right" , "TargetID", targetPositionID, CoSimTopic.OnStart, 
+                    _carryIDManager.CurrentCarryIdRight + ":" + CoSimAction.EndInstruction)
+            };
+            list.Add(moveObject);
+        }
+        else if (HandChecker.HasLeftHand(obj))
+        {
+            MInstruction moveObject = new MInstruction(MInstructionFactory.GenerateID(), "move object", "Object/Move")
+            {
+                Properties = PropertiesCreator.Create("SubjectID", objectID, "Hand",
+                    "Left", "TargetID", targetPositionID, CoSimTopic.OnStart, 
+                    _carryIDManager.CurrentCarryIdLeft + ":" + CoSimAction.EndInstruction)
+            };
+            list.Add(moveObject);
+        }
+
+       //list.AddRange(ReleaseObject());
+        
+
+
         return list;
     }
 
@@ -502,21 +540,27 @@ public class TestAvatarBehavior : AvatarBehavior
         list.AddRange(ReachObject(obj));
 
         String objID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
-
-        _carryID = MInstructionFactory.GenerateID();
+        
         if (list.Count == 2)
         {
+            carryIDB = MInstructionFactory.GenerateID();
+            _carryIDManager.CurrentCarryIdBoth = carryIDB;
             MInstruction carryInstruction =
-                new MInstruction(_carryID, "carry object", "Object/Carry")
+                new MInstruction(carryIDB, "carry object", "Object/Carry")
+
                 {
                     Properties = PropertiesCreator.Create("TargetID", objID, "Hand",
-                        "Both"),
+                        "Both")
                 };
             list.Add(carryInstruction);
         }
         else if (list[0].Name.Equals("reach right"))
         {
-            MInstruction carryInstruction = new MInstruction(_carryID, "carry object", "Object/Carry")
+
+            carryIDR = MInstructionFactory.GenerateID();
+            _carryIDManager.CurrentCarryIdRight = carryIDR;
+            MInstruction carryInstruction = new MInstruction(carryIDR, "carry object", "Object/Carry")
+
             {
                 Properties = PropertiesCreator.Create("TargetID", objID, "Hand",
                     "Right"),
@@ -525,8 +569,11 @@ public class TestAvatarBehavior : AvatarBehavior
         }
         else
         {
+            carryIDL = MInstructionFactory.GenerateID();
+            _carryIDManager.CurrentCarryIdLeft = carryIDL;
             MInstruction carryInstruction =
-                new MInstruction(_carryID, "carry object", "Object/Carry")
+                new MInstruction(carryIDL, "carry object", "Object/Carry")
+
                 {
                     Properties = PropertiesCreator.Create("TargetID", objID, "Hand",
                         "Left"),
@@ -650,6 +697,7 @@ public class TestAvatarBehavior : AvatarBehavior
         {
             if (i > 0)
             {
+                
                 if (list[i - 1].Name.Equals("carry object"))
                 {
                     list[i].StartCondition = list[i - 1].ID + ":" + "PositioningFinished + 0.1";
@@ -667,16 +715,19 @@ public class TestAvatarBehavior : AvatarBehavior
                     list[i].StartCondition = list[i - 1].ID + ":" + mmiConstants.MSimulationEvent_End + "+ 0.1";
                 }
             }
-        }
 
-        foreach (var x in list)
+
+        foreach (var t in list)
         {
-            CoSimulator.AssignInstruction(idleInstruction,
+            CoSimulator.AssignInstruction(t,
                 new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
-            CoSimulator.AssignInstruction(x,
+            CoSimulator.AssignInstruction(idleInstruction,
+
                 new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
         }
-        CoSimulator.AssignInstruction(idleInstruction,new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
+        
+        
+        //CoSimulator.AssignInstruction(idleInstruction,new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
     }
 
 
