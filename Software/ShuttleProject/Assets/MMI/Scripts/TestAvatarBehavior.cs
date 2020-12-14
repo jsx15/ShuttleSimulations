@@ -526,7 +526,7 @@ public class TestAvatarBehavior : AvatarBehavior
             // this.CoSimulator.AssignInstruction(reachLeft, null);
             list.Add(reachLeft);
         }
-        print("Gameobject: " + go);
+        
         if (HandChecker.HasRightHand(go))
         {
             //Get UnitySceneAccess ID of hand
@@ -619,7 +619,6 @@ public class TestAvatarBehavior : AvatarBehavior
 
         String objID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
 
-        print("listengröße: " + list.Count);
         if (list.Count == 2)
         {
             carryIDB = MInstructionFactory.GenerateID();
