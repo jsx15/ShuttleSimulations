@@ -1,4 +1,5 @@
 ﻿using System;
+using MMIUnity.TargetEngine.Scene;
 using Scripts;
 using UnityEngine;
 
@@ -27,6 +28,9 @@ public class SelectObject : MonoBehaviour
     private Material _materialTransparent;
     private MeshRenderer _mRenderer;
     private MeshRenderer _mRendererChild;
+    
+    //TODO
+    //private GameObject smallCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
     
     //Class objects
     private ObjectBounds _objectBounds;
@@ -76,6 +80,12 @@ public class SelectObject : MonoBehaviour
                     _hitPointNormal = _hit.normal;
                     _go = _hit.transform.gameObject;
 
+                    //TODO
+                    //Spawn a non visible object at the hitpoint
+                    //smallCube.transform.localScale = new Vector3(0, 0, 0);
+                    //GameObject cube = Instantiate(smallCube, _hitPoint, Quaternion.identity);
+                    //cube.transform.SetParent(_go.transform);
+
                     //Mark the selected object as red
                     _mRenderer = _go.GetComponent<MeshRenderer>();
                     _originalColor = _mRenderer.material.color;
@@ -108,7 +118,7 @@ public class SelectObject : MonoBehaviour
                         _mRenderer.material.color = _selectColor;   
                     }
 
-                    _dragAndRotate = new DragAndRotate(_go, lockY);
+                    _dragAndRotate = new DragAndRotate(_go, _hitPoint, _hitPointNormal, lockY);
                     if(HandChecker.IsHand(_go)) _handMovement = new HandMovement(_go);
                 }
             }

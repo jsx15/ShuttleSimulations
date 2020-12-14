@@ -35,6 +35,8 @@ namespace UI.MenuMB
             {
                 SSTools.ShowMessage("Select object to walk to", SSTools.Position.bottom,
                     SSTools.Time.threeSecond);
+                //TestAvatarBehavior script = GameObject.Find("Avatar").GetComponent<TestAvatarBehavior>();
+                //script.POPO();
             });
         }
 
@@ -45,9 +47,8 @@ namespace UI.MenuMB
             
             public void ObjectSelectedHandler(object sender, EventArgs e, string s)
             {
-                TestAvatarBehavior script = GameObject.Find("Avatar").GetComponent<TestAvatarBehavior>();
-                //script.WalkTo(s);
-
+                //TestAvatarBehavior script = GameObject.Find("Avatar").GetComponent<TestAvatarBehavior>();
+                //script.POPO();
             }
         }
     }
