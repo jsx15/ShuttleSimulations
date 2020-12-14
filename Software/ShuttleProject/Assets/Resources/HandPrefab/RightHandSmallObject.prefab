@@ -1601,6 +1601,7 @@ GameObject:
   - component: {fileID: 8705493262905169266}
   - component: {fileID: 2847535605347016596}
   - component: {fileID: 2966620582530540193}
+  - component: {fileID: -1362259831609081542}
   m_Layer: 0
   m_Name: RightHandSmallObject
   m_TagString: Untagged
@@ -1725,6 +1726,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 24
   ID: 
+--- !u!114 &-1362259831609081542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4557969653647462771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1482294805, guid: f966e4a8a42bc7b428fad187671fc2df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MSceneObject:
+    __isset:
+      Collider: 0
+      Mesh: 0
+      PhysicsProperties: 0
+      Properties: 0
+      Attachments: 0
+      Constraints: 0
+  TaskEditorLocalID: 0
+  TaskEditorID: 0
+  ShowCoordinateSystem: 0
+  Velocity: {x: 0, y: 0, z: 0}
+  UpdatePhysicsCurrentFrame: 1
+  OverrideColor: 0
+  Color: {r: 0, g: 0, b: 0, a: 0}
+  IgnoreCollision: 0
+  TransferMesh: 0
+  Type: 0
+  Tool: 
+  InitialLocation: {fileID: 0}
+  FinalLocation: {fileID: 0}
+  IsLocatedAt: {fileID: 0}
+  Constraints: []
+  HandType: 0
 --- !u!1 &4581403809435640816
 GameObject:
   m_ObjectHideFlags: 0
