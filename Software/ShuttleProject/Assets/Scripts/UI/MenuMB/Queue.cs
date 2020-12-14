@@ -127,7 +127,7 @@ namespace UI.MenuMB
             {
                 _move.transform.position = new Vector3(Screen.width / 20f + x, (Screen.height / 10f) * 5f);
                 x += 150;
-                _move.GetComponentInChildren<Text>().text = "Move";
+                _move.GetComponentInChildren<Text>().text = "Place object";
                 _move.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     try
@@ -175,7 +175,7 @@ namespace UI.MenuMB
             _pickUp.GetComponentInChildren<Text>().text = "Pick Up";
             _pickUp.GetComponent<Button>().onClick.AddListener(() =>
             {
-                _mInstructions.AddRange(beh.PickUp(GameObject.Find("Sphere")));
+                _mInstructions.AddRange(beh.PickUp(_selectObject.GetObject()));
                 addToList("Pick Up object");
             });
             _buttonList.Add(_pickUp);
