@@ -10,6 +10,8 @@
         private float _mZCoord;
         private readonly bool _lockY;
         private float _yPos;
+        private Vector3 _hitpoint;
+        private Vector3 _hitpointNormal;
 
         //rotate variables
         private bool _gravity;
@@ -24,7 +26,7 @@
         private ShowAxis showAxis;
         private ObjectBounds _objectBounds;
 
-        public DragAndRotate(GameObject go, bool lockY)
+        public DragAndRotate(GameObject go, Vector3 hitpoint, Vector3 hitpointNormal, bool lockY)
         {
             _go = go;
             _lockY = lockY;
