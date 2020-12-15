@@ -108,7 +108,7 @@ namespace UI.MenuMB
 
                     if (_go != null)
                     {
-                        if (!HandChecker.HasLeftHand(_go))
+                        if (!HandChecker.HasLeftHand(_go) && !HandChecker.IsHand(_go))
                         {
                             if (_go.GetComponent<Rigidbody>() != null)
                             {
@@ -164,7 +164,7 @@ namespace UI.MenuMB
 
                         if (_go != null)
                         {
-                            if (!HandChecker.HasRightHand(_go))
+                            if (!HandChecker.HasRightHand(_go) && !HandChecker.IsHand(_go))
                             {
                                 if (_go.GetComponent<Rigidbody>() != null)
                                 {

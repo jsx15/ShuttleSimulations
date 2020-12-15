@@ -7,6 +7,7 @@ using MMIUnity;
 using MMIUnity.TargetEngine;
 using MMIUnity.TargetEngine.Scene;
 using Scripts;
+using TMPro;
 using UnityEngine;
 
 
@@ -23,6 +24,7 @@ public class TestAvatarBehavior : AvatarBehavior
     private ObjectBounds objectBounds;
     private float OffSetValue = 0.005f;
     private CarryIDManager _carryIDManager = new CarryIDManager();
+    private HandPoseIdManager _handPoseIdManager = new HandPoseIdManager();
 
     protected override void GUIBehaviorInput()
     {
@@ -386,32 +388,6 @@ public class TestAvatarBehavior : AvatarBehavior
             };
             // this.CoSimulator.AssignInstruction(reachLeft, null);
             list.Add(reachLeft);
-            
-            /*
-            //Indicates whether a release motion should be performed
-            bool Release = false;
-            //The desired Hand pose (rotations of the finger Joints)
-            UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
-            
-            //Create the instruction to move the fingers
-            MInstruction moveFingersInstructions = new MInstruction(System.Guid.NewGuid().ToString(), "Move fingers", "Pose/MoveFingers")
-            {
-                Properties = new Dictionary<string, string>()
-                {
-                    {"Release", Release.ToString() },
-                    {"Hand", "Left" }
-                },
-                Constraints = new List<MConstraint>()
-            };
-            string constraintID = System.Guid.NewGuid().ToString();
-            moveFingersInstructions.Properties.Add("HandPose", constraintID);
-            moveFingersInstructions.Constraints.Add(new MConstraint()
-            {
-                ID = constraintID,
-                PostureConstraint = leftHandPose.GetPostureConstraint()
-            });
-            // this.CoSimulator.AssignInstruction(moveFingersInstructions, null);
-            list.Add(moveFingersInstructions);*/
         }
         
         if (HandChecker.HasRightHand(go))
@@ -426,32 +402,6 @@ public class TestAvatarBehavior : AvatarBehavior
             };
             // this.CoSimulator.AssignInstruction(reachRight, null);
             list.Add(reachRight);
-
-            /*
-            //Indicates whether a release motion should be performed
-            bool Release = false;
-            //The desired Hand pose (rotations of the finger Joints)
-            UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
-            
-            //Create the instruction to move the fingers
-            MInstruction moveFingersInstructions = new MInstruction(System.Guid.NewGuid().ToString(), "Move fingers", "Pose/MoveFingers")
-            {
-                Properties = new Dictionary<string, string>()
-                {
-                    {"Release", Release.ToString() },
-                    {"Hand", "Right" }
-                },
-                Constraints = new List<MConstraint>()
-            };
-            string constraintID = System.Guid.NewGuid().ToString();
-            moveFingersInstructions.Properties.Add("HandPose", constraintID);
-            moveFingersInstructions.Constraints.Add(new MConstraint()
-            {
-                ID = constraintID,
-                PostureConstraint = leftHandPose.GetPostureConstraint()
-            });
-            // this.CoSimulator.AssignInstruction(moveFingersInstructions, null);
-            list.Add(moveFingersInstructions);*/
         }
 
         list.AddRange(MakeHandPose(go));
@@ -463,13 +413,13 @@ public class TestAvatarBehavior : AvatarBehavior
     {
         List<MInstruction> list = new List<MInstruction>();
         list.AddRange(ReleaseHandPose());
-
+        
         MInstruction releaseLeft =
             new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
             {
 
-                Properties = PropertiesCreator.Create("Hand", "Left", CoSimTopic.OnStart, 
-                    _carryIDManager.CurrentCarryIdLeft + ":" + CoSimAction.EndInstruction)
+                Properties = PropertiesCreator.Create("Hand", "Left", CoSimTopic.OnStart,
+                    _handPoseIdManager.CurrentHandIdLeft + ":" + CoSimAction.EndInstruction)
             };
 
         list.Add(releaseLeft);
@@ -478,13 +428,12 @@ public class TestAvatarBehavior : AvatarBehavior
             new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
             {
                 Properties = PropertiesCreator.Create("Hand", "Right", CoSimTopic.OnStart,
-
-                    _carryIDManager.CurrentCarryIdRight + ":" + CoSimAction.EndInstruction),
+                    _handPoseIdManager.CurrentHandIdRight + ":" + CoSimAction.EndInstruction),
 
             };
 
         list.Add(releaseRight);
-
+        
         return list;
     }
 
@@ -528,10 +477,7 @@ public class TestAvatarBehavior : AvatarBehavior
         }
 
        //list.AddRange(ReleaseObject());
-        
-
-
-        return list;
+       return list;
     }
 
     public List<MInstruction> PickUp(GameObject obj)
@@ -597,8 +543,10 @@ public class TestAvatarBehavior : AvatarBehavior
             //The desired Hand pose (rotations of the finger Joints)
             UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
             
+            _handPoseIdManager.CurrentHandIdLeft = System.Guid.NewGuid().ToString();
+            
             //Create the instruction to move the fingers
-            MInstruction moveFingersInstructionsLeft = new MInstruction(System.Guid.NewGuid().ToString(), "Move Fingers", "Pose/MoveFingers")
+            MInstruction moveFingersInstructionsLeft = new MInstruction(_handPoseIdManager.CurrentHandIdLeft, "Move Fingers", "Pose/MoveFingers")
             {
                 Properties = new Dictionary<string, string>()
                 {
@@ -627,8 +575,10 @@ public class TestAvatarBehavior : AvatarBehavior
             //The desired Hand pose (rotations of the finger Joints)
             UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
             
+            _handPoseIdManager.CurrentHandIdRight = System.Guid.NewGuid().ToString();
+            
             //Create the instruction to move the fingers
-            MInstruction moveFingersInstructionsRight = new MInstruction(System.Guid.NewGuid().ToString(), "Move Fingers", "Pose/MoveFingers")
+            MInstruction moveFingersInstructionsRight = new MInstruction(_handPoseIdManager.CurrentHandIdRight, "Move Fingers", "Pose/MoveFingers")
             {
                 Properties = new Dictionary<string, string>()
                 {
@@ -660,11 +610,7 @@ public class TestAvatarBehavior : AvatarBehavior
         MInstruction moveFingersInstructionsLeft =
             new MInstruction(System.Guid.NewGuid().ToString(), "Release Fingers", "Pose/MoveFingers")
             {
-                Properties = new Dictionary<string, string>()
-                {
-                    {"Release", "true"},
-                    {"Hand", "Left"}
-                }
+                Properties = PropertiesCreator.Create("Release", "true", "Hand", "Right")
             };
 
         list.Add(moveFingersInstructionsLeft);
@@ -673,11 +619,7 @@ public class TestAvatarBehavior : AvatarBehavior
         MInstruction moveFingersInstructionsRight =
             new MInstruction(System.Guid.NewGuid().ToString(), "Release Fingers", "Pose/MoveFingers")
             {
-                Properties = new Dictionary<string, string>()
-                {
-                    {"Release", "true"},
-                    {"Hand", "Right"}
-                },
+                Properties = PropertiesCreator.Create("Release", "true", "Hand", "Right")
             };
 
         list.Add(moveFingersInstructionsRight);
@@ -689,15 +631,11 @@ public class TestAvatarBehavior : AvatarBehavior
     {
         MInstruction idleInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Idle", "Pose/Idle");
         this.CoSimulator.MSimulationEventHandler += this.CoSimulator_MSimulationEventHandler;
-        /*foreach (var x in list)
-        {
-            print(x.Name + "   StartBedingung: " + x.StartCondition.ToString());
-        }*/
         for (int i = 0; i < list.Count; i++)
         {
             if (i > 0)
             {
-                
+
                 if (list[i - 1].Name.Equals("carry object"))
                 {
                     list[i].StartCondition = list[i - 1].ID + ":" + "PositioningFinished + 0.1";
@@ -708,24 +646,23 @@ public class TestAvatarBehavior : AvatarBehavior
                 }
                 else if (list[i - 1].Name.Equals("Release Fingers"))
                 {
+                    //list[i].StartCondition = list[i - 1].ID + ":" + "FingersPositioned + 0.1";
                     list[i].StartCondition = list[i - 1].StartCondition;
-                }    
+                }
                 else
                 {
                     list[i].StartCondition = list[i - 1].ID + ":" + mmiConstants.MSimulationEvent_End + "+ 0.1";
                 }
             }
-
-
+        }
+        
         foreach (var t in list)
         {
             CoSimulator.AssignInstruction(t,
                 new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
             CoSimulator.AssignInstruction(idleInstruction,
-
                 new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
         }
-        
         
         //CoSimulator.AssignInstruction(idleInstruction,new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
     }
@@ -740,7 +677,6 @@ public class TestAvatarBehavior : AvatarBehavior
     /// <param name="e"></param>
     private void CoSimulator_MSimulationEventHandler(object sender, MSimulationEvent e)
     {
-        _tempEvent = e.Type;
         Debug.Log(e.Reference + " " + e.Name + " " + e.Type);
     }
 

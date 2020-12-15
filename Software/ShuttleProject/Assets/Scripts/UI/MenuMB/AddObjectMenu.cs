@@ -122,15 +122,15 @@ namespace Scripts
         public void ObjectSelected(GameObject go)
         {
             _canvas = GameObject.Find("Canvas");
-            if (go is null)
+            if (go is null) return;
+            if (go != _oldGameObject)
             {
                 Destroy(_removeButton);
                 Destroy(_createTargetButton);
                 _createTargetButton = null;
                 _removeButton = null;
-                return;
             }
-            if (_createTargetButton is null || _oldGameObject != go)
+            if ((_createTargetButton is null || _oldGameObject != go) && !go.transform.Find("moveTarget"))
             {
                 Destroy(_createTargetButton);
                 _createTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
