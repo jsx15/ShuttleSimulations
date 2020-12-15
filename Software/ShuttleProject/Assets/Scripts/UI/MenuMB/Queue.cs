@@ -35,6 +35,7 @@ namespace UI.MenuMB
         public void Start()
         {
             _selectObject = GameObject.Find("Main Camera").GetComponent<SelectObject>();
+            
         }
 
         public void RemoveMenu()
@@ -76,8 +77,13 @@ namespace UI.MenuMB
             GameObject play = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
             play.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width, "right"), MenuManager.HeightDistance(Screen.height, 2));
             play.GetComponentInChildren<Text>().text = "Play";
-            play.GetComponent<Button>().onClick.AddListener(() => 
+            play.GetComponent<Button>().onClick.AddListener(() =>
             {
+                List<GameObject> walkTargets = WalkTargetManager.getInstance().GetWalkTarget();
+                foreach (var x in walkTargets)
+                {
+                    x.transform.localScale = new Vector3(0, 0, 0);
+                }
                 ClearButtons();
                 beh.RunInstruction(_mInstructions);
                 MenuManager.CloseAllMenues();
@@ -101,25 +107,21 @@ namespace UI.MenuMB
                 _walk.GetComponentInChildren<Text>().text = "Walk";
                 _walk.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    _mInstructions.Add(beh.WalkTo(_selectObject.GetObject()));
-                    addToList("Walk to " + _selectObject.GetObject().name);
+                    try
+                    {
+                        GameObject walkTarget =
+                            _selectObject.GetObject().transform.GetChildRecursiveByName("WalkTarget").gameObject;
+                        _mInstructions.Add(beh.WalkTo(walkTarget));
+                        addToList("Walk to " + _selectObject.GetObject().name);
+                    }
+                    catch
+                    {
+                        SSTools.ShowMessage("Walktarget not found", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                    }
                 });
                 _buttonList.Add(_walk);
             }
-            /*
-            _walkSphere = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
-            if (!(_walkSphere is null))
-            {
-                _walkSphere.transform.position = new Vector3(Screen.width / 20f + x, (Screen.height / 10f) * 5f);
-                x += 150;
-                _walkSphere.GetComponentInChildren<Text>().text = "Walk Sphere";
-                _walkSphere.GetComponent<Button>().onClick.AddListener(() =>
-                {
-                    _mInstructions.Add(beh.WalkTo(_selectObject.GetObject()));
-                    addToList("Walk to sphere");
-                });
-                _buttonList.Add(_walkSphere);
-            }*/
+
 
 
             _move = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
@@ -187,8 +189,16 @@ namespace UI.MenuMB
             _release.GetComponentInChildren<Text>().text = "Release";
             _release.GetComponent<Button>().onClick.AddListener(() =>
             {
-                _mInstructions.AddRange(beh.ReleaseObject());
-                addToList("Release");
+                GameObject go = _selectObject.GetObject();
+                if (go != null)
+                {
+                    _mInstructions.AddRange(beh.ReleaseObject(go));
+                    addToList("Release");
+                }
+                else
+                {
+                    SSTools.ShowMessage("Select Object",SSTools.Position.bottom, SSTools.Time.twoSecond);
+                }
             });
             _buttonList.Add(_release);
         }

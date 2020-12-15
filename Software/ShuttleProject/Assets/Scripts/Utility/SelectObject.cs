@@ -97,7 +97,7 @@ public class SelectObject : MonoBehaviour
                         _walkToHandler.ObjectSelectedHandler(sender, args, _go.name);
                     };
                     */
-                    _addObjectMenu.ObjectSelected(_go);
+                  
 
                     //Look after the child if the object is a hand 
                     if (HandChecker.IsHand(_go))
