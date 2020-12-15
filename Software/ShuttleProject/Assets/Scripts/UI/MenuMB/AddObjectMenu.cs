@@ -133,6 +133,7 @@ namespace Scripts
                 _createTargetButton = null;
                 _removeButton = null;
                 _createWalkTargetButton = null;
+
             }
             if ((_createTargetButton is null || _oldGameObject != go) && !go.transform.Find("moveTarget"))
             {
