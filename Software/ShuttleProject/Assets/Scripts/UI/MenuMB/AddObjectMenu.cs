@@ -143,64 +143,78 @@ namespace Scripts
                 _removeButton = null;
                 _createWalkTargetButton = null;
             }
-            if ((_createTargetButton is null || _oldGameObject != go || go == _oldGameObject) && !go.transform.Find("moveTarget"))
+
+            //Hands shouldn't have a walktarget or a movetarget
+            if (!go.name.Equals("LeftHand(Clone)") && !go.name.Equals("RightHand(Clone)"))
             {
-                Destroy(_createTargetButton);
-                _createTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
-                if (_createTargetButton is null) return;
-                _createTargetButton.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width) + 150, MenuManager.HeightDistance(Screen.height, 1));
-                _createTargetButton.GetComponentInChildren<Text>().text = "Create Target";
-                _buttonList.Add(_createTargetButton);
-                _createTargetButton.GetComponent<Button>().onClick.AddListener(() =>
+                if ((_createTargetButton is null || _oldGameObject != go || go == _oldGameObject) && !go.transform.Find("moveTarget"))
                 {
-                    GameObject target = Instantiate(go, go.transform.position, go.transform.rotation);
-                    target.transform.parent = go.transform;
-                    target.name = "moveTarget";
-                    Material material = (Material) Resources.Load("Materials/targetMaterial",typeof(Material));
-                    target.GetComponent<Renderer>().material = material;
-                    target.AddComponent<HoldPos>();
-                    ObjectBounds _bounds = new ObjectBounds(go.transform.gameObject);
-                    float size = _bounds.GetMaxBounds().x - _bounds.GetMinBounds().x;
-                    Vector3 newPos = new Vector3(go.transform.position.x + size + 0.25f*size, go.transform.position.y, go.transform.position.z);
-                    target.transform.position = newPos;
-                    if (target.transform.GetChildRecursiveByName("RightHand(Clone)") || target.transform.GetChildRecursiveByName("LeftHand(Clone)") || target.transform.GetChildRecursiveByName("WalkTarget"))
+                    Destroy(_createTargetButton);
+                    _createTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
+                    if (_createTargetButton is null) return;
+                    _createTargetButton.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width) + 150,
+                        MenuManager.HeightDistance(Screen.height, 1));
+                    _createTargetButton.GetComponentInChildren<Text>().text = "Create Target";
+                    _buttonList.Add(_createTargetButton);
+                    _createTargetButton.GetComponent<Button>().onClick.AddListener(() =>
                     {
-                        foreach (Transform child in target.transform)
+                        GameObject target = Instantiate(go, go.transform.position, go.transform.rotation);
+                        target.transform.parent = go.transform;
+                        target.name = "moveTarget";
+                        Material material = (Material) Resources.Load("Materials/targetMaterial", typeof(Material));
+                        target.GetComponent<Renderer>().material = material;
+                        target.AddComponent<HoldPos>();
+                        ObjectBounds _bounds = new ObjectBounds(go.transform.gameObject);
+                        float size = _bounds.GetMaxBounds().x - _bounds.GetMinBounds().x;
+                        Vector3 newPos = new Vector3(go.transform.position.x + size + 0.25f * size,
+                            go.transform.position.y, go.transform.position.z);
+                        target.transform.position = newPos;
+                        if (target.transform.GetChildRecursiveByName("RightHand(Clone)") ||
+                            target.transform.GetChildRecursiveByName("LeftHand(Clone)") ||
+                            target.transform.GetChildRecursiveByName("WalkTarget"))
                         {
-                            if (child.name.Equals("RightHand(Clone)") || child.name.Equals("LeftHand(Clone)") || child.name.Equals("WalkTarget"))
+                            foreach (Transform child in target.transform)
                             {
-                                Destroy(child.gameObject);
+                                if (child.name.Equals("RightHand(Clone)") || child.name.Equals("LeftHand(Clone)") ||
+                                    child.name.Equals("WalkTarget"))
+                                {
+                                    Destroy(child.gameObject);
+                                }
                             }
                         }
-                    }
-                    Destroy(_createTargetButton);
-                });
-                _buttonList.Add(_createTargetButton);
-            }
-            
-            if ((_createWalkTargetButton is null || _oldGameObject != go || go == _oldGameObject) && !go.transform.Find("WalkTarget"))
-            {
-                Destroy(_createWalkTargetButton);
-                _createWalkTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
-                if (_createWalkTargetButton is null) return;
-                _createWalkTargetButton.transform.position = new Vector3(MenuManager.WidthDistance(Screen.width) + 300, MenuManager.HeightDistance(Screen.height, 1));
-                _createWalkTargetButton.GetComponentInChildren<Text>().text = "Create Walktarget";
-                _buttonList.Add(_createWalkTargetButton);
-                _createWalkTargetButton.GetComponent<Button>().onClick.AddListener(() =>
+
+                        Destroy(_createTargetButton);
+                    });
+                    _buttonList.Add(_createTargetButton);
+                }
+
+                if ((_createWalkTargetButton is null || _oldGameObject != go || go == _oldGameObject) &&
+                    !go.transform.Find("WalkTarget"))
                 {
-                    GameObject target = Instantiate(Resources.Load("Utility/WalkTarget"), go.transform) as GameObject;
-                    target.name = "WalkTarget";
-                    WalkTargetManager.getInstance().AddWalkTarget(target);
-                    ObjectBounds _bounds = new ObjectBounds(go.transform.gameObject);
-                    float size = _bounds.GetMaxBounds().x - _bounds.GetMinBounds().x;
-                    Vector3 newPos = new Vector3(go.transform.position.x - size - 0.15f*size, 0.025f, go.transform.position.z);
-                    target.transform.position = newPos;
                     Destroy(_createWalkTargetButton);
-                });
-                _buttonList.Add(_createWalkTargetButton);
+                    _createWalkTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
+                    if (_createWalkTargetButton is null) return;
+                    _createWalkTargetButton.transform.position = new Vector3(
+                        MenuManager.WidthDistance(Screen.width) + 300, MenuManager.HeightDistance(Screen.height, 1));
+                    _createWalkTargetButton.GetComponentInChildren<Text>().text = "Create Walktarget";
+                    _buttonList.Add(_createWalkTargetButton);
+                    _createWalkTargetButton.GetComponent<Button>().onClick.AddListener(() =>
+                    {
+                        GameObject target =
+                            Instantiate(Resources.Load("Utility/WalkTarget"), go.transform) as GameObject;
+                        target.name = "WalkTarget";
+                        WalkTargetManager.getInstance().AddWalkTarget(target);
+                        ObjectBounds _bounds = new ObjectBounds(go.transform.gameObject);
+                        float size = _bounds.GetMaxBounds().x - _bounds.GetMinBounds().x;
+                        Vector3 newPos = new Vector3(go.transform.position.x - size - 0.15f * size, 0.025f,
+                            go.transform.position.z);
+                        target.transform.position = newPos;
+                        Destroy(_createWalkTargetButton);
+                    });
+                    _buttonList.Add(_createWalkTargetButton);
+                }
             }
-            
-            
+
 
             if (_removeButton is null || _oldGameObject != go || go == _oldGameObject)
             {
