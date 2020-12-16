@@ -174,8 +174,6 @@ namespace Scripts
                         }
                     }
                     Destroy(_createTargetButton);
-                    Destroy(_createWalkTargetButton);
-                    Destroy(_removeButton);
                 });
                 _buttonList.Add(_createTargetButton);
             }
@@ -198,8 +196,6 @@ namespace Scripts
                     Vector3 newPos = new Vector3(go.transform.position.x - size - 0.15f*size, 0.025f, go.transform.position.z);
                     target.transform.position = newPos;
                     Destroy(_createWalkTargetButton);
-                    Destroy(_createTargetButton);
-                    Destroy(_removeButton);
                 });
                 _buttonList.Add(_createWalkTargetButton);
             }
@@ -226,9 +222,7 @@ namespace Scripts
                             _parent.AddComponent<Rigidbody>();
                         }
                     }
-                    Destroy(_createWalkTargetButton);
                     Destroy(_removeButton);
-                    Destroy(_createTargetButton);
                 });
             }
             _oldGameObject = go;
