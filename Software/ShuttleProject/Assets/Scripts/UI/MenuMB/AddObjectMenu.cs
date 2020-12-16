@@ -124,7 +124,16 @@ namespace Scripts
         public void ObjectSelected(GameObject go)
         {
             _canvas = GameObject.Find("Canvas");
-            if (go is null) return;
+            if (go is null) 
+            {
+                Destroy(_removeButton);
+                Destroy(_createTargetButton);
+                Destroy(_createWalkTargetButton);
+                _createTargetButton = null;
+                _removeButton = null;
+                _createWalkTargetButton = null;
+                return;
+            }    
             if (go != _oldGameObject)
             {
                 Destroy(_removeButton);
@@ -133,9 +142,8 @@ namespace Scripts
                 _createTargetButton = null;
                 _removeButton = null;
                 _createWalkTargetButton = null;
-
             }
-            if ((_createTargetButton is null || _oldGameObject != go) && !go.transform.Find("moveTarget"))
+            if ((_createTargetButton is null || _oldGameObject != go || go == _oldGameObject) && !go.transform.Find("moveTarget"))
             {
                 Destroy(_createTargetButton);
                 _createTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
@@ -172,7 +180,7 @@ namespace Scripts
                 _buttonList.Add(_createTargetButton);
             }
             
-            if ((_createWalkTargetButton is null || _oldGameObject != go) && !go.transform.Find("WalkTarget"))
+            if ((_createWalkTargetButton is null || _oldGameObject != go || go == _oldGameObject) && !go.transform.Find("WalkTarget"))
             {
                 Destroy(_createWalkTargetButton);
                 _createWalkTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
@@ -198,7 +206,7 @@ namespace Scripts
             
             
 
-            if (_removeButton is null || _oldGameObject != go)
+            if (_removeButton is null || _oldGameObject != go || go == _oldGameObject)
             {
                 Destroy(_removeButton);
                 // Add remove object button

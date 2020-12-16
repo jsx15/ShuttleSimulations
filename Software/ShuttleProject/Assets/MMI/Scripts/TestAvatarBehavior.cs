@@ -43,10 +43,7 @@ public class TestAvatarBehavior : AvatarBehavior
             Properties = PropertiesCreator.Create("TargetID", objectID, "ForcePath", "true")
         };
         
-  
-        
         return walkInstruction;
-        
     }
 
     public List<MInstruction> ReachObject(GameObject go)
@@ -65,8 +62,9 @@ public class TestAvatarBehavior : AvatarBehavior
                 Properties = PropertiesCreator.Create("TargetID", objectID,
                     "Hand", "Left")
             };
-            // this.CoSimulator.AssignInstruction(reachLeft, null);
+          
             list.Add(reachLeft);
+            list.AddRange(MakeHandPose(go, "Left"));
         }
 
         if (HandChecker.HasRightHand(go))
@@ -79,37 +77,31 @@ public class TestAvatarBehavior : AvatarBehavior
             {
                 Properties = PropertiesCreator.Create("TargetID", objectID, "Hand", "Right")
             };
-            // this.CoSimulator.AssignInstruction(reachRight, null);
+            
             list.Add(reachRight);
+            list.AddRange(MakeHandPose(go, "Right"));
         }
-
-        /*
-         * Not compatible
-         */
-       //list.AddRange(MakeHandPose(go));
-        
+        //list.AddRange(MakeHandPose(go));
         return list;
     }
 
     public List<MInstruction> ReleaseObject(GameObject go)
     {
         List<MInstruction> list = new List<MInstruction>();
+        List<GameObject> hands = new List<GameObject>();
 
         if (HandChecker.HasLeftHand(go))
         {
             MInstruction releaseLeft =
                 new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
                 {
-                    //Properties = PropertiesCreator.Create("Hand", "Left", CoSimTopic.OnStart,
-                    // _handPoseIdManager.CurrentHandIdLeft + ":" + CoSimAction.EndInstruction)
-                    Properties = PropertiesCreator.Create("Hand", "Left")
+                    Properties = PropertiesCreator.Create("Hand", "Left", CoSimTopic.OnStart,
+                     _handPoseIdManager.CurrentHandIdLeft + ":" + CoSimAction.EndInstruction)
+                    //Properties = PropertiesCreator.Create("Hand", "Left")
                 };
-            /*
-            * Not compatible
-            */
-            //list.AddRange(ReleaseHandPose("Left"));
-            
+            list.AddRange(ReleaseHandPose("Left"));
             list.Add(releaseLeft);
+            hands.Add(go.transform.GetChildRecursiveByName("LeftHand(Clone)").gameObject);
         }
 
 
@@ -118,31 +110,33 @@ public class TestAvatarBehavior : AvatarBehavior
             MInstruction releaseRight =
                 new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
                 {
-                    // Properties = PropertiesCreator.Create("Hand", "Right", CoSimTopic.OnStart,
-                    // _handPoseIdManager.CurrentHandIdRight + ":" + CoSimAction.EndInstruction),
-                    Properties = PropertiesCreator.Create("Hand", "Right")
-
-
+                    Properties = PropertiesCreator.Create("Hand", "Right", CoSimTopic.OnStart,
+                     _handPoseIdManager.CurrentHandIdRight + ":" + CoSimAction.EndInstruction)
+                    //Properties = PropertiesCreator.Create("Hand", "Right")
                 };
-            /*
-            * Not compatible
-            */
-            //list.AddRange(ReleaseHandPose("Right"));
+            list.AddRange(ReleaseHandPose("Right"));
             list.Add(releaseRight);
+            hands.Add(go.transform.GetChildRecursiveByName("RightHand(Clone)").gameObject);
         }
-    return list;
+        
+        //Destroy the hands after moving an object
+        foreach (var hand in hands)
+        {
+            Destroy(hand);
+        }
+        
+        return list;
     }
 
     public List<MInstruction> MoveObject(GameObject obj, GameObject positionTarget)
     {
         List<MInstruction> list = new List<MInstruction>();
-
+        List<GameObject> hands = new List<GameObject>();
         
         String objectID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
         String targetPositionID = positionTarget.GetComponent<MMISceneObject>().MSceneObject.ID;
         if (HandChecker.HasBothHands(obj))
         {
-
             MInstruction moveObject = new MInstruction(MInstructionFactory.GenerateID(), "move object", "Object/Move")
             {
                 Properties = PropertiesCreator.Create("SubjectID", objectID, "Hand",
@@ -171,19 +165,17 @@ public class TestAvatarBehavior : AvatarBehavior
             };
             list.Add(moveObject);
         }
-
-       return list;
-
+        
+        return list;
     }
 
     public List<MInstruction> PickUp(GameObject obj)
     {
         List<MInstruction> list = new List<MInstruction>();
-        list.AddRange(ReachObject(obj));
 
         String objID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
         
-        if (list.Count == 2)
+        if (HandChecker.HasBothHands(obj))
         {
             carryIDB = MInstructionFactory.GenerateID();
             _carryIDManager.CurrentCarryIdBoth = carryIDB;
@@ -195,19 +187,19 @@ public class TestAvatarBehavior : AvatarBehavior
                 };
             list.Add(carryInstruction);
         }
-        else if (list[0].Name.Equals("reach right"))
+        else if (HandChecker.HasRightHand(obj))
         {
-
             carryIDR = MInstructionFactory.GenerateID();
             _carryIDManager.CurrentCarryIdRight = carryIDR;
-            MInstruction carryInstruction = new MInstruction(carryIDR, "carry object", "Object/Carry")
+            MInstruction carryInstruction = 
+                new MInstruction(carryIDR, "carry object", "Object/Carry")
             {
                 Properties = PropertiesCreator.Create("TargetID", objID, "Hand",
                     "Right"),
             };
             list.Add(carryInstruction);
         }
-        else
+        else if (HandChecker.HasLeftHand(obj))
         {
             carryIDL = MInstructionFactory.GenerateID();
             _carryIDManager.CurrentCarryIdLeft = carryIDL;
@@ -224,14 +216,14 @@ public class TestAvatarBehavior : AvatarBehavior
     }
 
     //Define a HandPose for the given object
-    private List<MInstruction> MakeHandPose(GameObject go)
+    private List<MInstruction> MakeHandPose(GameObject go, String side)
     {
         List<MInstruction> list = new List<MInstruction>();
-        if (HandChecker.HasLeftHand(go))
+        if (side.Equals("Left"))
         {
             //Get UnitySceneAccess ID of hand
             GameObject hand = go.transform.GetChildRecursiveByName("LeftHand(Clone)").gameObject;
-            String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
+            //String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
             
             //The desired Hand pose (rotations of the finger Joints)
             UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
@@ -260,11 +252,11 @@ public class TestAvatarBehavior : AvatarBehavior
             list.Add(moveFingersInstructionsLeft);
         }
 
-        if (HandChecker.HasRightHand(go))
+        if (side.Equals("Right"))
         {
             //Get UnitySceneAccess ID of hand
             GameObject hand = go.transform.GetChildRecursiveByName("RightHand(Clone)").gameObject;
-            String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
+            //String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
             
             //The desired Hand pose (rotations of the finger Joints)
             UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
@@ -311,20 +303,9 @@ public class TestAvatarBehavior : AvatarBehavior
                     {"Release", "true"},
                     {"Hand", side}
                 }
-
             };
 
         list.Add(moveFingersInstructionsLeft);
-/*
-        //Create the instruction to move the fingers
-        MInstruction moveFingersInstructionsRight =
-            new MInstruction(System.Guid.NewGuid().ToString(), "Release Fingers", "Pose/MoveFingers")
-            {
-                Properties = PropertiesCreator.Create("Release", "true", "Hand", "Right")
-            };
-
-        list.Add(moveFingersInstructionsRight);
- */       
         return list;
     }    
     
@@ -337,7 +318,6 @@ public class TestAvatarBehavior : AvatarBehavior
         {
             if (i > 0)
             {
-
                 if (list[i - 1].Name.Equals("carry object"))
                 {
                     list[i].StartCondition = list[i - 1].ID + ":" + "PositioningFinished + 0.1";
@@ -348,8 +328,8 @@ public class TestAvatarBehavior : AvatarBehavior
                 }
                 else if (list[i - 1].Name.Equals("Release Fingers"))
                 {
-                    //list[i].StartCondition = list[i - 1].StartCondition ;
-                    list[i].StartCondition = list[i - 1].ID + ":" + "FingersPositioned + 0.1";
+                    list[i].StartCondition = list[i - 1].StartCondition ;
+                    //list[i].StartCondition = list[i - 1].ID + ":" + "FingersPositioned + 0.1";
                 }
                 else
                 {
