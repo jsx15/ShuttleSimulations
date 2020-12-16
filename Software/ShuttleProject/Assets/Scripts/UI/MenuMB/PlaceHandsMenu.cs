@@ -38,7 +38,7 @@ namespace UI.MenuMB
         private bool _hasRigidBody = false;
         
         private const float OffSetValue = 0.02f;
-
+        private DragAndRotate _dragAndRotate;
         
 
         public void RemoveMenu()
@@ -99,6 +99,8 @@ namespace UI.MenuMB
                         _go = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetObject();
                         _hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPoint();
                         _hitPointNormal = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPointNormal();
+                        _dragAndRotate = GameObject.Find("Main Camera").GetComponent<SelectObject>()
+                            .GetDragAndRotate();
                         GameObject.Find("Main Camera").GetComponent<SelectObject>().ResetColor();
                     }
                     catch (Exception)
@@ -123,7 +125,7 @@ namespace UI.MenuMB
                             GameObject leftHandPrefab =
                                 Resources.Load("HandPrefab" + Path.DirectorySeparatorChar + "LeftHand") as GameObject;
                             GameObject leftHand = Instantiate(leftHandPrefab,
-                                _hitPoint + _hitPointNormal * OffSetValue ,
+                                _hitPoint + _dragAndRotate.GetOffsetAfterDrag() + _hitPointNormal * OffSetValue ,
                                 Quaternion.Euler(rotationLeft));
                             leftHand.transform.SetParent(_go.transform);
                             leftHand.transform.rotation = Quaternion.FromToRotation(-leftHand.transform.right, _hitPointNormal);
@@ -154,6 +156,8 @@ namespace UI.MenuMB
                             _go = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetObject();
                             _hitPoint = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPoint();
                             _hitPointNormal = GameObject.Find("Main Camera").GetComponent<SelectObject>().GetHitPointNormal();
+                            _dragAndRotate = GameObject.Find("Main Camera").GetComponent<SelectObject>()
+                                .GetDragAndRotate();
                             GameObject.Find("Main Camera").GetComponent<SelectObject>().ResetColor();
                         }
                         catch (Exception)
@@ -180,7 +184,7 @@ namespace UI.MenuMB
                                     Resources.Load("HandPrefab" + Path.DirectorySeparatorChar + "RightHand") as
                                         GameObject;
                                 GameObject rightHand = Instantiate(rightHandPrefab,
-                                    _hitPoint +  _hitPointNormal * OffSetValue,
+                                    _hitPoint + _dragAndRotate.GetOffsetAfterDrag() +  _hitPointNormal * OffSetValue,
                                     Quaternion.Euler(rotationRight));
                                 rightHand.transform.SetParent(_go.transform);
                                 rightHand.transform.rotation = Quaternion.FromToRotation(-rightHand.transform.right, _hitPointNormal);

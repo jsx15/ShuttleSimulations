@@ -18,6 +18,7 @@ public class HandMovement
     private bool _collider;
     private float _x;
     private float _speed = 5.0F;
+    private Vector3 _goDirectionOld;
 
     //classes
     private ShowAxis showAxis;
@@ -25,6 +26,7 @@ public class HandMovement
     public HandMovement(GameObject go)
     {
         _go = go;
+        _goDirectionOld = _go.transform.up;
         _parent = go.transform.parent.gameObject;
         _bones = new List<UnityBone>(go.GetComponentsInChildren<UnityBone>());
         SafeCollider();
@@ -52,6 +54,7 @@ public class HandMovement
 
             //rotate object
             _go.transform.Rotate(_x, 0, 0, Space.Self);
+            _goDirectionOld = _go.transform.up;
 
             RestoreCollider();
         }
@@ -82,12 +85,14 @@ public class HandMovement
                     {
                         _go.transform.position = hitInfoMouse.point + hitInfoMouse.normal * 0.02f;
                         _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoMouse.normal);
+                        _go.transform.Rotate(Vector3.Angle(_goDirectionOld,_go.transform.up), 0, 0);
                     }
                 }
                 else
                 {
                     _go.transform.position = hitInfoHand.point + hitInfoHand.normal * 0.02f;
                     _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoHand.normal);
+                    _go.transform.Rotate(Vector3.Angle(_goDirectionOld,_go.transform.up), 0, 0);
                 }
             }
             RestoreCollider();

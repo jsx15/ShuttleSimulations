@@ -189,6 +189,8 @@ public class SelectObject : MonoBehaviour
         _mRenderer = null;
         _addObjectMenu.ObjectSelected(_go);
     }
+    //Return used DragAndRotate
+    public DragAndRotate GetDragAndRotate() => _dragAndRotate;
     
     //Return the selected object
     public GameObject GetObject() => _go;
