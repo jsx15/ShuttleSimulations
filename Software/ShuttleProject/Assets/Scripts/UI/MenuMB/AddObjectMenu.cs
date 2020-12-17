@@ -191,6 +191,14 @@ namespace Scripts
                 if ((_createWalkTargetButton is null || _oldGameObject != go || go == _oldGameObject) &&
                     !go.transform.Find("WalkTarget"))
                 {
+                    GameObject target = Instantiate(Resources.Load("Utility/WalkTarget"), go.transform) as GameObject;
+                    target.name = "WalkTarget";
+                    WalkTargetManager.getInstance().AddWalkTarget(target);
+                    ObjectBounds _bounds = new ObjectBounds(go.transform.gameObject);
+                    float size = _bounds.GetMaxBounds().x - _bounds.GetMinBounds().x;
+                    Vector3 newPos = new Vector3(go.transform.position.x - size - 0.15f*size, 0.025f, go.transform.position.z);
+                    target.transform.position = newPos;
+                    target.transform.Rotate(0, -90, 0, Space.World);
                     Destroy(_createWalkTargetButton);
                     _createWalkTargetButton = Instantiate(Resources.Load("UI/Button"), _canvas.transform) as GameObject;
                     if (_createWalkTargetButton is null) return;

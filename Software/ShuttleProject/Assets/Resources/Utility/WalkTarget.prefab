@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1608087408013272221}
   - component: {fileID: 8600005252195713017}
   - component: {fileID: -3306188505695732341}
+  - component: {fileID: 4443107526836755583}
   m_Layer: 0
   m_Name: WalkTarget
   m_TagString: Untagged
@@ -129,3 +130,15 @@ MonoBehaviour:
   FinalLocation: {fileID: 0}
   IsLocatedAt: {fileID: 0}
   Constraints: []
+--- !u!114 &4443107526836755583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608087408013272194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c886356d77847b48d1bc6871fb94e3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
