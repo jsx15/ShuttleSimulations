@@ -195,6 +195,7 @@ namespace Scripts
                     float size = _bounds.GetMaxBounds().x - _bounds.GetMinBounds().x;
                     Vector3 newPos = new Vector3(go.transform.position.x - size - 0.15f*size, 0.025f, go.transform.position.z);
                     target.transform.position = newPos;
+                    target.transform.Rotate(0, -90, 0, Space.World);
                     Destroy(_createWalkTargetButton);
                 });
                 _buttonList.Add(_createWalkTargetButton);
