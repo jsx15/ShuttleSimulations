@@ -5,26 +5,28 @@ namespace Scripts
 {
     public class ManageObject : MonoBehaviour
     {
-        [HideInInspector]
-        public bool addObjectPressed;
-        [HideInInspector]
-        public bool addPrefabPressed;
+        /// <summary>
+        ///     Name of selected prefab
+        /// </summary>
         [HideInInspector]
         public string selectedPrefab;
 
+        /// <summary>
+        ///     Check for mouse click
+        /// </summary>
         public void Update()
         {
-            
-            if (Input.GetButtonDown("Fire1") && addPrefabPressed)
-                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
+            // Call AddObject left mouse click and prefab selected
+            if (Input.GetButtonDown("Fire1") && !selectedPrefab.Equals(""))
                 AddObject(Input.mousePosition);
         }
         
 
-        /*
-         * Instantiate clicked object
-         */
-        public void AddObject(Vector2 mousePosition)
+        /// <summary>
+        ///     Instantiate clicked object
+        /// </summary>
+        /// <param name="mousePosition">Position of the mouse</param>
+        private void AddObject(Vector2 mousePosition)
         {
             // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
             var hit = RayFromCamera(mousePosition, 1000.0f);
@@ -34,36 +36,35 @@ namespace Scripts
                 return;
             }
     
-            if (Instantiate(Resources.Load(selectedPrefab), hit.point, Quaternion.identity) is GameObject clickedObject)
+            //Instantiate selected prefab
+            if (Instantiate(Resources.Load(selectedPrefab), hit.point, Quaternion.identity) 
+                is GameObject clickedObject)
             {
-                //Align position
+                //Set position
                 var position = clickedObject.transform.position;
                 position = new Vector3(position.x,
                     // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
                     position.y + clickedObject.GetComponent<MeshRenderer>().bounds.size.y / 2,
                     position.z);
                 clickedObject.transform.position = position;
-                
-                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
-                //Add rigidbody
-                clickedObject.AddComponent<Rigidbody>();
-                
-                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
-                clickedObject.AddComponent<MMISceneObject>();
-                
+
                 //Set scene as parent
                 clickedObject.transform.parent = transform;
             }
-            addPrefabPressed = false;
-            // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
-            GetComponent<AddObjectMenu>().ClearButtons();
+            
+			//Reset 
+            selectedPrefab = "";
+            
 
         }
         
         
-        /*
-         * Get next collider hit
-         */
+        /// <summary>
+        ///     Get next collider hit
+        /// </summary>
+        /// <param name="mousePosition">Position of the mouse</param>
+        /// <param name="rayLength">Distance to observe</param>
+        /// <returns>hit point of collider</returns>
         private RaycastHit RayFromCamera(Vector3 mousePosition, float rayLength)
         {
             var direction = Camera.main.ScreenPointToRay(mousePosition);
