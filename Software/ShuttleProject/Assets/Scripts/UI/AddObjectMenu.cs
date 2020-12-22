@@ -17,7 +17,7 @@ namespace Scripts
         /// <summary>
         ///     The object selected buttons
         /// </summary>
-        public GameObject _removeButton, _createWalkTargetButton, _createTargetButton;
+        public GameObject removeButton, createWalkTargetButton, createTargetButton;
         
         /// <summary>
         ///     Add object panel for buttons
@@ -65,7 +65,7 @@ namespace Scripts
             }
             
             //Add click listener
-            _createWalkTargetButton.GetComponent<Button>().onClick.AddListener(() =>
+            createWalkTargetButton.GetComponent<Button>().onClick.AddListener(() =>
             {
                 //Instantiate walk target
                 GameObject target = Instantiate(Resources.Load("Utility/WalkTarget"), _selectObject.GetObject().transform) as GameObject;
@@ -79,7 +79,7 @@ namespace Scripts
                 target.transform.position = newPos;
                 
                 //Hide button
-                _createWalkTargetButton.SetActive(false);
+                createWalkTargetButton.SetActive(false);
             });
         }
         
@@ -117,7 +117,7 @@ namespace Scripts
             if (!go.transform.Find("moveTarget"))
             {
                 //Add click listener
-                _createTargetButton.GetComponent<Button>().onClick.AddListener(() =>
+                createTargetButton.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     //Instantiate move target
                     GameObject target = Instantiate(go, go.transform.position, go.transform.rotation);
@@ -147,22 +147,22 @@ namespace Scripts
                     }
                     
                     //Hide button
-                    _createTargetButton.SetActive(false);
+                    createTargetButton.SetActive(false);
                 });
             }
             else
             {
-                _createTargetButton.SetActive(false);
+                createTargetButton.SetActive(false);
             }
             
             //Hide button if walk target already created
             if (_selectObject.GetObject().transform.Find("WalkTarget"))
             {
-                _createWalkTargetButton.SetActive(false);
+                createWalkTargetButton.SetActive(false);
             }
 
             // Add click listener on remove button
-            _removeButton.GetComponent<Button>().onClick.AddListener(() =>
+            removeButton.GetComponent<Button>().onClick.AddListener(() =>
             {
                 if (HandChecker.IsHand(go)) _parent = go.transform.parent.gameObject;
                 GameObject.Find("Main Camera").GetComponent<SelectObject>().ResetColor();
@@ -178,7 +178,7 @@ namespace Scripts
                 */
                 
                 //Hide button
-                _removeButton.SetActive(false);
+                removeButton.SetActive(false);
             });
 
         }
