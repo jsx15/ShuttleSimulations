@@ -14,16 +14,18 @@ using UnityEngine;
 public class TestAvatarBehavior : AvatarBehavior
 {
     private Vector3 hitPoint;
-    private string carryIDR;
-    private string carryIDL;
-    private string carryIDB;
-    private BoxCollider boxColliderLeftHand;
-    private BoxCollider boxColliderRightHand;
+    private string carryIDR, carryIDL, carryIDB;
+    private BoxCollider boxColliderLeftHand, boxColliderRightHand;
     private ObjectBounds objectBounds;
     private float OffSetValue = 0.005f;
     private CarryIDManager _carryIDManager = new CarryIDManager();
     private string tmp;
     private HandPoseIdManager _handPoseIdManager = new HandPoseIdManager();
+    
+    
+    
+    
+    
 
 
     protected override void GUIBehaviorInput()
@@ -31,6 +33,7 @@ public class TestAvatarBehavior : AvatarBehavior
         //base.GUIBehaviorInput();
     }
 
+    
     public MInstruction WalkTo(GameObject go)
 
     {
@@ -168,7 +171,7 @@ public class TestAvatarBehavior : AvatarBehavior
         
         return list;
     }
-
+    
     public List<MInstruction> PickUp(GameObject obj)
     {
         List<MInstruction> list = new List<MInstruction>();
@@ -311,6 +314,7 @@ public class TestAvatarBehavior : AvatarBehavior
     
     public void RunInstruction(List<MInstruction> list)
     {
+        print(list.Count);
         MInstruction idleInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Idle", "Pose/Idle");
         this.CoSimulator.MSimulationEventHandler += this.CoSimulator_MSimulationEventHandler;
 
