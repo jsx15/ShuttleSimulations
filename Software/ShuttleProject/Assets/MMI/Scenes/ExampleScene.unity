@@ -928,7 +928,7 @@ PrefabInstance:
     - target: {fileID: 3564602522434321158, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 516
       objectReference: {fileID: 0}
     - target: {fileID: 3564602522434321158, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
@@ -983,7 +983,7 @@ PrefabInstance:
     - target: {fileID: 3564602523078003830, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_text
-      value: Craete Movetarget
+      value: Create Movetarget
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e475909308176d43937aaae406fa534, type: 3}
@@ -2413,6 +2413,31 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1293632471}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: WalkTo
+      objectReference: {fileID: 0}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3564602522991060925, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_Texture
@@ -2547,6 +2572,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 808446401}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlaceRightHand
       objectReference: {fileID: 0}
     - target: {fileID: 3564602522991060925, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
@@ -3708,8 +3743,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 977536086}
   m_HandleRect: {fileID: 977536085}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.9999973
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4040,7 +4075,12 @@ PrefabInstance:
     - target: {fileID: 3564602523078003830, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_text
-      value: Place Hands
+      value: Create Queue
+      objectReference: {fileID: 0}
+    - target: {fileID: 3564602523078003831, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_CullTransparentMesh
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e475909308176d43937aaae406fa534, type: 3}
@@ -4429,6 +4469,7 @@ GameObject:
   - component: {fileID: 808446397}
   - component: {fileID: 808446398}
   - component: {fileID: 808446396}
+  - component: {fileID: 808446401}
   m_Layer: 5
   m_Name: PlaceHandsPanel
   m_TagString: Untagged
@@ -4541,6 +4582,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 808446394}
   m_CullTransparentMesh: 0
+--- !u!114 &808446401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808446394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6745657b1569418b95dc759203a1c8b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectObject: {fileID: 534669910}
 --- !u!1 &816365172
 GameObject:
   m_ObjectHideFlags: 0
@@ -5689,6 +5743,16 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 808446401}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlaceLeftHand
+      objectReference: {fileID: 0}
     - target: {fileID: 3564602522991060925, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_Texture
@@ -6291,6 +6355,7 @@ GameObject:
   - component: {fileID: 1293632467}
   - component: {fileID: 1293632468}
   - component: {fileID: 1293632466}
+  - component: {fileID: 1293632471}
   m_Layer: 5
   m_Name: CreateQueuePanel
   m_TagString: Untagged
@@ -6404,6 +6469,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1293632464}
   m_CullTransparentMesh: 0
+--- !u!114 &1293632471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1293632464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d8d35698f1a42b08d92441dcf303b21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selectObject: {fileID: 534669910}
+  testAvatarBehavior: {fileID: 7341640644656884277}
+  ScrollView: {fileID: 1968316365}
 --- !u!1001 &1294696543
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6520,6 +6600,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1293632471}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Play
       objectReference: {fileID: 0}
     - target: {fileID: 3564602522991060924, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
@@ -7153,7 +7243,7 @@ PrefabInstance:
     - target: {fileID: 3564602522434321158, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -40
       objectReference: {fileID: 0}
     - target: {fileID: 3564602522434321158, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
@@ -7364,7 +7454,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1523860985
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7385,7 +7475,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 32, y: 32}
-  m_SizeDelta: {x: 0, y: 40}
+  m_SizeDelta: {x: 616, y: 40}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1523860986
 MonoBehaviour:
@@ -7986,9 +8076,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectSelectedBar: {fileID: 1523860984}
-  _removeButton: {fileID: 45795421}
-  _createWalkTargetButton: {fileID: 640508156}
-  _createTargetButton: {fileID: 1715167985}
+  removeButton: {fileID: 45795421}
+  createWalkTargetButton: {fileID: 640508156}
+  createTargetButton: {fileID: 1715167985}
   addObjectPanel: {fileID: 1999383791}
 --- !u!114 &1635182285
 MonoBehaviour:
@@ -8073,7 +8163,7 @@ PrefabInstance:
     - target: {fileID: 3564602522434321158, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 308
       objectReference: {fileID: 0}
     - target: {fileID: 3564602522434321158, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
@@ -9024,7 +9114,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000044592107}
+  m_AnchoredPosition: {x: 0, y: -0.000055901382}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!21 &1970323829
@@ -9541,6 +9631,16 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1293632471}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ReachObject
+      objectReference: {fileID: 0}
     - target: {fileID: 3564602522991060925, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_Texture
@@ -9904,7 +10004,7 @@ PrefabInstance:
     - target: {fileID: 3564602522434321158, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -80
+      value: -120
       objectReference: {fileID: 0}
     - target: {fileID: 3564602522434321158, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
@@ -9945,6 +10045,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1293632471}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PickUp
       objectReference: {fileID: 0}
     - target: {fileID: 3564602522991060925, guid: 1e475909308176d43937aaae406fa534,
         type: 3}

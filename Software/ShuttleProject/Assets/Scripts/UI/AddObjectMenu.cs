@@ -48,7 +48,7 @@ namespace Scripts
             {
                 //Instantiate button
                 var button = Instantiate(Resources.Load("UI/Button"), addObjectPanel.transform) as GameObject;
-
+                
                 //Set button text
                 var index = file.LastIndexOf("\\", StringComparison.Ordinal);
                 var prefabeName = file.Substring(index + 1);
