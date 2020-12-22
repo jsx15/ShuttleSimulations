@@ -5,7 +5,11 @@ namespace Scripts
 {
     public static class HandChecker
     {
-        //Check if object has a LeftHand
+        /// <summary>
+        ///     Check if object has left hand
+        /// </summary>
+        /// <param name="go">Object to be checked</param>
+        /// <returns>True if object has left hand</returns>
         public static bool HasLeftHand(GameObject go)
         {
             if (go != null && go.transform.GetChildRecursiveByName("LeftHand(Clone)"))
@@ -15,7 +19,11 @@ namespace Scripts
             return false;
         }
     
-        //Check if object has a RightHand
+        /// <summary>
+        ///     Check if object has right hand
+        /// </summary>
+        /// <param name="go">Object to be checked</param>
+        /// <returns>True if object has right hand</returns>
         public static bool HasRightHand(GameObject go)
         {
             if (go != null && go.transform.GetChildRecursiveByName("RightHand(Clone)"))
@@ -25,17 +33,25 @@ namespace Scripts
             return false;
         }
         
-        //Check if object has both hands
-        public static bool HasBothHands(GameObject obj)
+        /// <summary>
+        ///     Check if object has both hand
+        /// </summary>
+        /// <param name="go">Object to be checked</param>
+        /// <returns>True if object has both hand</returns>
+        public static bool HasBothHands(GameObject go)
         {
-            if (obj != null && obj.transform.GetChildRecursiveByName("RightHand(Clone)") && obj.transform.GetChildRecursiveByName("LeftHand(Clone)"))
+            if (go != null && go.transform.GetChildRecursiveByName("RightHand(Clone)") && go.transform.GetChildRecursiveByName("LeftHand(Clone)"))
             {
                 return true;
             }
             return false;
         }
         
-        //Check if object is a Hand
+        /// <summary>
+        ///     Check if object is a hand
+        /// </summary>
+        /// <param name="go">Object to be checked</param>
+        /// <returns>True if object is hand</returns>
         public static bool IsHand(GameObject go)
         {
             if (go != null && (go.name == "RightHand(Clone)" || go.name == "LeftHand(Clone)"))

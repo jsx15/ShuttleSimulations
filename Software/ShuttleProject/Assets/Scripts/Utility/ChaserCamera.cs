@@ -16,7 +16,6 @@ public class ChaserCamera : MonoBehaviour
     {
         targetObject = GameObject.Find("Avatar").transform;
         _initalOffset = new Vector3(0,2,-2) - targetObject.position;
-        MenuManager.ShowMainMenu();
     }
 
     // Update is called once per frame
