@@ -324,6 +324,11 @@ namespace Movement
         public void Play()
         {
             testAvatarBehavior.RunInstruction(_mInstructions);
+            WalkTargetManager.getInstance().GetWalkTarget();
+            foreach (var target in WalkTargetManager.getInstance().GetWalkTarget())
+            {
+                target.transform.localScale = new Vector3(0,0,0);
+            }
         }
     }
 }
