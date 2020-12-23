@@ -81,6 +81,40 @@ namespace Scripts
                 //Hide button
                 createWalkTargetButton.SetActive(false);
             });
+            
+            //Add click listener
+            createTargetButton.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                GameObject go = _selectObject.GetObject();
+                GameObject target = Instantiate(go, go.transform.position, go.transform.rotation);
+                target.transform.parent = go.transform;
+                target.name = "moveTarget";
+                target.GetComponent<Renderer>().material = (Material) Resources.Load("Materials/targetMaterial",typeof(Material));
+
+                //Add script
+                target.AddComponent<HoldPos>();
+                
+                //Set bounds and position
+                ObjectBounds bounds = new ObjectBounds(go.transform.gameObject);
+                float size = bounds.GetMaxBounds().x - bounds.GetMinBounds().x;
+                Vector3 newPos = new Vector3(go.transform.position.x + size + 0.25f*size, go.transform.position.y, go.transform.position.z);
+                target.transform.position = newPos;
+                
+                //Remove hands and walk targets from move target 
+                if (target.transform.GetChildRecursiveByName("RightHand(Clone)") || target.transform.GetChildRecursiveByName("LeftHand(Clone)") || target.transform.GetChildRecursiveByName("WalkTarget"))
+                {
+                    foreach (Transform child in target.transform)
+                    {
+                        if (child.name.Equals("RightHand(Clone)") || child.name.Equals("LeftHand(Clone)") || child.name.Equals("WalkTarget"))
+                        {
+                            Destroy(child.gameObject);
+                        }
+                    }
+                }
+                    
+                //Hide button
+                createTargetButton.SetActive(false);
+            });
         }
         
         /// <summary>
@@ -114,43 +148,7 @@ namespace Scripts
             ShowButtons();
             
             //Check if moveTarget has not been already created
-            if (!go.transform.Find("moveTarget"))
-            {
-                //Add click listener
-                createTargetButton.GetComponent<Button>().onClick.AddListener(() =>
-                {
-                    //Instantiate move target
-                    GameObject target = Instantiate(go, go.transform.position, go.transform.rotation);
-                    target.transform.parent = go.transform;
-                    target.name = "moveTarget";
-                    target.GetComponent<Renderer>().material = (Material) Resources.Load("Materials/targetMaterial",typeof(Material));
-                    
-                    //Add script
-                    target.AddComponent<HoldPos>();
-                    
-                    //Set bounds and position
-                    ObjectBounds bounds = new ObjectBounds(go.transform.gameObject);
-                    float size = bounds.GetMaxBounds().x - bounds.GetMinBounds().x;
-                    Vector3 newPos = new Vector3(go.transform.position.x + size + 0.25f*size, go.transform.position.y, go.transform.position.z);
-                    target.transform.position = newPos;
-                    
-                    //Remove hands and walk targets from move target 
-                    if (target.transform.GetChildRecursiveByName("RightHand(Clone)") || target.transform.GetChildRecursiveByName("LeftHand(Clone)") || target.transform.GetChildRecursiveByName("WalkTarget"))
-                    {
-                        foreach (Transform child in target.transform)
-                        {
-                            if (child.name.Equals("RightHand(Clone)") || child.name.Equals("LeftHand(Clone)") || child.name.Equals("WalkTarget"))
-                            {
-                                Destroy(child.gameObject);
-                            }
-                        }
-                    }
-                    
-                    //Hide button
-                    createTargetButton.SetActive(false);
-                });
-            }
-            else
+            if (_selectObject.GetObject().transform.Find("moveTarget"))
             {
                 createTargetButton.SetActive(false);
             }
