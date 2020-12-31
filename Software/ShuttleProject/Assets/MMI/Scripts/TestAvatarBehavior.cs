@@ -5,6 +5,14 @@ using UnityEngine;
 
 public class TestAvatarBehavior : AvatarBehavior
 {
+    protected override void GUIBehaviorInput()
+    {
+        //base.GUIBehaviorInput();
+    }
+    public void Abort()
+    {
+        CoSimulator.Abort();
+    }
     public void RunInstruction(List<MInstruction> list)
     {
         print(list.Count);

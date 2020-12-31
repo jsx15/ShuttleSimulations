@@ -350,6 +350,11 @@ namespace Movement
             var text = Instantiate(Resources.Load("UI/ScrollViewInstruction"), scrollViewContent.transform) as GameObject;
             if (!(text is null)) text.GetComponent<TextMeshProUGUI>().text = instructionText;
         }
+
+        public void Abort()
+        {    
+            testAvatarBehavior.Abort();
+        }
         public void Play()
         {
             testAvatarBehavior.RunInstruction(_mInstructions);

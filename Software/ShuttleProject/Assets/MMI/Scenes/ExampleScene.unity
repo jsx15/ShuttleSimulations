@@ -6031,6 +6031,16 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1293632471}
+    - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Abort
+      objectReference: {fileID: 0}
     - target: {fileID: 3564602522991060924, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_SizeDelta.x
