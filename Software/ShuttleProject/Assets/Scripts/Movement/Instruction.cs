@@ -7,8 +7,6 @@ using MMIUnity;
 using MMIUnity.TargetEngine.Scene;
 using Scripts;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 namespace Movement
 {
