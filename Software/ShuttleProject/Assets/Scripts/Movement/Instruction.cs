@@ -39,7 +39,9 @@ namespace Movement
         /// </summary>
         private readonly List<MInstruction> _mInstructions = new List<MInstruction>();
         
-
+        /// <summary>
+        ///     Walk to selected object
+        /// </summary>
         public void WalkTo()
         {
             GameObject go = selectObject.GetObject();
@@ -56,6 +58,9 @@ namespace Movement
             AddToScrollView("Walk to " + go.name);
         }
 
+        /// <summary>
+        ///     Reach selected object
+        /// </summary>
         public void ReachObject()
         {
             GameObject go = selectObject.GetObject();
@@ -104,6 +109,9 @@ namespace Movement
             AddToScrollView("Reach " + go.name);
         }
 
+        /// <summary>
+        ///     Release selected object
+        /// </summary>
         public void Release()
         {
             GameObject go = selectObject.GetObject();
@@ -150,6 +158,9 @@ namespace Movement
             AddToScrollView("Release " + go.name);
         }
 
+        /// <summary>
+        ///     Place selected object
+        /// </summary>
         public void MoveObject()
         {
             GameObject obj = selectObject.GetObject();
@@ -200,7 +211,10 @@ namespace Movement
             _mInstructions.AddRange(list);
             AddToScrollView("Place " + obj.name);
         }
-
+        
+        /// <summary>
+        ///     Pick up selected object
+        /// </summary>
         public void PickUp()
         {
             GameObject obj = selectObject.GetObject();
@@ -253,6 +267,9 @@ namespace Movement
             AddToScrollView("Pick up " + obj.name);
         }
         
+        /// <summary>
+        ///     Position fingers on hand pose
+        /// </summary>
         private IEnumerable<MInstruction> MakeHandPose(GameObject go, String side)
     {
         List<MInstruction> list = new List<MInstruction>();
@@ -325,6 +342,9 @@ namespace Movement
         return list;
     }
         
+        /// <summary>
+        ///     Release fingers from hand pose
+        /// </summary>
         private IEnumerable<MInstruction> ReleaseHandPose(string side)
         {
             List<MInstruction> list = new List<MInstruction>();
@@ -345,16 +365,27 @@ namespace Movement
             return list;
         }
 
+        /// <summary>
+        ///     Add text to scroll view
+        /// <param name="instructionText">Text to display</param>
+        /// </summary>
         private void AddToScrollView(string instructionText)
         {
             var text = Instantiate(Resources.Load("UI/ScrollViewInstruction"), scrollViewContent.transform) as GameObject;
             if (!(text is null)) text.GetComponent<TextMeshProUGUI>().text = instructionText;
         }
 
+        /// <summary>
+        ///     Abort running instructions
+        /// </summary>
         public void Abort()
         {    
             testAvatarBehavior.Abort();
         }
+        
+        /// <summary>
+        ///     Play stored queue
+        /// </summary>
         public void Play()
         {
             testAvatarBehavior.RunInstruction(_mInstructions);
