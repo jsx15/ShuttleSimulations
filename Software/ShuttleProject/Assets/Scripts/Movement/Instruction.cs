@@ -6,6 +6,7 @@ using MMIStandard;
 using MMIUnity;
 using MMIUnity.TargetEngine.Scene;
 using Scripts;
+using TMPro;
 using UnityEngine;
 
 namespace Movement
@@ -15,33 +16,33 @@ namespace Movement
         /// <summary>
         ///     Manager for carry instruction ids
         /// </summary>
-        private CarryIDManager _carryIDManager = new CarryIDManager();
+        private readonly CarryIDManager _carryIDManager = new CarryIDManager();
         
         /// <summary>
         ///     Manager for hand pose instruction ids
         /// </summary>
-        private HandPoseIdManager _handPoseIdManager = new HandPoseIdManager();
+        private readonly HandPoseIdManager _handPoseIdManager = new HandPoseIdManager();
         /// <summary>
         ///     SelectObject
         /// </summary>
-        public SelectObject _selectObject;
+        public SelectObject selectObject;
         
         /// <summary>
         ///     TestAvatarBehavior
         /// </summary>
         public TestAvatarBehavior testAvatarBehavior;
 
-        public GameObject ScrollView;
+        public GameObject scrollViewContent;
         
         /// <summary>
         ///     List of all instructions
         /// </summary>
-        private List<MInstruction> _mInstructions = new List<MInstruction>();
+        private readonly List<MInstruction> _mInstructions = new List<MInstruction>();
         
 
         public void WalkTo()
         {
-            GameObject go = _selectObject.GetObject();
+            GameObject go = selectObject.GetObject();
             GameObject walkTarget = go.transform.GetChildRecursiveByName("WalkTarget").gameObject;
 
             String objectID = walkTarget.GetComponent<MMISceneObject>().MSceneObject.ID;
@@ -52,11 +53,12 @@ namespace Movement
             };
             
             _mInstructions.Add(walkInstruction);
+            AddToScrollView("Walk to " + go.name);
         }
 
         public void ReachObject()
         {
-            GameObject go = _selectObject.GetObject();
+            GameObject go = selectObject.GetObject();
             List<MInstruction> list = new List<MInstruction>();
 
             if (HandChecker.HasLeftHand(go))
@@ -92,11 +94,12 @@ namespace Movement
             }
             
             _mInstructions.AddRange(list);
+            AddToScrollView("Reach " + go.name);
         }
 
         public void Release()
         {
-            GameObject go = _selectObject.GetObject();
+            GameObject go = selectObject.GetObject();
             
             List<MInstruction> list = new List<MInstruction>();
             List<GameObject> hands = new List<GameObject>();
@@ -137,14 +140,15 @@ namespace Movement
             }
             
             _mInstructions.AddRange(list);
+            AddToScrollView("Release " + go.name);
         }
 
         public void MoveObject()
         {
-            GameObject obj = _selectObject.GetObject();
+            GameObject obj = selectObject.GetObject();
             GameObject positionTarget = obj.transform.GetChildRecursiveByName("moveTarget").gameObject;
             List<MInstruction> list = new List<MInstruction>();
-            List<GameObject> hands = new List<GameObject>();
+            // List<GameObject> hands = new List<GameObject>();
         
             String objectID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
             String targetPositionID = positionTarget.GetComponent<MMISceneObject>().MSceneObject.ID;
@@ -180,11 +184,12 @@ namespace Movement
             }
             
             _mInstructions.AddRange(list);
+            AddToScrollView("Place " + obj.name);
         }
 
         public void PickUp()
         {
-            GameObject obj = _selectObject.GetObject();
+            GameObject obj = selectObject.GetObject();
             List<MInstruction> list = new List<MInstruction>();
 
             String objID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
@@ -224,9 +229,10 @@ namespace Movement
             }
             
             _mInstructions.AddRange(list);
+            AddToScrollView("Pick up " + obj.name);
         }
         
-        private List<MInstruction> MakeHandPose(GameObject go, String side)
+        private IEnumerable<MInstruction> MakeHandPose(GameObject go, String side)
     {
         List<MInstruction> list = new List<MInstruction>();
         if (side.Equals("Left"))
@@ -238,7 +244,7 @@ namespace Movement
             //The desired Hand pose (rotations of the finger Joints)
             UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
             
-            _handPoseIdManager.CurrentHandIdLeft = System.Guid.NewGuid().ToString();
+            _handPoseIdManager.CurrentHandIdLeft = Guid.NewGuid().ToString();
             
             //Create the instruction to move the fingers
 
@@ -251,7 +257,7 @@ namespace Movement
                 },
                 Constraints = new List<MConstraint>()
             };
-            string constraintID = System.Guid.NewGuid().ToString();
+            var constraintID = Guid.NewGuid().ToString();
             moveFingersInstructionsLeft.Properties.Add("HandPose", constraintID);
             moveFingersInstructionsLeft.Constraints.Add(new MConstraint()
             {
@@ -271,7 +277,7 @@ namespace Movement
             //The desired Hand pose (rotations of the finger Joints)
             UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
             
-            _handPoseIdManager.CurrentHandIdRight = System.Guid.NewGuid().ToString();
+            _handPoseIdManager.CurrentHandIdRight = Guid.NewGuid().ToString();
             
             //Create the instruction to move the fingers
 
@@ -284,7 +290,7 @@ namespace Movement
                 },
                 Constraints = new List<MConstraint>()
             };
-            string constraintID = System.Guid.NewGuid().ToString();
+            string constraintID = Guid.NewGuid().ToString();
             moveFingersInstructionsRight.Properties.Add("HandPose", constraintID);
             moveFingersInstructionsRight.Constraints.Add(new MConstraint()
             {
@@ -298,14 +304,14 @@ namespace Movement
         return list;
     }
         
-        private List<MInstruction> ReleaseHandPose(string side)
+        private IEnumerable<MInstruction> ReleaseHandPose(string side)
         {
             List<MInstruction> list = new List<MInstruction>();
 
             //Create the instruction to move the fingers
         
             MInstruction moveFingersInstructionsLeft =
-                new MInstruction(System.Guid.NewGuid().ToString(), "Release Fingers", "Pose/MoveFingers")
+                new MInstruction(Guid.NewGuid().ToString(), "Release Fingers", "Pose/MoveFingers")
                 {
                     Properties = new Dictionary<string, string>()
                     {
@@ -317,8 +323,12 @@ namespace Movement
             list.Add(moveFingersInstructionsLeft);
             return list;
         }
-        
-        
+
+        private void AddToScrollView(string instructionText)
+        {
+            var text = Instantiate(Resources.Load("UI/ScrollViewInstruction"), scrollViewContent.transform) as GameObject;
+            if (!(text is null)) text.GetComponent<TextMeshProUGUI>().text = instructionText;
+        }
         public void Play()
         {
             testAvatarBehavior.RunInstruction(_mInstructions);

@@ -7205,9 +7205,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d8d35698f1a42b08d92441dcf303b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _selectObject: {fileID: 534669910}
+  selectObject: {fileID: 534669910}
   testAvatarBehavior: {fileID: 7341640644656884277}
-  ScrollView: {fileID: 1968316365}
+  scrollViewContent: {fileID: 1968316365}
 --- !u!1001 &1294696543
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10533,7 +10533,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 4
+  m_Spacing: 8
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
