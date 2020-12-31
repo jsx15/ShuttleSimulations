@@ -27,7 +27,7 @@ namespace Scripts
         /// <summary>
         ///    Reference for selectObject script
         /// </summary>
-        private SelectObject _selectObject;
+        public SelectObject selectObject;
         
         /// <summary>
         ///     Parent object
@@ -39,43 +39,18 @@ namespace Scripts
         /// </summary>
         public void Start()
         {
-            //Get reference
-            _selectObject = GameObject.Find("Main Camera").GetComponent<SelectObject>();
-            
-            // Create button for every prefab in resource folder
-            var files = PrefabLoader.GETPrefab();
-            foreach (var file in files)
-            {
-                //Instantiate button
-                var button = Instantiate(Resources.Load("UI/Button"), addObjectPanel.transform) as GameObject;
-                
-                //Set button text
-                var index = file.LastIndexOf("\\", StringComparison.Ordinal);
-                var prefabeName = file.Substring(index + 1);
-                prefabeName = prefabeName.Split('.')[0];
-                button.transform.GetChildRecursiveByName("Text").GetComponent<TextMeshProUGUI>().text = prefabeName;
-                
-                //Add  button onClick listener
-                button.GetComponent<Button>().onClick.AddListener(() =>
-                {
-                    //Set prefabName in ManageObject
-                    GameObject scene = GameObject.Find("Scene");
-                    scene.GetComponent<ManageObject>().selectedPrefab = prefabeName;
-                });
-            }
-            
             //Add click listener
             createWalkTargetButton.GetComponent<Button>().onClick.AddListener(() =>
             {
                 //Instantiate walk target
-                GameObject target = Instantiate(Resources.Load("Utility/WalkTarget"), _selectObject.GetObject().transform) as GameObject;
+                GameObject target = Instantiate(Resources.Load("Utility/WalkTarget"), selectObject.GetObject().transform) as GameObject;
                 target.name = "WalkTarget";
                 WalkTargetManager.getInstance().AddWalkTarget(target);
                 
                 //Set bounds and position
-                ObjectBounds _bounds = new ObjectBounds(_selectObject.GetObject().transform.gameObject);
+                ObjectBounds _bounds = new ObjectBounds(selectObject.GetObject().transform.gameObject);
                 float size = _bounds.GetMaxBounds().x - _bounds.GetMinBounds().x;
-                Vector3 newPos = new Vector3(_selectObject.GetObject().transform.position.x - size - 0.15f*size, 0.025f, _selectObject.GetObject().transform.position.z);
+                Vector3 newPos = new Vector3(selectObject.GetObject().transform.position.x - size - 0.15f*size, 0.025f, selectObject.GetObject().transform.position.z);
                 target.transform.position = newPos;
                 
                 //Hide button
@@ -85,7 +60,7 @@ namespace Scripts
             //Add click listener
             createTargetButton.GetComponent<Button>().onClick.AddListener(() =>
             {
-                GameObject go = _selectObject.GetObject();
+                GameObject go = selectObject.GetObject();
                 GameObject target = Instantiate(go, go.transform.position, go.transform.rotation);
                 target.transform.parent = go.transform;
                 target.name = "moveTarget";
@@ -148,13 +123,13 @@ namespace Scripts
             ShowButtons();
             
             //Check if moveTarget has not been already created
-            if (_selectObject.GetObject().transform.Find("moveTarget"))
+            if (selectObject.GetObject().transform.Find("moveTarget"))
             {
                 createTargetButton.SetActive(false);
             }
             
             //Hide button if walk target already created
-            if (_selectObject.GetObject().transform.Find("WalkTarget"))
+            if (selectObject.GetObject().transform.Find("WalkTarget"))
             {
                 createWalkTargetButton.SetActive(false);
             }
