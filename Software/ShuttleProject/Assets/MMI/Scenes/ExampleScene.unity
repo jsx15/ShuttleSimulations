@@ -5282,7 +5282,7 @@ Animator:
   m_GameObject: {fileID: 808446394}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4f1e0c6fb7c261f49a732514b3ffa248, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9b93f7bb5a0b0944188525c3771eb621, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -6989,7 +6989,7 @@ Animator:
   m_GameObject: {fileID: 1293632464}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4f1e0c6fb7c261f49a732514b3ffa248, type: 2}
+  m_Controller: {fileID: 9100000, guid: 38d838ecbfd31124fbf3faf792477f91, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -8834,8 +8834,6 @@ MonoBehaviour:
   createTargetButton: {fileID: 1715167985}
   addObjectPanel: {fileID: 1999383791}
   selectObject: {fileID: 534669910}
-  cubeButton: {fileID: 0}
-  capsuleButton: {fileID: 0}
 --- !u!114 &1635182285
 MonoBehaviour:
   m_ObjectHideFlags: 0

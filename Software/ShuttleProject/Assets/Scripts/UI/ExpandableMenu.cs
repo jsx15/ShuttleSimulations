@@ -10,7 +10,7 @@ public class ExpandableMenu : MonoBehaviour
     /// <summary>
     ///     
     /// </summary>
-    private static bool open = false;
+    private bool open = false;
     
     /// <summary>
     /// 
