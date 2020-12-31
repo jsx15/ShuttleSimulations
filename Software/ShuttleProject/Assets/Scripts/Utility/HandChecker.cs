@@ -60,5 +60,10 @@ namespace Scripts
             }
             return false;
         }
+
+        public static bool HasHands(GameObject go)
+        {
+            return HasLeftHand(go) || HasRightHand(go);
+        }
     }
 }

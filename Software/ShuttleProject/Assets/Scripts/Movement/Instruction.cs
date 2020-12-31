@@ -59,6 +59,13 @@ namespace Movement
         public void ReachObject()
         {
             GameObject go = selectObject.GetObject();
+
+            if (!HandChecker.HasHands(go))
+            {
+                SSTools.ShowMessage("No hands placed", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                return;
+            }
+            
             List<MInstruction> list = new List<MInstruction>();
 
             if (HandChecker.HasLeftHand(go))
@@ -146,6 +153,13 @@ namespace Movement
         public void MoveObject()
         {
             GameObject obj = selectObject.GetObject();
+            
+            if (!HandChecker.HasHands(obj))
+            {
+                SSTools.ShowMessage("No hands placed", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                return;
+            }
+            
             GameObject positionTarget = obj.transform.GetChildRecursiveByName("moveTarget").gameObject;
             List<MInstruction> list = new List<MInstruction>();
             // List<GameObject> hands = new List<GameObject>();
@@ -190,6 +204,13 @@ namespace Movement
         public void PickUp()
         {
             GameObject obj = selectObject.GetObject();
+            
+            if (!HandChecker.HasHands(obj))
+            {
+                SSTools.ShowMessage("No hands placed", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                return;
+            }
+            
             List<MInstruction> list = new List<MInstruction>();
 
             String objID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
