@@ -379,6 +379,10 @@ namespace Movement
         public void Abort()
         {    
             testAvatarBehavior.Abort();
+            foreach (Transform child in scrollViewContent.transform)
+            {
+                Destroy(child.gameObject);
+            }
         }
         
         /// <summary>
