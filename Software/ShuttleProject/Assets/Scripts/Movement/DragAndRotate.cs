@@ -12,6 +12,8 @@
         private float _yPos;
         private Vector3 _hitpoint;
         private Vector3 _hitpointNormal;
+        private Vector3 _goPosOld;
+        private Vector3 _dragOffset;
 
         //rotate variables
         private bool _gravity;
@@ -29,6 +31,7 @@
         public DragAndRotate(GameObject go, Vector3 hitpoint, Vector3 hitpointNormal, bool lockY)
         {
             _go = go;
+            _goPosOld = go.transform.position;
             _lockY = lockY;
 
             //safe settings
@@ -128,6 +131,7 @@
                 {
                     _go.transform.position = new Vector3(GetMouseAsWorldPoint().x + _mOffset.x, _yPos,
                         GetMouseAsWorldPoint().z + _mOffset.z);
+                    _dragOffset = _go.transform.position - _goPosOld;
                 }
                 //change height with mouse
                 else
@@ -137,6 +141,7 @@
                     {
                         _go.transform.position = new Vector3(_go.transform.position.x, 0, _go.transform.position.z);
                     }
+                    _dragOffset = _go.transform.position - _goPosOld;
                 }
             }
             else
@@ -144,6 +149,7 @@
                 restoreGravityAndCollider();
             }
         }
+        public Vector3 GetOffsetAfterDrag()=>_dragOffset;
         
         //-------------------safe, restore and disable Settings-------------------
 
