@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class ChaserCamera : MonoBehaviour
 {
-    
     public float smoothness;
     public Transform targetObject;
     private Vector3 _initalOffset;

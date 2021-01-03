@@ -277,8 +277,7 @@ namespace Movement
         {
             //Get UnitySceneAccess ID of hand
             GameObject hand = go.transform.GetChildRecursiveByName("LeftHand(Clone)").gameObject;
-            //String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
-            
+
             //The desired Hand pose (rotations of the finger Joints)
             UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
             
@@ -318,7 +317,6 @@ namespace Movement
             _handPoseIdManager.CurrentHandIdRight = Guid.NewGuid().ToString();
             
             //Create the instruction to move the fingers
-
             MInstruction moveFingersInstructionsRight = new MInstruction(_handPoseIdManager.CurrentHandIdRight, "Move Fingers", "Pose/MoveFingers")
             {
                 Properties = new Dictionary<string, string>()
