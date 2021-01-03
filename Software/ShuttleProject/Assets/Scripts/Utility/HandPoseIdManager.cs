@@ -2,24 +2,14 @@
 {
     public class HandPoseIdManager
     {
-        /*
-         * Current IDs
-         */
-        private string _currentHandIdLeft, _currentHandIdRight;
+        /// <summary>
+        ///     Left hand instruction id
+        /// </summary>
+        public string CurrentHandIdLeft { get; set; }
 
-        /*
-         * Getter / Setter
-         */
-        public string CurrentHandIdLeft
-        {
-            get => _currentHandIdLeft;
-            set => _currentHandIdLeft = value;
-        }
-
-        public string CurrentHandIdRight
-        {
-            get => _currentHandIdRight;
-            set => _currentHandIdRight = value;
-        }
+        /// <summary>
+        ///     Right hand instruction id
+        /// </summary>
+        public string CurrentHandIdRight { get; set; }
     }
 }

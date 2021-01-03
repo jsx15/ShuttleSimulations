@@ -2,31 +2,19 @@
 {
     public class CarryIDManager
     {
-        /*
-         * Current IDs
-         */
-        private string _currentCarryIdLeft, _currentCarryIdRight, _currentCarryIdBoth;
+        /// <summary>
+        ///     Carry instruction id of left hand
+        /// </summary>
+        public string CurrentCarryIdLeft { get; set; }
 
-        /*
-         * Getter / Setter
-         */
-        public string CurrentCarryIdLeft
-        {
-            get => _currentCarryIdLeft;
-            set => _currentCarryIdLeft = value;
-        }
+        /// <summary>
+        ///     Carry instruction id of right hand
+        /// </summary>
+        public string CurrentCarryIdRight { get; set; }
 
-        public string CurrentCarryIdRight
-        {
-            get => _currentCarryIdRight;
-            set => _currentCarryIdRight = value;
-        }
-
-        public string CurrentCarryIdBoth
-        {
-            get => _currentCarryIdBoth;
-            set => _currentCarryIdBoth = value;
-        }
-        
+        /// <summary>
+        ///     Carry instruction id of both hand
+        /// </summary>
+        public string CurrentCarryIdBoth { get; set; }
     }
 }

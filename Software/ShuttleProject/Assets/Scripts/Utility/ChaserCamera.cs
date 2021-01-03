@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class ChaserCamera : MonoBehaviour
 {
-    
     public float smoothness;
     public Transform targetObject;
     private Vector3 _initalOffset;
@@ -16,7 +15,6 @@ public class ChaserCamera : MonoBehaviour
     {
         targetObject = GameObject.Find("Avatar").transform;
         _initalOffset = new Vector3(0,2,-2) - targetObject.position;
-        MenuManager.ShowMainMenu();
     }
 
     // Update is called once per frame
