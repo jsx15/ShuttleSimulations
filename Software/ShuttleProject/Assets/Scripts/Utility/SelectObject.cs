@@ -153,7 +153,7 @@ public class SelectObject : MonoBehaviour
             if (HandChecker.IsHand(_go))
             {
                 //Handle rotate OR Drag for a hand object
-                if (Input.GetKey(KeyCode.M))
+                if (Input.GetKey(KeyCode.M) || Input.GetKey(KeyCode.X))
                 {
                     _moving = true;
                 }

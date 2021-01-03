@@ -8,20 +8,49 @@ using UnityEngine;
  */
 namespace Movement
 {
+    /// <summary>
+    /// Inverse Kinematic Manager for finger movement.
+    /// </summary>
     public class IKManager : MonoBehaviour
     {
+        /// <summary>
+        /// UnityBone of the fingertip.
+        /// </summary>
         private UnityBone _tip;
-        private Vector3 _target;
-        private Vector3 _initialTarget;
-        private Vector3 _rayDirection;
         
-
+        /// <summary>
+        /// Target for the inverse kinematic.
+        /// </summary>
+        private Vector3 _target;
+        
+        /// <summary>
+        /// Parent object of the hand corresponding to the finger.
+        /// </summary>
+        private Vector3 _initialTarget;
+        
+        /// <summary>
+        /// List of every UnityBone in  a finger.
+        /// </summary>
         private List<UnityBone> _fingerBones;
+        
+        /// <summary>
+        /// List containing Rotation of each fingers bone.
+        /// </summary>
         private List<Quaternion> _fingerBonesRotation;
+        
+        /// <summary>
+        /// Reference to the SelectObject class since the IKManager will be added on Runtime.
+        /// </summary>
         private SelectObject _selectObject; 
-           
-
+        
+        /// <summary>
+        /// Threshold which sets the distance between fingertip and object surface.
+        /// </summary>
         private const float Threshold = 0.01f;
+        
+        /// <summary>
+        /// The rate at which the rotation will rotate. A higher value equals a quicker, but less accurate rotation.
+        /// </summary>
         private  float _rate;
         
         private void Start()
@@ -41,32 +70,42 @@ namespace Movement
 
         private void Update()
         {
-            if (!_selectObject.IsMoving())
+            //make sure that only the script running on the selected hand's fingers is responding
+            if (_selectObject.GetObject().GetInstanceID().Equals(gameObject.transform.parent.gameObject.GetInstanceID()))
             {
-                if (Vector3.Distance(_tip.transform.position, _target) > Threshold)
-                {
-                    UnityBone currentBone;
-                    for (int x = 0; x < _fingerBones.Count; x++)
-                    {
-                        currentBone = _fingerBones[x];
-                        float slope = CalculateSlope(currentBone);
-                        currentBone.transform.Rotate(Vector3.forward * (-slope * _rate));
-                    }
-                }
+                 // make sure that the hand isn't moving 
+                 if (!_selectObject.IsMoving())
+                 {
+                     //Remain a certain distance to the target
+                     if (Vector3.Distance(_tip.transform.position, _target) > Threshold)
+                     {
+                         UnityBone currentBone;
+                         for (int x = 0; x < _fingerBones.Count; x++)
+                         {
+                             currentBone = _fingerBones[x];
+                             float slope = CalculateSlope(currentBone);
+                             currentBone.transform.Rotate(Vector3.forward * (-slope * _rate));
+                         }
+                     }
+                 }
+                 //hand is moving 
+                 else
+                 {
+                     UnityBone currentBone;
+                     for (int x = 0; x < _fingerBones.Count; x++)
+                     {
+                         currentBone = _fingerBones[x];
+                         currentBone.transform.localRotation = _fingerBonesRotation[x];
+                     }
+                 }
             }
-            else
-            {
-                UnityBone currentBone;
-                for (int x = 0; x < _fingerBones.Count; x++)
-                {
-                    currentBone = _fingerBones[x];
-                    currentBone.transform.localRotation = _fingerBonesRotation[x];
-                }
-            }
-
-            
         }
-
+        
+        /// <summary>
+        /// Calculates the Slope for movement
+        /// </summary>
+        /// <param name="bone"></param>
+        /// <returns>returns calculated slope</returns>
         private float CalculateSlope(UnityBone bone)
         {
             float deltaTheta = 0.1f;
@@ -80,7 +119,11 @@ namespace Movement
             return (distance2 - distance1) / deltaTheta;
         }
         
-
+        /// <summary>
+        /// Determines the target of the fingertip via Raycast. If the Raycast returns null the target is defaulted to the transform of the hands parent object
+        /// </summary>
+        /// <param name="transformTarget">transform of the object from which the Raycast will originate</param>
+        /// <returns></returns>
         private Vector3 GetTarget(Transform transformTarget)
         {
             _rate = 500.0f;

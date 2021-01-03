@@ -32,7 +32,10 @@ public class HandMovement
         {
             if (bone.name.Contains("Proximal") || bone.name.Contains("ThumbMid"))
             {
-                bone.gameObject.AddComponent<IKManager>();
+                if (bone.gameObject.GetComponent<IKManager>() == null)
+                {
+                    bone.gameObject.AddComponent<IKManager>();
+                }
             }
         }
     }

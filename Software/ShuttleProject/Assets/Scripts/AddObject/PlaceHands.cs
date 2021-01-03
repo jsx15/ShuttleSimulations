@@ -30,10 +30,13 @@ namespace Scripts
         /// </summary>
         public void PlaceLeftHand()
         {
+            
             GameObject go = selectObject.GetObject();
             Vector3 hitPoint = selectObject.GetHitPoint();
             Vector3 hitPointNormal = selectObject.GetHitPointNormal();
+            
             selectObject.ResetColor();
+            
 
             if (go != null)
             {
@@ -52,7 +55,7 @@ namespace Scripts
                     GameObject leftHandPrefab =
                         Resources.Load("HandPrefab" + Path.DirectorySeparatorChar + "LeftHand") as GameObject;
                     GameObject leftHand = Instantiate(leftHandPrefab,
-                        hitPoint + hitPointNormal * OffSetValue ,
+                        hitPoint + selectObject.GetDragAndRotate().GetOffsetAfterDrag() + hitPointNormal * OffSetValue ,
                         Quaternion.Euler(rotationLeft));
                     leftHand.transform.SetParent(go.transform);
                     leftHand.transform.rotation = Quaternion.FromToRotation(-leftHand.transform.right, hitPointNormal);
@@ -92,7 +95,7 @@ namespace Scripts
                         Resources.Load("HandPrefab" + Path.DirectorySeparatorChar + "RightHand") as
                             GameObject;
                     GameObject rightHand = Instantiate(rightHandPrefab,
-                        hitPoint + hitPointNormal * OffSetValue,
+                        hitPoint + selectObject.GetDragAndRotate().GetOffsetAfterDrag() + hitPointNormal * OffSetValue,
                         Quaternion.Euler(rotationRight));
                     rightHand.transform.SetParent(go.transform);
                     rightHand.transform.rotation =
