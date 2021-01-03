@@ -50,6 +50,7 @@ namespace Scripts
         /// </summary>
         public void RemoveLastItem()
         {
+            if (_mInstructions.Count <= 0) return;
             _mInstructions.RemoveAt(_mInstructions.Count - 1);
             Destroy(scrollViewContent.transform.GetChild(_mInstructions.Count).gameObject);
         }
