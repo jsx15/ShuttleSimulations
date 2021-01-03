@@ -383,6 +383,7 @@ namespace Movement
             {
                 Destroy(child.gameObject);
             }
+            _mInstructions.Clear();
         }
         
         /// <summary>
