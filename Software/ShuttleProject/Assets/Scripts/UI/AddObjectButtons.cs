@@ -24,7 +24,5 @@ namespace Scripts
         {
             manageObject.selectedPrefab = "Capsule";
         }
-        
-        
     }
 }
