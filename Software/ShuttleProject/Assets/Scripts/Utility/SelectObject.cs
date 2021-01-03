@@ -37,6 +37,8 @@ public class SelectObject : MonoBehaviour
     private DragAndRotate _dragAndRotate;
 
     private HandMovement _handMovement;
+
+    private bool _moving = false;
     
     //private WalkToMenu.WalkToHandler _walkToHandler = new WalkToMenu.WalkToHandler();
     
@@ -151,6 +153,15 @@ public class SelectObject : MonoBehaviour
             if (HandChecker.IsHand(_go))
             {
                 //Handle rotate OR Drag for a hand object
+                if (Input.GetKey(KeyCode.M))
+                {
+                    _moving = true;
+                }
+                else
+                {
+                    _moving = false;
+                }
+
                 if (!Input.GetKey(KeyCode.X)) _handMovement.CastRayFromObject();
                 if (!Input.GetKey(KeyCode.M)) _handMovement.HandleRotateHand();
             }
@@ -189,6 +200,8 @@ public class SelectObject : MonoBehaviour
         _mRenderer = null;
         _addObjectMenu.ObjectSelected(_go);
     }
+
+    public bool IsMoving() => _moving;
     //Return used DragAndRotate
     public DragAndRotate GetDragAndRotate() => _dragAndRotate;
     

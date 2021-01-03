@@ -67,7 +67,6 @@ public class HandMovement
         if (Input.GetKey(KeyCode.M))
         {
             DisableCollider();
-
             //cast ray from object in direction
             Ray rayHand = new Ray(_go.transform.position, _go.transform.right);
             RaycastHit hitInfoHand;
@@ -90,7 +89,7 @@ public class HandMovement
                 }
                 else
                 {
-                    _go.transform.position = hitInfoHand.point + hitInfoHand.normal * 0.02f;
+                    _go.transform.position = hitInfoHand.point  + hitInfoHand.normal * 0.02f;
                     _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoHand.normal);
                     _go.transform.Rotate(Vector3.Angle(_goDirectionOld,_go.transform.up), 0, 0);
                 }
