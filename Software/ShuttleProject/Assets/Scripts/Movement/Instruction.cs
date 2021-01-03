@@ -31,31 +31,37 @@ namespace Movement
         ///     TestAvatarBehavior
         /// </summary>
         public TestAvatarBehavior testAvatarBehavior;
-
-        public GameObject scrollViewContent;
         
         /// <summary>
-        ///     List of all instructions
+        ///     Controller for queue and scrollView
         /// </summary>
-        private readonly List<MInstruction> _mInstructions = new List<MInstruction>();
+        public QueueController queueController;
         
+
         /// <summary>
         ///     Walk to selected object
         /// </summary>
         public void WalkTo()
         {
             GameObject go = selectObject.GetObject();
-            GameObject walkTarget = go.transform.GetChildRecursiveByName("WalkTarget").gameObject;
-
-            String objectID = walkTarget.GetComponent<MMISceneObject>().MSceneObject.ID;
-
-            MInstruction walkInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Walk", "Locomotion/Walk")
+            try
             {
-                Properties = PropertiesCreator.Create("TargetID", objectID, "ForcePath", "true")
-            };
-            
-            _mInstructions.Add(walkInstruction);
-            AddToScrollView("Walk to " + go.name);
+                GameObject walkTarget = go.transform.GetChildRecursiveByName("WalkTarget").gameObject;
+
+                String objectID = walkTarget.GetComponent<MMISceneObject>().MSceneObject.ID;
+
+                MInstruction walkInstruction =
+                    new MInstruction(MInstructionFactory.GenerateID(), "Walk", "Locomotion/Walk")
+                    {
+                        Properties = PropertiesCreator.Create("TargetID", objectID, "ForcePath", "true")
+                    };
+                
+                queueController.AddItem(walkInstruction, "Walk to " + go.name);
+            }
+            catch (NullReferenceException e)
+            {
+                SSTools.ShowMessage("No walk target found", SSTools.Position.bottom, SSTools.Time.twoSecond);
+            }
         }
 
         /// <summary>
@@ -105,8 +111,7 @@ namespace Movement
                 list.AddRange(MakeHandPose(go, "Right"));
             }
             
-            _mInstructions.AddRange(list);
-            AddToScrollView("Reach " + go.name);
+            queueController.AddItem(list, "Reach " + go.name);
         }
 
         /// <summary>
@@ -154,8 +159,7 @@ namespace Movement
                 Destroy(hand);
             }
             
-            _mInstructions.AddRange(list);
-            AddToScrollView("Release " + go.name);
+            queueController.AddItem(list, "Release "+ go.name);
         }
 
         /// <summary>
@@ -208,8 +212,7 @@ namespace Movement
                 list.Add(moveObject);
             }
             
-            _mInstructions.AddRange(list);
-            AddToScrollView("Place " + obj.name);
+            queueController.AddItem(list, "Place " + obj.name);
         }
         
         /// <summary>
@@ -263,8 +266,7 @@ namespace Movement
                 list.Add(carryInstruction);
             }
             
-            _mInstructions.AddRange(list);
-            AddToScrollView("Pick up " + obj.name);
+            queueController.AddItem(list, "Pick up " + obj.name);
         }
         
         /// <summary>
@@ -364,13 +366,11 @@ namespace Movement
         }
 
         /// <summary>
-        ///     Add text to scroll view
-        /// <param name="instructionText">Text to display</param>
+        ///     Remove last added instruction
         /// </summary>
-        private void AddToScrollView(string instructionText)
+        public void Undo()
         {
-            var text = Instantiate(Resources.Load("UI/ScrollViewInstruction"), scrollViewContent.transform) as GameObject;
-            if (!(text is null)) text.GetComponent<TextMeshProUGUI>().text = instructionText;
+            queueController.RemoveLastItem();
         }
 
         /// <summary>
@@ -379,6 +379,7 @@ namespace Movement
         public void Abort()
         {    
             testAvatarBehavior.Abort();
+            queueController.Clear();
         }
         
         /// <summary>
@@ -386,7 +387,7 @@ namespace Movement
         /// </summary>
         public void Play()
         {
-            testAvatarBehavior.RunInstruction(_mInstructions);
+            testAvatarBehavior.RunInstruction(queueController.GETQueue());
             WalkTargetManager.getInstance().GetWalkTarget();
             foreach (var target in WalkTargetManager.getInstance().GetWalkTarget())
             {
