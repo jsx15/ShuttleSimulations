@@ -16,10 +16,11 @@ public class HandMovement
     private float _x;
     private float _speed = 5.0F;
     private Vector3 _goDirectionOld;
-
-    //classes
-    private ShowAxis showAxis;
-
+    
+    /// <summary>
+    /// Constructor for initializing parameters and adding the IKManager script to each finger of the hand object
+    /// </summary>
+    /// <param name="go">GameObject which logically should be a hand</param>
     public HandMovement(GameObject go)
     {
         _go = go;
@@ -40,12 +41,14 @@ public class HandMovement
         }
     }
 
-    //Handle the rotation of the hand
+    /// <summary>
+    /// Handle hand rotation
+    /// </summary>
     public void HandleRotateHand()
     {
         if (Input.GetKey(KeyCode.X))
         {
-            //showAxis.showY();
+            
             //disable gravity and collider
             DisableCollider();
 
@@ -54,24 +57,29 @@ public class HandMovement
 
             //rotate object
             _go.transform.Rotate(_x, 0, 0, Space.Self);
+            //needed to ensure rotation stays the same when object is moved 
             _goDirectionOld = _go.transform.up;
 
             RestoreCollider();
         }
     }
 
-    //casts a Ray from Object in predetermined direction
-    //colliders from originating object have to be disabled in order to let the rays not hit the objects own collider 
+    
+    /// <summary>
+    /// casts a Ray from Object in predetermined direction.
+    /// colliders from originating object will be disabled in order to let the rays not hit the objects own collider
+    /// </summary>
     public void CastRayFromObject()
     {
         if (Input.GetKey(KeyCode.M))
         {
+            // disable object collider to prevent the ray hitting the objects (hands) collider  
             DisableCollider();
-            //cast ray from object in direction
+            // cast ray from object in direction
             Ray rayHand = new Ray(_go.transform.position, _go.transform.right);
             RaycastHit hitInfoHand;
 
-            //cast ray from camera position to mouse position
+            // cast ray from camera position to mouse position
             Ray rayMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfoMouse;
 
@@ -82,11 +90,15 @@ public class HandMovement
                     // check if hitInfoMouse points to parent object of hand
                     if (hitInfoMouse.collider.gameObject.GetInstanceID().Equals(_parent.GetInstanceID()))
                     {
+                        // set object position to mouse position with a certain distance to the parent object
                         _go.transform.position = hitInfoMouse.point + hitInfoMouse.normal * 0.02f;
+                        // ensure that the object is facing towards the parent object
                         _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoMouse.normal);
+                        // restore previous rotation. needed when the object was manually rotated beforehand.
                         _go.transform.Rotate(Vector3.Angle(_goDirectionOld,_go.transform.up), 0, 0);
                     }
                 }
+                // needed to ensure that the object cant leave the dimensions of the parent if the mouse is not on the parent 
                 else
                 {
                     _go.transform.position = hitInfoHand.point  + hitInfoHand.normal * 0.02f;
@@ -94,6 +106,7 @@ public class HandMovement
                     _go.transform.Rotate(Vector3.Angle(_goDirectionOld,_go.transform.up), 0, 0);
                 }
             }
+            // restore collider
             RestoreCollider();
         }
     }
