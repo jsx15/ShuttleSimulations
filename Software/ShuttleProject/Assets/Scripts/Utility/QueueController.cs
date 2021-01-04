@@ -54,7 +54,6 @@ namespace Scripts
             if (_queueList.Count <= 0) return;
             Destroy(scrollViewContent.transform.GetChild(scrollViewContent.transform.childCount-1).gameObject);
             _queueList.RemoveAt(_queueList.Count - 1);
-
         }
 
         /// <summary>
