@@ -69,7 +69,16 @@ namespace Movement
         /// </summary>
         public void ReachObject()
         {
-            GameObject go = selectObject.GetObject();
+            GameObject go;
+            try
+            {
+                go = selectObject.GetObject();
+            }
+            catch (NullReferenceException ex)
+            {
+                SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                return;
+            }
 
             if (!HandChecker.HasHands(go))
             {
