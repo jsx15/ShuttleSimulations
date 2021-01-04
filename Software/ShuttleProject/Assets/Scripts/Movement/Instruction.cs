@@ -47,6 +47,7 @@ namespace Movement
             GameObject walkTarget;
             try
             {
+                //Get selected object
                 go = selectObject.GetObject();
             }
             catch (NullReferenceException ex)
@@ -56,6 +57,7 @@ namespace Movement
             }
             try
             {
+                //Get walk target of selected object
                 walkTarget = go.transform.GetChildRecursiveByName("WalkTarget").gameObject;
             }
             catch (NullReferenceException e)
@@ -65,12 +67,14 @@ namespace Movement
             }
             String objectID = walkTarget.GetComponent<MMISceneObject>().MSceneObject.ID;
 
+            //Create instruction
             MInstruction walkInstruction =
                 new MInstruction(MInstructionFactory.GenerateID(), "Walk", "Locomotion/Walk")
                 {
                     Properties = PropertiesCreator.Create("TargetID", objectID, "ForcePath", "true")
                 };
             
+            //Add instruction to queue
             queueController.AddItem(walkInstruction, "Walk to " + go.name);
 
         }
@@ -83,6 +87,7 @@ namespace Movement
             GameObject go;
             try
             {
+                //Get selected object
                 go = selectObject.GetObject();
             }
             catch (NullReferenceException ex)
@@ -91,12 +96,14 @@ namespace Movement
                 return;
             }
 
+            //Check for hands
             if (!HandChecker.HasHands(go))
             {
                 SSTools.ShowMessage("No hands placed", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
             }
             
+            //List of instructions
             List<MInstruction> list = new List<MInstruction>();
 
             if (HandChecker.HasLeftHand(go))
@@ -112,6 +119,7 @@ namespace Movement
                         "Hand", "Left")
                 };
           
+                //Add instructions to list
                 list.Add(reachLeft);
                 list.AddRange(MakeHandPose(go, "Left"));
             }
@@ -127,10 +135,12 @@ namespace Movement
                     Properties = PropertiesCreator.Create("TargetID", objectID, "Hand", "Right")
                 };
             
+                //Add instructions to list
                 list.Add(reachRight);
                 list.AddRange(MakeHandPose(go, "Right"));
             }
             
+            //Add instruction to queue
             queueController.AddItem(list, "Reach " + go.name);
         }
 
@@ -142,6 +152,7 @@ namespace Movement
             GameObject go;
             try
             {
+                //Get selected object
                 go = selectObject.GetObject();
             }
             catch (NullReferenceException ex)
@@ -150,7 +161,10 @@ namespace Movement
                 return;
             }
 
+            //List for instructions
             List<MInstruction> list = new List<MInstruction>();
+            
+            //List for hands on object
             List<GameObject> hands = new List<GameObject>();
 
             if (HandChecker.HasLeftHand(go))
@@ -162,8 +176,14 @@ namespace Movement
                             _handPoseIdManager.CurrentHandIdLeft + ":" + CoSimAction.EndInstruction)
                         //Properties = PropertiesCreator.Create("Hand", "Left")
                     };
+                
+                //Add instructions to position fingers
                 list.AddRange(ReleaseHandPose("Left"));
+                
+                //Add instruction to release left hand
                 list.Add(releaseLeft);
+                
+                //Remove left hand game object from object
                 hands.Add(go.transform.GetChildRecursiveByName("LeftHand(Clone)").gameObject);
             }
 
@@ -177,8 +197,14 @@ namespace Movement
                             _handPoseIdManager.CurrentHandIdRight + ":" + CoSimAction.EndInstruction)
                         //Properties = PropertiesCreator.Create("Hand", "Right")
                     };
+                
+                //Add instructions to position fingers
                 list.AddRange(ReleaseHandPose("Right"));
+                
+                //Add instruction to release right hand
                 list.Add(releaseRight);
+                
+                //Remove right hand game object from object
                 hands.Add(go.transform.GetChildRecursiveByName("RightHand(Clone)").gameObject);
             }
         
@@ -188,6 +214,7 @@ namespace Movement
                 Destroy(hand);
             }
             
+            //Add instructions to queue
             queueController.AddItem(list, "Release "+ go.name);
         }
 
@@ -199,6 +226,7 @@ namespace Movement
             GameObject obj;
             try
             {
+                //Get selected object
                 obj = selectObject.GetObject();
             }
             catch (NullReferenceException ex)
@@ -216,6 +244,7 @@ namespace Movement
             GameObject positionTarget;
             try
             {
+                //Get move target
                 positionTarget = obj.transform.GetChildRecursiveByName("moveTarget").gameObject;
             }
             catch (NullReferenceException ex)
@@ -224,11 +253,14 @@ namespace Movement
                 return;
             }
 
+            //List for instructions
             List<MInstruction> list = new List<MInstruction>();
-            // List<GameObject> hands = new List<GameObject>();
-        
+
+            //Get IDs of objects
             String objectID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
             String targetPositionID = positionTarget.GetComponent<MMISceneObject>().MSceneObject.ID;
+            
+            //Instruction if both hands are present on object
             if (HandChecker.HasBothHands(obj))
             {
                 MInstruction moveObject = new MInstruction(MInstructionFactory.GenerateID(), "move object", "Object/Move")
@@ -239,6 +271,8 @@ namespace Movement
                 };
                 list.Add(moveObject);
             }
+            
+            //Instruction if only right hand is present on object
             else if (HandChecker.HasRightHand(obj))
             {
                 MInstruction moveObject = new MInstruction(MInstructionFactory.GenerateID(), "move object", "Object/Move")
@@ -249,6 +283,8 @@ namespace Movement
                 };
                 list.Add(moveObject);
             }
+            
+            //Instruction if only left hand is present on object
             else if (HandChecker.HasLeftHand(obj))
             {
                 MInstruction moveObject = new MInstruction(MInstructionFactory.GenerateID(), "move object", "Object/Move")
@@ -260,6 +296,7 @@ namespace Movement
                 list.Add(moveObject);
             }
             
+            //Add instructions to queue
             queueController.AddItem(list, "Place " + obj.name);
         }
         
@@ -271,6 +308,7 @@ namespace Movement
             GameObject obj;
             try
             {
+                //Get selected object
                 obj = selectObject.GetObject();
             }
             catch (NullReferenceException ex)
@@ -287,8 +325,10 @@ namespace Movement
             
             List<MInstruction> list = new List<MInstruction>();
 
+            //Get IDs of object
             String objID = obj.GetComponent<MMISceneObject>().MSceneObject.ID;
         
+            //Instructions if both hands are present on object
             if (HandChecker.HasBothHands(obj))
             {
                 _carryIDManager.CurrentCarryIdBoth = MInstructionFactory.GenerateID();
@@ -300,6 +340,8 @@ namespace Movement
                     };
                 list.Add(carryInstruction);
             }
+            
+            //Instructions if only right hand is present on object
             else if (HandChecker.HasRightHand(obj))
             {
                 _carryIDManager.CurrentCarryIdRight = MInstructionFactory.GenerateID();
@@ -311,6 +353,8 @@ namespace Movement
                     };
                 list.Add(carryInstruction);
             }
+            
+            //Instructions if only left hand is present on object
             else if (HandChecker.HasLeftHand(obj))
             {
                 _carryIDManager.CurrentCarryIdLeft = MInstructionFactory.GenerateID();
@@ -323,81 +367,85 @@ namespace Movement
                 list.Add(carryInstruction);
             }
             
+            //Add instructions to queue
             queueController.AddItem(list, "Pick up " + obj.name);
         }
         
         /// <summary>
         ///     Position fingers on hand pose
         /// </summary>
-        private IEnumerable<MInstruction> MakeHandPose(GameObject go, String side)
-    {
-        List<MInstruction> list = new List<MInstruction>();
-        if (side.Equals("Left"))
+        private IEnumerable<MInstruction> MakeHandPose(GameObject go, string side)
         {
-            //Get UnitySceneAccess ID of hand
-            GameObject hand = go.transform.GetChildRecursiveByName("LeftHand(Clone)").gameObject;
-
-            //The desired Hand pose (rotations of the finger Joints)
-            UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
-            
-            _handPoseIdManager.CurrentHandIdLeft = Guid.NewGuid().ToString();
-            
-            //Create the instruction to move the fingers
-
-            MInstruction moveFingersInstructionsLeft = new MInstruction(_handPoseIdManager.CurrentHandIdLeft, "Move Fingers", "Pose/MoveFingers")
+            List<MInstruction> list = new List<MInstruction>();
+            if (side.Equals("Left"))
             {
-                Properties = new Dictionary<string, string>()
+                //Get UnitySceneAccess ID of hand
+                GameObject hand = go.transform.GetChildRecursiveByName("LeftHand(Clone)").gameObject;
+
+                //The desired Hand pose (rotations of the finger Joints)
+                UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
+                
+                _handPoseIdManager.CurrentHandIdLeft = Guid.NewGuid().ToString();
+                
+                //Create the instruction to move the fingers
+                MInstruction moveFingersInstructionsLeft = new MInstruction(_handPoseIdManager.CurrentHandIdLeft, "Move Fingers", "Pose/MoveFingers")
                 {
-                    {"Release", "false" },
-                    {"Hand", "Left" }
-                },
-                Constraints = new List<MConstraint>()
-            };
-            var constraintID = Guid.NewGuid().ToString();
-            moveFingersInstructionsLeft.Properties.Add("HandPose", constraintID);
-            moveFingersInstructionsLeft.Constraints.Add(new MConstraint()
-            {
-                ID = constraintID,
-                PostureConstraint = leftHandPose.GetPostureConstraint()
-            });
-            
-            list.Add(moveFingersInstructionsLeft);
-        }
-
-        if (side.Equals("Right"))
-        {
-            //Get UnitySceneAccess ID of hand
-            GameObject hand = go.transform.GetChildRecursiveByName("RightHand(Clone)").gameObject;
-            //String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
-            
-            //The desired Hand pose (rotations of the finger Joints)
-            UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
-            
-            _handPoseIdManager.CurrentHandIdRight = Guid.NewGuid().ToString();
-            
-            //Create the instruction to move the fingers
-            MInstruction moveFingersInstructionsRight = new MInstruction(_handPoseIdManager.CurrentHandIdRight, "Move Fingers", "Pose/MoveFingers")
-            {
-                Properties = new Dictionary<string, string>()
+                    Properties = new Dictionary<string, string>()
+                    {
+                        {"Release", "false" },
+                        {"Hand", "Left" }
+                    },
+                    Constraints = new List<MConstraint>()
+                };
+                
+                //Add properties to the instruction
+                var constraintID = Guid.NewGuid().ToString();
+                moveFingersInstructionsLeft.Properties.Add("HandPose", constraintID);
+                moveFingersInstructionsLeft.Constraints.Add(new MConstraint()
                 {
-                    {"Release", "false" },
-                    {"Hand", "Right" }
-                },
-                Constraints = new List<MConstraint>()
-            };
-            string constraintID = Guid.NewGuid().ToString();
-            moveFingersInstructionsRight.Properties.Add("HandPose", constraintID);
-            moveFingersInstructionsRight.Constraints.Add(new MConstraint()
-            {
-                ID = constraintID,
-                PostureConstraint = leftHandPose.GetPostureConstraint()
-            });
-            
-            list.Add(moveFingersInstructionsRight);
-        }
+                    ID = constraintID,
+                    PostureConstraint = leftHandPose.GetPostureConstraint()
+                });
+                
+                list.Add(moveFingersInstructionsLeft);
+            }
 
-        return list;
-    }
+            if (side.Equals("Right"))
+            {
+                //Get UnitySceneAccess ID of hand
+                GameObject hand = go.transform.GetChildRecursiveByName("RightHand(Clone)").gameObject;
+                //String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
+                
+                //The desired Hand pose (rotations of the finger Joints)
+                UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
+                
+                _handPoseIdManager.CurrentHandIdRight = Guid.NewGuid().ToString();
+                
+                //Create the instruction to move the fingers
+                MInstruction moveFingersInstructionsRight = new MInstruction(_handPoseIdManager.CurrentHandIdRight, "Move Fingers", "Pose/MoveFingers")
+                {
+                    Properties = new Dictionary<string, string>()
+                    {
+                        {"Release", "false" },
+                        {"Hand", "Right" }
+                    },
+                    Constraints = new List<MConstraint>()
+                };
+                
+                //Add properties to the instruction
+                var constraintID = Guid.NewGuid().ToString();
+                moveFingersInstructionsRight.Properties.Add("HandPose", constraintID);
+                moveFingersInstructionsRight.Constraints.Add(new MConstraint()
+                {
+                    ID = constraintID,
+                    PostureConstraint = leftHandPose.GetPostureConstraint()
+                });
+                
+                list.Add(moveFingersInstructionsRight);
+            }
+
+            return list;
+        }
         
         /// <summary>
         ///     Release fingers from hand pose
@@ -406,8 +454,7 @@ namespace Movement
         {
             List<MInstruction> list = new List<MInstruction>();
 
-            //Create the instruction to move the fingers
-        
+            //Create the instruction to release the fingers
             MInstruction moveFingersInstructionsLeft =
                 new MInstruction(Guid.NewGuid().ToString(), "Release Fingers", "Pose/MoveFingers")
                 {
