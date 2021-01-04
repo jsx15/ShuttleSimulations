@@ -84,19 +84,38 @@ namespace Scripts
             return list;
         }
 
+        /// <summary>
+        ///     Wrapper class for instructions
+        /// </summary>
         private class QueueElement
         {
+            /// <summary>
+            ///     List of instructions
+            /// </summary>
             private readonly IEnumerable<MInstruction> _instructions;
 
+            /// <summary>
+            ///     Constructor
+            /// </summary>
+            /// <param name="list">List with instructions</param>
             public QueueElement(IEnumerable<MInstruction> list)
             {
                 _instructions = list;
             }
+            
+            /// <summary>
+            ///     Constructor
+            /// </summary>
+            /// <param name="instruction">Instruction</param>
             public QueueElement(MInstruction instruction)
             {
                 _instructions = new List<MInstruction> {instruction};
             }
-
+            
+            /// <summary>
+            ///     Get list of instructions
+            /// </summary>
+            /// <returns>List of instructions</returns>
             public IEnumerable<MInstruction> GETList()
             {
                 return _instructions;
