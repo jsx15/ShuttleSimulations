@@ -174,8 +174,18 @@ namespace Movement
                 SSTools.ShowMessage("No hands placed", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
             }
-            
-            GameObject positionTarget = obj.transform.GetChildRecursiveByName("moveTarget").gameObject;
+
+            GameObject positionTarget;
+            try
+            {
+                positionTarget = obj.transform.GetChildRecursiveByName("moveTarget").gameObject;
+            }
+            catch (NullReferenceException ex)
+            {
+                SSTools.ShowMessage("No move target defined", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                return;
+            }
+
             List<MInstruction> list = new List<MInstruction>();
             // List<GameObject> hands = new List<GameObject>();
         
