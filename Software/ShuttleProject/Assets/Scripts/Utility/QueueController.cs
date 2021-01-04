@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MMIStandard;
 using TMPro;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace Scripts
         /// <summary>
         ///     Queue of instructions
         /// </summary>
-        private readonly List<MInstruction> _mInstructions = new List<MInstruction>();
+        private readonly List<QueueElement> _queueList = new List<QueueElement>();
 
         /// <summary>
         ///     Add instructions to queue
@@ -24,8 +25,8 @@ namespace Scripts
         /// <param name="instructionText">Text to display</param>
         public void AddItem(MInstruction instruction, string instructionText)
         {
-            _mInstructions.Add(instruction);
-            
+            _queueList.Add(new QueueElement(instruction));
+
             //Instantiate game object to display text 
             var text = Instantiate(Resources.Load("UI/ScrollViewInstruction"), scrollViewContent.transform) as GameObject;
             if (!(text is null)) text.GetComponent<TextMeshProUGUI>().text = instructionText;
@@ -38,8 +39,8 @@ namespace Scripts
         /// <param name="instructionText">Text to display</param>
         public void AddItem(IEnumerable<MInstruction> instructions, string instructionText)
         {
-            _mInstructions.AddRange(instructions);
-            
+            _queueList.Add(new QueueElement(instructions));
+
             //Instantiate game object to display text 
             var text = Instantiate(Resources.Load("UI/ScrollViewInstruction"), scrollViewContent.transform) as GameObject;
             if (!(text is null)) text.GetComponent<TextMeshProUGUI>().text = instructionText;
@@ -50,9 +51,10 @@ namespace Scripts
         /// </summary>
         public void RemoveLastItem()
         {
-            if (_mInstructions.Count <= 0) return;
-            _mInstructions.RemoveAt(_mInstructions.Count - 1);
-            Destroy(scrollViewContent.transform.GetChild(_mInstructions.Count).gameObject);
+            if (_queueList.Count <= 0) return;
+            Destroy(scrollViewContent.transform.GetChild(scrollViewContent.transform.childCount-1).gameObject);
+            _queueList.RemoveAt(_queueList.Count - 1);
+
         }
 
         /// <summary>
@@ -64,7 +66,7 @@ namespace Scripts
             {
                 Destroy(child.gameObject);
             }
-            _mInstructions.Clear();
+            _queueList.Clear();
         }
 
         /// <summary>
@@ -73,7 +75,33 @@ namespace Scripts
         /// <returns>Instruction queue</returns>
         public List<MInstruction> GETQueue()
         {
-            return _mInstructions;
+            List<MInstruction> list = new List<MInstruction>();
+            foreach (var x in _queueList)
+            {
+                list.AddRange(x.GETList());                
+            }
+
+            return list;
+        }
+
+        private class QueueElement
+        {
+            private readonly IEnumerable<MInstruction> _instructions;
+
+            public QueueElement(IEnumerable<MInstruction> list)
+            {
+                _instructions = list;
+            }
+            public QueueElement(MInstruction instruction)
+            {
+                _instructions = new List<MInstruction> {instruction};
+            }
+
+            public IEnumerable<MInstruction> GETList()
+            {
+                return _instructions;
+            }
+            
         }
         
         
