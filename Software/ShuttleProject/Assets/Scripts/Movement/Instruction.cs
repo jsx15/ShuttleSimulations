@@ -43,25 +43,36 @@ namespace Movement
         /// </summary>
         public void WalkTo()
         {
-            GameObject go = selectObject.GetObject();
+            GameObject go;
+            GameObject walkTarget;
             try
             {
-                GameObject walkTarget = go.transform.GetChildRecursiveByName("WalkTarget").gameObject;
-
-                String objectID = walkTarget.GetComponent<MMISceneObject>().MSceneObject.ID;
-
-                MInstruction walkInstruction =
-                    new MInstruction(MInstructionFactory.GenerateID(), "Walk", "Locomotion/Walk")
-                    {
-                        Properties = PropertiesCreator.Create("TargetID", objectID, "ForcePath", "true")
-                    };
-                
-                queueController.AddItem(walkInstruction, "Walk to " + go.name);
+                go = selectObject.GetObject();
+            }
+            catch (NullReferenceException ex)
+            {
+                SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                return;
+            }
+            try
+            {
+                walkTarget = go.transform.GetChildRecursiveByName("WalkTarget").gameObject;
             }
             catch (NullReferenceException e)
             {
                 SSTools.ShowMessage("No walk target found", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                return;
             }
+            String objectID = walkTarget.GetComponent<MMISceneObject>().MSceneObject.ID;
+
+            MInstruction walkInstruction =
+                new MInstruction(MInstructionFactory.GenerateID(), "Walk", "Locomotion/Walk")
+                {
+                    Properties = PropertiesCreator.Create("TargetID", objectID, "ForcePath", "true")
+                };
+            
+            queueController.AddItem(walkInstruction, "Walk to " + go.name);
+
         }
 
         /// <summary>
@@ -128,8 +139,17 @@ namespace Movement
         /// </summary>
         public void Release()
         {
-            GameObject go = selectObject.GetObject();
-            
+            GameObject go;
+            try
+            {
+                go = selectObject.GetObject();
+            }
+            catch (NullReferenceException ex)
+            {
+                SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                return;
+            }
+
             List<MInstruction> list = new List<MInstruction>();
             List<GameObject> hands = new List<GameObject>();
 
@@ -176,7 +196,16 @@ namespace Movement
         /// </summary>
         public void MoveObject()
         {
-            GameObject obj = selectObject.GetObject();
+            GameObject obj;
+            try
+            {
+                obj = selectObject.GetObject();
+            }
+            catch (NullReferenceException ex)
+            {
+                SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                return;
+            }
             
             if (!HandChecker.HasHands(obj))
             {
@@ -239,7 +268,16 @@ namespace Movement
         /// </summary>
         public void PickUp()
         {
-            GameObject obj = selectObject.GetObject();
+            GameObject obj;
+            try
+            {
+                obj = selectObject.GetObject();
+            }
+            catch (NullReferenceException ex)
+            {
+                SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                return;
+            }
             
             if (!HandChecker.HasHands(obj))
             {
