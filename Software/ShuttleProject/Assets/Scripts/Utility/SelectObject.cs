@@ -6,19 +6,21 @@ using UnityEngine;
 
 public class SelectObject : MonoBehaviour
 {
-    public bool lockY;
-    
-    public event EventHandler ObjectSelected;
-    
-    //Button manager
-    private AddObjectMenu _addObjectMenu;
-    
-    //object ,child and hitpoint
+    /// <summary>
+    ///     The selected GameObject
+    /// </summary>
     private GameObject _go;
-    private Transform _child;
-    private Vector3 _hitPoint;
-    private Vector3 _hitPointNormal;
     
+    /// <summary>
+    ///     The wrist of a selected hand
+    /// </summary>
+    private Transform _child;
+    
+    /// <summary>
+    ///     The hitpoint where the object was clicked and it's normalized form
+    /// </summary>
+    private Vector3 _hitPoint, _hitPointNormal;
+
     //selector variables
     private RaycastHit _hit;
     private Ray _ray;
@@ -28,6 +30,20 @@ public class SelectObject : MonoBehaviour
     private Material _materialTransparent;
     private MeshRenderer _mRenderer;
     private MeshRenderer _mRendererChild;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool lockY;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public event EventHandler ObjectSelected;
+    
+    //Button manager
+    private AddObjectMenu _addObjectMenu;
+    
     
     //TODO
     //private GameObject smallCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
