@@ -195,10 +195,14 @@ public class SelectObject : MonoBehaviour
         {
             _mRenderer.material = _defaultMaterial;
         }  
-        _mRenderer.material.color = _originalColor;
-        _go = null;
-        _mRenderer = null;
-        _addObjectMenu.ObjectSelected(_go);
+        //Reset the color if the gameobject is not null
+        if (_go != null)
+        {
+            _mRenderer.material.color = _originalColor;
+            _go = null;
+            _mRenderer = null;
+            _addObjectMenu.ObjectSelected(_go);
+        }
     }
 
     public bool IsMoving() => _moving;
