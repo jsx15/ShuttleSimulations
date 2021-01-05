@@ -58,7 +58,8 @@ namespace Movement
             try
             {
                 //Get walk target of selected object
-                walkTarget = go.transform.GetChildRecursiveByName("WalkTarget").gameObject;
+                //walkTarget = go.transform.GetChildRecursiveByName("WalkTarget").gameObject;
+                walkTarget = go.transform.Find("WalkTarget").gameObject;
             }
             catch (NullReferenceException e)
             {

@@ -134,6 +134,9 @@ namespace Scripts
                 createWalkTargetButton.SetActive(false);
             }
 
+            //Remove all onCLick Listener of previously clicked objects
+            removeButton.GetComponent<Button>().onClick.RemoveAllListeners();
+            
             // Add click listener on remove button
             removeButton.GetComponent<Button>().onClick.AddListener(() =>
             {
