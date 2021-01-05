@@ -43,14 +43,17 @@ public class TestAvatarBehavior : AvatarBehavior
             }
         }
 
+        CoSimulator.AssignInstruction(idleInstruction,
+            new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
+        
         foreach (var t in list)
         {
             CoSimulator.AssignInstruction(t,
                 new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
             
-            CoSimulator.AssignInstruction(idleInstruction,
+           /**CoSimulator.AssignInstruction(idleInstruction,
                 new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
-        
+            */
         }
         //CoSimulator.AssignInstruction(idleInstruction,new MSimulationState() {Initial = this.avatar.GetPosture(), Current = this.avatar.GetPosture()});
     }
