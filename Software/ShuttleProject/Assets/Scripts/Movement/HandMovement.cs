@@ -6,15 +6,32 @@ using UnityEngine;
 
 public class HandMovement
 {
-    private readonly GameObject _go;
-    private readonly GameObject _parent;
+    /// <summary>
+    ///     _go     = The wrist of the hand that should be moved
+    ///     _parent = The hand itself
+    /// </summary>
+    private readonly GameObject _go, _parent;
+    
+    /// <summary>
+    ///     The List of all the bones in a hand
+    /// </summary>
     private List<UnityBone> _bones;
 
-    //rotate variables
-    private bool _gravity;
-    private bool _collider;
-    private float _x;
-    private float _speed = 5.0F;
+    /// <summary>
+    ///     _gravity  = States if the object has gravity
+    ///     _collider = States if the object has a collider
+    /// </summary>
+    private bool _gravity, _collider;
+    
+    /// <summary>
+    ///     _x     = The mouse position on the x-Axis
+    ///     _speed = The default speed of the movement
+    /// </summary>
+    private float _x, _speed = 5.0F;
+    
+    /// <summary>
+    ///     Ensures that the rotation stays the same even when the object is moved
+    /// </summary>
     private Vector3 _goDirectionOld;
     
     /// <summary>
@@ -113,7 +130,9 @@ public class HandMovement
     
 //-------------------safe, restore and disable Settings-------------------
 
-    //safe gravity and collider settings
+    /// <summary>
+    ///     Safe the Collider
+    /// </summary>
     private void SafeCollider()
     {
         try
@@ -126,7 +145,9 @@ public class HandMovement
         }
     }
 
-    //restore gravity and collider settings
+    /// <summary>
+    ///     Restore the Collider
+    /// </summary>
     private void RestoreCollider()
     {
         try
@@ -139,7 +160,9 @@ public class HandMovement
         }
     }
 
-    //disable gravity and collider settings
+    /// <summary>
+    ///     Disable the Collider
+    /// </summary>
     public void DisableCollider()
     {
         try
