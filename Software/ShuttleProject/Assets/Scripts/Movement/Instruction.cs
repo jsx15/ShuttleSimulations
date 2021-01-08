@@ -497,17 +497,17 @@ namespace Movement
         public void Play()
         {
             testAvatarBehavior.RunInstruction(queueController.GETQueue());
-            WalkTargetManager.getInstance().GetWalkTarget();
-            foreach (var target in WalkTargetManager.getInstance().GetWalkTarget())
-            {
-                target.transform.localScale = new Vector3(0,0,0);
-            }
+            WalkTargetManager.getInstance().MinWalkTargets();
             
         }
 
+        /// <summary>
+        ///     Clear queue and scale walk targets
+        /// </summary>
         private void QueueFinishedHandler()
         {
             queueController.Clear();
+            WalkTargetManager.getInstance().MaxWalkTargets();
         }
     }
 }

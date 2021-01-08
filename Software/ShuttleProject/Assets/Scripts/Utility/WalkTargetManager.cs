@@ -46,5 +46,27 @@ namespace Scripts
         {
             return _walkTargetList;
         }
+
+        /// <summary>
+        ///     Scale walk targets to 0,0,0
+        /// </summary>
+        public void MinWalkTargets()
+        {
+            foreach (var target in _walkTargetList)
+            {
+                target.transform.localScale = new Vector3(0,0,0);
+            }
+        }
+        
+        /// <summary>
+        ///     Scale walk targets to original size
+        /// </summary>
+        public void MaxWalkTargets()
+        {
+            foreach (var target in _walkTargetList)
+            {
+                target.transform.localScale = new Vector3(0.05f,0.05f,0.05f);
+            }
+        }
     }
 }
