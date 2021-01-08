@@ -36,7 +36,11 @@ namespace Movement
         ///     Controller for queue and scrollView
         /// </summary>
         public QueueController queueController;
-        
+
+        private void Start()
+        {
+            testAvatarBehavior.QueueFinished += QueueFinishedHandler;
+        }
 
         /// <summary>
         ///     Walk to selected object
@@ -498,6 +502,12 @@ namespace Movement
             {
                 target.transform.localScale = new Vector3(0,0,0);
             }
+            
+        }
+
+        private void QueueFinishedHandler()
+        {
+            queueController.Clear();
         }
     }
 }
