@@ -133,7 +133,8 @@ namespace Movement
             if (HandChecker.HasLeftHand(go))
             {
                 //Get UnitySceneAccess ID of hand
-                GameObject hand = go.transform.GetChildRecursiveByName("LeftHand(Clone)").gameObject;
+                //GameObject hand = go.transform.Find("LeftHand(Clone)").gameObject;
+                GameObject hand = HandChecker.GetLeftHand(go);
                 String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
 
                 //Now create a specific instruction to reach with the right hand
@@ -151,7 +152,8 @@ namespace Movement
             if (HandChecker.HasRightHand(go))
             {
                 //Get UnitySceneAccess ID of hand
-                GameObject hand = go.transform.GetChildRecursiveByName("RightHand(Clone)").gameObject;
+                //GameObject hand = go.transform.Find("RightHand(Clone)").gameObject;
+                GameObject hand = HandChecker.GetRightHand(go);
                 String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
                 //Now create a specific instruction to reach with the right hand
                 MInstruction reachRight = new MInstruction(MInstructionFactory.GenerateID(), "reach right", "Pose/Reach")
@@ -214,7 +216,8 @@ namespace Movement
                 list.Add(releaseLeft);
                 
                 //Remove left hand game object from object
-                hands.Add(go.transform.GetChildRecursiveByName("LeftHand(Clone)").gameObject);
+                //hands.Add(go.transform.Find("LeftHand(Clone)").gameObject);
+                hands.Add(HandChecker.GetLeftHand(go));
             }
 
 
@@ -235,7 +238,8 @@ namespace Movement
                 list.Add(releaseRight);
                 
                 //Remove right hand game object from object
-                hands.Add(go.transform.GetChildRecursiveByName("RightHand(Clone)").gameObject);
+                //hands.Add(go.transform.Find("RightHand(Clone)").gameObject);
+                hands.Add(HandChecker.GetRightHand(go));
             }
         
             //Destroy the hands after moving an object
@@ -281,7 +285,7 @@ namespace Movement
             try
             {
                 //Get move target
-                positionTarget = obj.transform.GetChildRecursiveByName("moveTarget").gameObject;
+                positionTarget = obj.transform.Find("moveTarget").gameObject;
             }
             catch (NullReferenceException ex)
             {
@@ -422,7 +426,8 @@ namespace Movement
             if (side.Equals("Left"))
             {
                 //Get UnitySceneAccess ID of hand
-                GameObject hand = go.transform.GetChildRecursiveByName("LeftHand(Clone)").gameObject;
+                //GameObject hand = go.transform.Find("LeftHand(Clone)").gameObject;
+                GameObject hand = HandChecker.GetLeftHand(go);
 
                 //The desired Hand pose (rotations of the finger Joints)
                 UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
@@ -455,7 +460,8 @@ namespace Movement
             if (side.Equals("Right"))
             {
                 //Get UnitySceneAccess ID of hand
-                GameObject hand = go.transform.GetChildRecursiveByName("RightHand(Clone)").gameObject;
+                //GameObject hand = go.transform.Find("RightHand(Clone)").gameObject;
+                GameObject hand = HandChecker.GetRightHand(go);
                 //String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
                 
                 //The desired Hand pose (rotations of the finger Joints)

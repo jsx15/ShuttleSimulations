@@ -12,7 +12,7 @@ namespace Scripts
         /// <returns>True if object has left hand</returns>
         public static bool HasLeftHand(GameObject go)
         {
-            if (go != null && go.transform.GetChildRecursiveByName("LeftHand(Clone)"))
+            if (go != null && (go.transform.GetChildRecursiveByName("LeftHand(Clone)") || go.transform.GetChildRecursiveByName("LeftHandSmallObject(Clone)")))
             {
                 return true;
             }
@@ -26,7 +26,7 @@ namespace Scripts
         /// <returns>True if object has right hand</returns>
         public static bool HasRightHand(GameObject go)
         {
-            if (go != null && go.transform.GetChildRecursiveByName("RightHand(Clone)"))
+            if (go != null && (go.transform.GetChildRecursiveByName("RightHand(Clone)") || go.transform.GetChildRecursiveByName("RightHandSmallObject(Clone)")))
             {
                 return true;
             }
@@ -40,7 +40,7 @@ namespace Scripts
         /// <returns>True if object has both hand</returns>
         public static bool HasBothHands(GameObject go)
         {
-            if (go != null && go.transform.GetChildRecursiveByName("RightHand(Clone)") && go.transform.GetChildRecursiveByName("LeftHand(Clone)"))
+            if (HasLeftHand(go) && HasRightHand(go))
             {
                 return true;
             }
@@ -64,6 +64,24 @@ namespace Scripts
         public static bool HasHands(GameObject go)
         {
             return HasLeftHand(go) || HasRightHand(go);
+        }
+
+        public static GameObject GetLeftHand(GameObject go)
+        {
+            if (go.transform.Find("LeftHand(Clone)") != null)
+            {
+                return go.transform.Find("LeftHand(Clone)").gameObject;
+            }
+            return go.transform.Find("LeftHandSmallObject(Clone)").gameObject;
+        }
+        
+        public static GameObject GetRightHand(GameObject go)
+        {
+            if (go.transform.Find("RightHand(Clone)") != null)
+            {
+                return go.transform.Find("RightHand(Clone)").gameObject;
+            }
+            return go.transform.Find("RightHandSmallObject(Clone)").gameObject;
         }
     }
 }

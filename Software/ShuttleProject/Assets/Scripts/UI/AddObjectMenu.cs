@@ -76,16 +76,24 @@ namespace Scripts
                 target.transform.position = newPos;
                 
                 //Remove hands and walk targets from move target 
-                if (target.transform.GetChildRecursiveByName("RightHand(Clone)") || target.transform.GetChildRecursiveByName("LeftHand(Clone)") || target.transform.GetChildRecursiveByName("WalkTarget"))
+                //if (target.transform.GetChildRecursiveByName("RightHand(Clone)") || target.transform.GetChildRecursiveByName("LeftHand(Clone)") || target.transform.GetChildRecursiveByName("WalkTarget"))
+                /*if (HandChecker.HasHands(go) || target.transform.Find("WalkTarget"))
                 {
                     foreach (Transform child in target.transform)
                     {
-                        if (child.name.Equals("RightHand(Clone)") || child.name.Equals("LeftHand(Clone)") || child.name.Equals("WalkTarget"))
+                        //if (child.name.Equals("RightHand(Clone)") || child.name.Equals("LeftHand(Clone)") || child.name.Equals("WalkTarget"))
+                        if (child.name.Equals(HandChecker.GetRightHand(go).name) || child.name.Equals("LeftHand(Clone)") || child.name.Equals("WalkTarget"))
                         {
                             Destroy(child.gameObject);
                         }
                     }
-                }
+                }*/
+
+                //Remove all the children of the move traget
+                foreach (Transform child in target.transform)
+                {
+                    Destroy(child.gameObject);
+                }    
                     
                 //Hide button
                 createTargetButton.SetActive(false);
