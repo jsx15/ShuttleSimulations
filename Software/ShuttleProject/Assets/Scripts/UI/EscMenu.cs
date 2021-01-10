@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Scripts
 {
@@ -91,7 +92,7 @@ namespace Scripts
         /// </summary>
         public void Quit()
         {
-            Application.Quit();
+            SceneManager.LoadScene("MainMenu");
         }
 
         /// <summary>
