@@ -36,6 +36,12 @@ namespace Movement
         ///     Controller for queue and scrollView
         /// </summary>
         public QueueController queueController;
+        
+        /// <summary>
+        ///     Event to signal start of queue
+        /// </summary>
+        public delegate void Notify();
+        public event Notify QueueStart;
 
         private void Start()
         {
@@ -489,6 +495,7 @@ namespace Movement
         {    
             testAvatarBehavior.Abort();
             queueController.Clear();
+            
         }
         
         /// <summary>
@@ -497,6 +504,7 @@ namespace Movement
         public void Play()
         {
             testAvatarBehavior.RunInstruction(queueController.GETQueue());
+            QueueStart?.Invoke();
             WalkTargetManager.getInstance().MinWalkTargets();
             
         }
