@@ -82,6 +82,7 @@ public class SelectObject : MonoBehaviour
     /// </summary>
     private bool _moving = false;
     
+    // Start is called once per start
     private void Start()
     {
         _addObjectMenu = GameObject.Find("Scene").GetComponent<AddObjectMenu>();
