@@ -2372,7 +2372,7 @@ PrefabInstance:
     - target: {fileID: 3564602522434321153, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_Name
-      value: CubeButton
+      value: WheelButton
       objectReference: {fileID: 0}
     - target: {fileID: 3564602522434321158, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
@@ -2492,7 +2492,7 @@ PrefabInstance:
     - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: AddCube
+      value: AddWheel
       objectReference: {fileID: 0}
     - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
@@ -2507,7 +2507,7 @@ PrefabInstance:
     - target: {fileID: 3564602523078003830, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_text
-      value: Cube
+      value: Wheel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e475909308176d43937aaae406fa534, type: 3}
@@ -4986,7 +4986,7 @@ PrefabInstance:
     - target: {fileID: 3564602522434321153, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_Name
-      value: CapsuleButton
+      value: FrontDoorButton
       objectReference: {fileID: 0}
     - target: {fileID: 3564602522434321158, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
@@ -5106,7 +5106,7 @@ PrefabInstance:
     - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: AddCapsule
+      value: AddFrontDoor
       objectReference: {fileID: 0}
     - target: {fileID: 3564602522434321159, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
@@ -5121,7 +5121,7 @@ PrefabInstance:
     - target: {fileID: 3564602523078003830, guid: 1e475909308176d43937aaae406fa534,
         type: 3}
       propertyPath: m_text
-      value: Capsule
+      value: Front door
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e475909308176d43937aaae406fa534, type: 3}
