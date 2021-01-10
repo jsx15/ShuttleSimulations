@@ -37,6 +37,16 @@ namespace Movement
         /// </summary>
         public QueueController queueController;
         
+        /// <summary>
+        ///     Event to signal start of queue
+        /// </summary>
+        public delegate void Notify();
+        public event Notify QueueStart;
+
+        private void Start()
+        {
+            testAvatarBehavior.QueueFinished += QueueFinishedHandler;
+        }
 
         /// <summary>
         ///     Walk to selected object
@@ -485,6 +495,7 @@ namespace Movement
         {    
             testAvatarBehavior.Abort();
             queueController.Clear();
+            
         }
         
         /// <summary>
@@ -493,11 +504,18 @@ namespace Movement
         public void Play()
         {
             testAvatarBehavior.RunInstruction(queueController.GETQueue());
-            WalkTargetManager.getInstance().GetWalkTarget();
-            foreach (var target in WalkTargetManager.getInstance().GetWalkTarget())
-            {
-                target.transform.localScale = new Vector3(0,0,0);
-            }
+            QueueStart?.Invoke();
+            WalkTargetManager.getInstance().MinWalkTargets();
+            
+        }
+
+        /// <summary>
+        ///     Clear queue and scale walk targets
+        /// </summary>
+        private void QueueFinishedHandler()
+        {
+            queueController.Clear();
+            WalkTargetManager.getInstance().MaxWalkTargets();
         }
     }
 }
