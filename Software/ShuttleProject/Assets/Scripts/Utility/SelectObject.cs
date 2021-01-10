@@ -60,12 +60,7 @@ public class SelectObject : MonoBehaviour
     ///     Can be set in the scene to lock objects in their y axis and make them only movable in the other axes
     /// </summary>
     public bool lockY;
-    
-    /// <summary>
-    ///     The EventHandler for three basic buttons for all clicked objects
-    /// </summary>
-    public event EventHandler ObjectSelected;
-    
+
     /// <summary>
     ///     The button manager
     /// </summary>
@@ -151,7 +146,7 @@ public class SelectObject : MonoBehaviour
                         _mRenderer.material.color = _selectColor;   
                     }
 
-                    _dragAndRotate = new DragAndRotate(_go, _hitPoint, _hitPointNormal, lockY);
+                    _dragAndRotate = new DragAndRotate(_go, lockY);
                     if(HandChecker.IsHand(_go)) _handMovement = new HandMovement(_go);
                 }
             }
@@ -199,8 +194,8 @@ public class SelectObject : MonoBehaviour
             else
             {
                 //handle Rotate OR Drag
-                if (!Input.GetKey(KeyCode.M)) _dragAndRotate.handleRotate();
-                if (!Input.GetKey(KeyCode.X) && !Input.GetKey(KeyCode.Y) && !Input.GetKey(KeyCode.Z)) _dragAndRotate.handleDrag();
+                if (!Input.GetKey(KeyCode.M)) _dragAndRotate.HandleRotate();
+                if (!Input.GetKey(KeyCode.X) && !Input.GetKey(KeyCode.Y) && !Input.GetKey(KeyCode.Z)) _dragAndRotate.HandleDrag();
             }
         }
         catch (Exception)
