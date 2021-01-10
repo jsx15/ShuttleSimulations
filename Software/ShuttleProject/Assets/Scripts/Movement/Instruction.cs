@@ -65,6 +65,13 @@ namespace Movement
                 SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
             }
+
+            //If walk target is selected, switch to parent
+            if (go.transform.name.Equals("WalkTarget"))
+            {
+                go = go.transform.parent.gameObject;
+            }
+            
             try
             {
                 //Get walk target of selected object
@@ -105,6 +112,12 @@ namespace Movement
             {
                 SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
+            }
+
+            //If move target is selected, switch to parent
+            if (MoveTargetChecker.IsMoveTarget(go))
+            {
+                go = go.transform.parent.gameObject;
             }
 
             //Check for hands
@@ -170,6 +183,12 @@ namespace Movement
             {
                 SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
+            }
+            
+            //If move target is selected, switch to parent
+            if (MoveTargetChecker.IsMoveTarget(go))
+            {
+                go = go.transform.parent.gameObject;
             }
 
             //List for instructions
@@ -244,6 +263,12 @@ namespace Movement
             {
                 SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
+            }
+            
+            //If move target is selected, switch to parent
+            if (MoveTargetChecker.IsMoveTarget(obj))
+            {
+                obj = obj.transform.parent.gameObject;
             }
             
             if (!HandChecker.HasHands(obj))
@@ -326,6 +351,12 @@ namespace Movement
             {
                 SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
+            }
+            
+            //If move target is selected, switch to parent
+            if (MoveTargetChecker.IsMoveTarget(obj))
+            {
+                obj = obj.transform.parent.gameObject;
             }
             
             if (!HandChecker.HasHands(obj))
