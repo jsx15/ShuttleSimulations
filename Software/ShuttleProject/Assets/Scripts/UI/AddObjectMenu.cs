@@ -123,13 +123,13 @@ namespace Scripts
             ShowButtons();
             
             //Check if moveTarget has not been already created
-            if (selectObject.GetObject().transform.Find("moveTarget"))
+            if (selectObject.GetObject().transform.Find("moveTarget") || MoveTargetChecker.IsMoveTarget(selectObject.GetObject()) || HandChecker.IsHand(selectObject.GetObject()))
             {
                 createTargetButton.SetActive(false);
             }
             
             //Hide button if walk target already created
-            if (selectObject.GetObject().transform.Find("WalkTarget"))
+            if (selectObject.GetObject().transform.Find("WalkTarget") || selectObject.GetObject().transform.name.Equals("WalkTarget") || HandChecker.IsHand(selectObject.GetObject()))
             {
                 createWalkTargetButton.SetActive(false);
             }
