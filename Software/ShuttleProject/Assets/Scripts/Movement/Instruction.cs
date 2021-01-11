@@ -94,7 +94,7 @@ namespace Movement
             MInstruction walkInstruction =
                 new MInstruction(MInstructionFactory.GenerateID(), "Walk", "Locomotion/Walk")
                 {
-                    Properties = PropertiesCreator.Create("TargetID", objectID, "ForcePath", "false")
+                    Properties = PropertiesCreator.Create("TargetID", objectID, "ForcePath", "true")
                 };
             
             //Add instruction to queue
