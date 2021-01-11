@@ -24,5 +24,15 @@ namespace Scripts
         {
             manageObject.selectedPrefab = "Capsule";
         }
+
+        public void AddWheel()
+        {
+            manageObject.selectedPrefab = "Bus/Reifen";
+        }
+
+        public void AddFrontDoor()
+        {
+            manageObject.selectedPrefab = "Bus/VorderTuer";
+        }
     }
 }
