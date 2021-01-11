@@ -65,7 +65,7 @@ namespace Movement
                 //Get selected object
                 go = selectObject.GetObject();
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
@@ -83,7 +83,7 @@ namespace Movement
                 //walkTarget = go.transform.GetChildRecursiveByName("WalkTarget").gameObject;
                 walkTarget = go.transform.Find("WalkTarget").gameObject;
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
                 SSTools.ShowMessage("No walk target found", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
@@ -94,7 +94,7 @@ namespace Movement
             MInstruction walkInstruction =
                 new MInstruction(MInstructionFactory.GenerateID(), "Walk", "Locomotion/Walk")
                 {
-                    Properties = PropertiesCreator.Create("TargetID", objectID, "ForcePath", "true")
+                    Properties = PropertiesCreator.Create("TargetID", objectID, "ForcePath", "false")
                 };
             
             //Add instruction to queue
@@ -113,7 +113,7 @@ namespace Movement
                 //Get selected object
                 go = selectObject.GetObject();
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
@@ -188,7 +188,7 @@ namespace Movement
                     //Get selected object
                     go = selectObject.GetObject();
                 }
-                catch (NullReferenceException ex)
+                catch (NullReferenceException)
                 {
                     SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
                     return;
@@ -275,7 +275,7 @@ namespace Movement
                 //Get selected object
                 obj = selectObject.GetObject();
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
@@ -299,7 +299,7 @@ namespace Movement
                 //Get move target
                 positionTarget = obj.transform.Find("moveTarget").gameObject;
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 SSTools.ShowMessage("No move target defined", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
@@ -365,7 +365,7 @@ namespace Movement
                 //Get selected object
                 obj = selectObject.GetObject();
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
