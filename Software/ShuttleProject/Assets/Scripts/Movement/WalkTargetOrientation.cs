@@ -7,16 +7,19 @@ namespace Movement
     {
         private Transform _parent;
         private Vector3 _direction;
+        private Vector3 _pos;
         
         private void Start()
         {
-            _parent = this.transform.parent;
-            _direction = this.transform.position - _parent.transform.position;
+            _parent = transform.parent;
+            _direction = transform.position - _parent.transform.position;
         }
 
         private void Update()
         {
-            this.transform.LookAt(_parent, _direction);
+            transform.LookAt(_parent, _direction);
+            _pos = transform.position;
+            transform.position = new Vector3(_pos.x, 0.03f, _pos.z);
         }
     }
 }
