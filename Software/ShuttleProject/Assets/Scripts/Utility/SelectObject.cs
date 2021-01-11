@@ -12,53 +12,77 @@ public class SelectObject : MonoBehaviour
     private GameObject _go;
     
     /// <summary>
-    ///     The wrist of a selected hand
+    ///     The wrist of a selected hand. This is needed in order to make the selection of a hand visible.
+    ///     The hand itself is so small that the change in colour is not visible. Therefore, its first child is selected. This is the wrist of that hand.
     /// </summary>
     private Transform _child;
     
     /// <summary>
-    ///     The hitpoint where the object was clicked and it's normalized form
+    ///     _hitPoint       = The hitpoint where the object was clicked
+    ///     _hitPointNormal = The normalized form of the _hitpoint
     /// </summary>
     private Vector3 _hitPoint, _hitPointNormal;
 
-    //selector variables
-    private RaycastHit _hit;
+    /// <summary>
+    ///     The ray to determine the clicked object
+    /// </summary>
     private Ray _ray;
-    private Color _originalColor;
-    private Color _selectColor = Color.red;
-    private Material _defaultMaterial;
-    private Material _materialTransparent;
-    private MeshRenderer _mRenderer;
-    private MeshRenderer _mRendererChild;
+    
+    //selector variables
+    /// <summary>
+    ///     The RaycastHit on the object
+    /// </summary>
+    private RaycastHit _hit;
     
     /// <summary>
-    /// 
+    ///     _originalColor = The orirginal color the object had before it was clicked
+    ///     _selectColor   = The color the object will be in when it is selected
+    /// </summary>
+    private Color _originalColor, _selectColor = Color.red;
+
+    /// <summary>
+    ///     The dafault material of the clicked object
+    /// </summary>
+    private Material _defaultMaterial;
+    
+    /// <summary>
+    ///     The transparent material that MoveTargets get if they are clicked
+    /// </summary>
+    private Material _materialTransparent;
+    
+    /// <summary>
+    ///     _mRenderer      = The MeshRenderer of the clicked object
+    ///     _mRendererChild = The MeshRenderer of the _child object
+    /// </summary>
+    private MeshRenderer _mRenderer, _mRendererChild;
+    
+    /// <summary>
+    ///     Can be set in the scene to lock objects in their y axis and make them only movable in the other axes
     /// </summary>
     public bool lockY;
-    
+
     /// <summary>
-    /// 
+    ///     The button manager
     /// </summary>
-    public event EventHandler ObjectSelected;
-    
-    //Button manager
     private AddObjectMenu _addObjectMenu;
     
-    
-    //TODO
-    //private GameObject smallCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-    
     //Class objects
-    private ObjectBounds _objectBounds;
+    /// <summary>
+    ///     The movement of normal objects
+    /// </summary>
     private DragAndRotate _dragAndRotate;
 
+    /// <summary>
+    ///     The movement of hands
+    /// </summary>
     private HandMovement _handMovement;
 
+    /// <summary>
+    ///     Indicates if a hand is moving
+    /// </summary>
     private bool _moving = false;
     
-    //private WalkToMenu.WalkToHandler _walkToHandler = new WalkToMenu.WalkToHandler();
-    
-    
+    // Start is called once per start
     private void Start()
     {
         _addObjectMenu = GameObject.Find("Scene").GetComponent<AddObjectMenu>();
@@ -98,24 +122,11 @@ public class SelectObject : MonoBehaviour
                     _hitPointNormal = _hit.normal;
                     _go = _hit.transform.gameObject;
 
-                    //TODO
-                    //Spawn a non visible object at the hitpoint
-                    //smallCube.transform.localScale = new Vector3(0, 0, 0);
-                    //GameObject cube = Instantiate(smallCube, _hitPoint, Quaternion.identity);
-                    //cube.transform.SetParent(_go.transform);
-
                     //Mark the selected object as red
                     _mRenderer = _go.GetComponent<MeshRenderer>();
                     _originalColor = _mRenderer.material.color;
                     
                     _addObjectMenu.ObjectSelected(_go);
-                    
-                  /*  ObjectSelected += delegate(object sender, EventArgs args)
-                    {
-                        _walkToHandler.ObjectSelectedHandler(sender, args, _go.name);
-                    };
-                    */
-                  
 
                     //Look after the child if the object is a hand 
                     if (HandChecker.IsAnyHand(_go))
@@ -136,7 +147,7 @@ public class SelectObject : MonoBehaviour
                         _mRenderer.material.color = _selectColor;   
                     }
 
-                    _dragAndRotate = new DragAndRotate(_go, _hitPoint, _hitPointNormal, lockY);
+                    _dragAndRotate = new DragAndRotate(_go, lockY);
                     if(HandChecker.IsHand(_go)) _handMovement = new HandMovement(_go);
                 }
             }
@@ -184,8 +195,8 @@ public class SelectObject : MonoBehaviour
             else
             {
                 //handle Rotate OR Drag
-                if (!Input.GetKey(KeyCode.M)) _dragAndRotate.handleRotate();
-                if (!Input.GetKey(KeyCode.X) && !Input.GetKey(KeyCode.Y) && !Input.GetKey(KeyCode.Z)) _dragAndRotate.handleDrag();
+                if (!Input.GetKey(KeyCode.M)) _dragAndRotate.HandleRotate();
+                if (!Input.GetKey(KeyCode.X) && !Input.GetKey(KeyCode.Y) && !Input.GetKey(KeyCode.Z)) _dragAndRotate.HandleDrag();
             }
         }
         catch (Exception)
@@ -196,7 +207,9 @@ public class SelectObject : MonoBehaviour
     
     //-------------------often used/helpful methods-------------------
 
-    //Change color back to the original one
+    /// <summary>
+    ///     Change the color back to its original one
+    /// </summary>
     public void ResetColor()
     {
         //Look after the child if the object is a hand
@@ -221,16 +234,33 @@ public class SelectObject : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///     Returns the _moving variable
+    /// </summary>
+    /// <returns> _moving </returns>
     public bool IsMoving() => _moving;
-    //Return used DragAndRotate
+    
+    /// <summary>
+    ///     Returns the _dragAndRotate variable
+    /// </summary>
+    /// <returns> _dragAndRotate </returns>
     public DragAndRotate GetDragAndRotate() => _dragAndRotate;
     
-    //Return the selected object
+    /// <summary>
+    ///     Returns the selected GameObject _go
+    /// </summary>
+    /// <returns> _go </returns>
     public GameObject GetObject() => _go;
 
-    //Return the selected point
+    /// <summary>
+    ///     Returns the _hitpoint
+    /// </summary>
+    /// <returns> _hitpoint </returns>
     public Vector3 GetHitPoint() => _hitPoint;
     
-    //Return the selected points normal
+    /// <summary>
+    ///     Returns the normalized hitpoint
+    /// </summary>
+    /// <returns> _hitPointNormal </returns>
     public Vector3 GetHitPointNormal() => _hitPointNormal;
 }

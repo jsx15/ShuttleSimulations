@@ -79,7 +79,12 @@ namespace Scripts
         {
             return IsTweezerHand(go) || IsHand(go);
         }
-
+        
+        /// <summary>
+        ///     Check if object has hands
+        /// </summary>
+        /// <param name="go">Object to be checked</param>
+        /// <returns>True if object has a hand</returns>
         public static bool HasHands(GameObject go)
         {
             return HasLeftHand(go) || HasRightHand(go);
