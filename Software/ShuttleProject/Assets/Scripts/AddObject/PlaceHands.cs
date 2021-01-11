@@ -109,6 +109,85 @@ namespace Scripts
         }
 
         /// <summary>
+        ///     Place right tweezer hand on selected object
+        /// </summary>
+        public void PlaceRightTweezerHand()
+        {
+            GameObject go = selectObject.GetObject();
+            Vector3 hitPoint = selectObject.GetHitPoint();
+            Vector3 hitPointNormal = selectObject.GetHitPointNormal();
+            selectObject.ResetColor();
+
+            if (go != null)
+            {
+                if (!HandChecker.HasRightHand(go) && !HandChecker.IsHand(go))
+                {
+                    if (go.GetComponent<Rigidbody>() != null)
+                    {
+                        //Destroy the RigidBody
+                        Destroy(go.GetComponent<Rigidbody>());
+                        _hasRigidBody = true;
+                    }
+
+                    Vector3 rotationRight = new Vector3();
+
+                    //load rightHandPrefab and instantiate it with the predetermined parameters
+                    GameObject rightHandPrefab =
+                        Resources.Load("HandPrefab" + Path.DirectorySeparatorChar + "RightHandSmallObject") as
+                            GameObject;
+                    GameObject rightHand = Instantiate(rightHandPrefab,
+                        hitPoint + selectObject.GetDragAndRotate().GetOffsetAfterDrag() + hitPointNormal * OffSetValue,
+                        Quaternion.Euler(rotationRight));
+                    rightHand.transform.SetParent(go.transform);
+                    rightHand.transform.rotation =
+                        Quaternion.FromToRotation(-rightHand.transform.right, hitPointNormal);
+
+                    //Add a BoxCollider to the hand
+                    _boxColliderRightHand = rightHand.AddComponent<BoxCollider>();
+                    adjustBoxCollider(_boxColliderRightHand, 1);
+                }
+            }
+        }
+
+        public void PlaceLeftTweezerHand()
+        {
+            GameObject go = selectObject.GetObject();
+            Vector3 hitPoint = selectObject.GetHitPoint();
+            Vector3 hitPointNormal = selectObject.GetHitPointNormal();
+            
+            selectObject.ResetColor();
+            
+
+            if (go != null)
+            {
+                if (!HandChecker.HasLeftHand(go) && !HandChecker.IsHand(go))
+                {
+                    if (go.GetComponent<Rigidbody>() != null)
+                    {
+                        //Destroy the RigidBody
+                        Destroy(go.GetComponent<Rigidbody>());
+                        _hasRigidBody = true;
+                    }
+
+                    Vector3 rotationLeft = new Vector3() ;
+                            
+                    //load leftHandPrefab and instantiate it with the predetermined parameters
+                    GameObject leftHandPrefab =
+                        Resources.Load("HandPrefab" + Path.DirectorySeparatorChar + "LeftHandSmallObject") as GameObject;
+                    GameObject leftHand = Instantiate(leftHandPrefab,
+                        hitPoint + selectObject.GetDragAndRotate().GetOffsetAfterDrag() + hitPointNormal * OffSetValue ,
+                        Quaternion.Euler(rotationLeft));
+                    leftHand.transform.SetParent(go.transform);
+                    leftHand.transform.rotation = Quaternion.FromToRotation(-leftHand.transform.right, hitPointNormal);
+                            
+                    //Add a BoxCollider to the hand
+                    _boxColliderLeftHand = leftHand.AddComponent<BoxCollider>();
+                    adjustBoxCollider(_boxColliderLeftHand, 0);
+                }
+            }
+        }
+
+        /// <summary>
         ///     Adjust box collider
         /// </summary>
         /// <param name="boxCollider"></param>
