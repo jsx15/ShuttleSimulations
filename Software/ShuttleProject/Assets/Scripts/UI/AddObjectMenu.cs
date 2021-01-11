@@ -131,13 +131,13 @@ namespace Scripts
             ShowButtons();
             
             //Check if moveTarget has not been already created
-            if (selectObject.GetObject().transform.Find("moveTarget") || MoveTargetChecker.IsMoveTarget(selectObject.GetObject()) || HandChecker.IsHand(selectObject.GetObject()))
+            if (selectObject.GetObject().transform.Find("moveTarget") || MoveTargetChecker.IsMoveTarget(selectObject.GetObject()) || HandChecker.IsAnyHand(selectObject.GetObject()))
             {
                 createTargetButton.SetActive(false);
             }
             
             //Hide button if walk target already created
-            if (selectObject.GetObject().transform.Find("WalkTarget") || selectObject.GetObject().transform.name.Equals("WalkTarget") || HandChecker.IsHand(selectObject.GetObject()))
+            if (selectObject.GetObject().transform.Find("WalkTarget") || selectObject.GetObject().transform.name.Equals("WalkTarget") || HandChecker.IsAnyHand(selectObject.GetObject()))
             {
                 createWalkTargetButton.SetActive(false);
             }
@@ -148,9 +148,13 @@ namespace Scripts
             // Add click listener on remove button
             removeButton.GetComponent<Button>().onClick.AddListener(() =>
             {
-                if (HandChecker.IsHand(go)) _parent = go.transform.parent.gameObject;
+                //_parent is needed to add rigidbody after hands are removed
+                // if (HandChecker.IsAnyHand(go)) _parent = go.transform.parent.gameObject;
+                
                 GameObject.Find("Main Camera").GetComponent<SelectObject>().ResetColor();
                 Destroy(go);
+                
+                //Add rigidbody if hands are removed
                 /*
                 if (_parent != null )//&& GameObject.Find("Scene").GetComponent<PlaceHandsMenu>().GetRigidBody())
                 {
