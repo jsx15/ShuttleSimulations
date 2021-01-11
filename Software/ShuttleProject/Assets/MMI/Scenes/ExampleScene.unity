@@ -3898,7 +3898,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectObject: {fileID: 534669910}
   testAvatarBehavior: {fileID: 7341640644656884277}
-  queueController: {fileID: 2033717842}
+  queueController: {fileID: 0}
 --- !u!1001 &1294696543
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6429,7 +6429,7 @@ PrefabInstance:
     - target: {fileID: 5261099351542498966, guid: 85b9c15cd729046439eaa2445c410ce9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.212
+      value: 5.066
       objectReference: {fileID: 0}
     - target: {fileID: 5261099351542498966, guid: 85b9c15cd729046439eaa2445c410ce9,
         type: 3}
@@ -6439,7 +6439,7 @@ PrefabInstance:
     - target: {fileID: 5261099351542498966, guid: 85b9c15cd729046439eaa2445c410ce9,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.466
+      value: 1.461
       objectReference: {fileID: 0}
     - target: {fileID: 5261099351542498966, guid: 85b9c15cd729046439eaa2445c410ce9,
         type: 3}
@@ -6449,7 +6449,7 @@ PrefabInstance:
     - target: {fileID: 5261099351542498966, guid: 85b9c15cd729046439eaa2445c410ce9,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.70522135
+      value: 0.5803744
       objectReference: {fileID: 0}
     - target: {fileID: 5261099351542498966, guid: 85b9c15cd729046439eaa2445c410ce9,
         type: 3}
@@ -6459,7 +6459,7 @@ PrefabInstance:
     - target: {fileID: 5261099351542498966, guid: 85b9c15cd729046439eaa2445c410ce9,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7089873
+      value: 0.81434983
       objectReference: {fileID: 0}
     - target: {fileID: 5261099351542498966, guid: 85b9c15cd729046439eaa2445c410ce9,
         type: 3}
@@ -6474,7 +6474,7 @@ PrefabInstance:
     - target: {fileID: 5261099351542498966, guid: 85b9c15cd729046439eaa2445c410ce9,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 89.69501
+      value: 70.954
       objectReference: {fileID: 0}
     - target: {fileID: 5261099351542498966, guid: 85b9c15cd729046439eaa2445c410ce9,
         type: 3}
@@ -7065,6 +7065,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 717469823}
     m_Modifications:
+    - target: {fileID: -8716615973412235126, guid: ce9ae65d26285824d90cef8f427feb6a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8bc0644e81aa01e4581867d67f28ec3c, type: 2}
     - target: {fileID: 7858245995505753552, guid: ce9ae65d26285824d90cef8f427feb6a,
         type: 3}
       propertyPath: m_LocalPosition.x
