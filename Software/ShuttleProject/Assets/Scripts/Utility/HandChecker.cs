@@ -61,6 +61,20 @@ namespace Scripts
             return false;
         }
 
+        public static bool IsTweezerHand(GameObject go)
+        {
+            if (go != null && (go.name == "RightHandSmallObject(Clone)" || go.name == "LeftHandSmallObject(Clone)"))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static bool IsAnyHand(GameObject go)
+        {
+            return IsTweezerHand(go) || IsHand(go);
+        }
+
         public static bool HasHands(GameObject go)
         {
             return HasLeftHand(go) || HasRightHand(go);

@@ -40,7 +40,7 @@ namespace Scripts
 
             if (go != null)
             {
-                if (!HandChecker.HasLeftHand(go) && !HandChecker.IsHand(go))
+                if (!HandChecker.HasLeftHand(go) && !HandChecker.IsAnyHand(go))
                 {
                     if (go.GetComponent<Rigidbody>() != null)
                     {
@@ -79,7 +79,7 @@ namespace Scripts
 
             if (go != null)
             {
-                if (!HandChecker.HasRightHand(go) && !HandChecker.IsHand(go))
+                if (!HandChecker.HasRightHand(go) && !HandChecker.IsAnyHand(go))
                 {
                     if (go.GetComponent<Rigidbody>() != null)
                     {
@@ -120,7 +120,7 @@ namespace Scripts
 
             if (go != null)
             {
-                if (!HandChecker.HasRightHand(go) && !HandChecker.IsHand(go))
+                if (!HandChecker.HasRightHand(go) && !HandChecker.IsAnyHand(go))
                 {
                     if (go.GetComponent<Rigidbody>() != null)
                     {
@@ -160,7 +160,7 @@ namespace Scripts
 
             if (go != null)
             {
-                if (!HandChecker.HasLeftHand(go) && !HandChecker.IsHand(go))
+                if (!HandChecker.HasLeftHand(go) && !HandChecker.IsAnyHand(go))
                 {
                     if (go.GetComponent<Rigidbody>() != null)
                     {
