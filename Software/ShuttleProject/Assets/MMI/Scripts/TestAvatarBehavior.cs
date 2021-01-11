@@ -5,20 +5,36 @@ using MMIStandard;
 using MMIUnity.TargetEngine;
 using UnityEngine;
 
-public delegate void Notify();
-
 public class TestAvatarBehavior : AvatarBehavior
 {
+    
+    /// <summary>
+    ///     Event to signal finished queue
+    /// </summary>
+    public delegate void Notify();
     public event Notify QueueFinished;
+    
+    /// <summary>
+    ///     Override GUI
+    /// </summary>
     protected override void GUIBehaviorInput()
     {
         //base.GUIBehaviorInput();
     }
+    
+    /// <summary>
+    ///     Abort all running instructions
+    /// </summary>
     public void Abort()
     {
         CoSimulator.Abort();
+        QueueFinished?.Invoke();
     }
 
+    /// <summary>
+    ///     Play list of instructions
+    /// </summary>
+    /// <param name="list">Instructions to play</param>
     public void RunInstruction(List<MInstruction> list)
     {
         //IdleInstruction to ensure a underlying instruction to fall back

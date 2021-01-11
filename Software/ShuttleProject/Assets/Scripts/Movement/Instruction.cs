@@ -36,6 +36,17 @@ namespace Movement
         ///     Controller for queue and scrollView
         /// </summary>
         public QueueController queueController;
+        
+        /// <summary>
+        ///     Event to signal start of queue
+        /// </summary>
+        public delegate void Notify();
+        public event Notify QueueStart;
+
+        /// <summary>
+        ///     Indicates if a carry-Instruction is running and therefore blocks a release instruction before the carry instruction has been finished
+        /// </summary>
+        public bool pickedUp;
 
         private void Start()
         {
@@ -59,6 +70,13 @@ namespace Movement
                 SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
             }
+
+            //If walk target is selected, switch to parent
+            if (go.transform.name.Equals("WalkTarget"))
+            {
+                go = go.transform.parent.gameObject;
+            }
+            
             try
             {
                 //Get walk target of selected object
@@ -101,6 +119,12 @@ namespace Movement
                 return;
             }
 
+            //If move target is selected, switch to parent
+            if (MoveTargetChecker.IsMoveTarget(go))
+            {
+                go = go.transform.parent.gameObject;
+            }
+
             //Check for hands
             if (!HandChecker.HasHands(go))
             {
@@ -114,7 +138,8 @@ namespace Movement
             if (HandChecker.HasLeftHand(go))
             {
                 //Get UnitySceneAccess ID of hand
-                GameObject hand = go.transform.GetChildRecursiveByName("LeftHand(Clone)").gameObject;
+                //GameObject hand = go.transform.Find("LeftHand(Clone)").gameObject;
+                GameObject hand = HandChecker.GetLeftHand(go);
                 String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
 
                 //Now create a specific instruction to reach with the right hand
@@ -132,7 +157,8 @@ namespace Movement
             if (HandChecker.HasRightHand(go))
             {
                 //Get UnitySceneAccess ID of hand
-                GameObject hand = go.transform.GetChildRecursiveByName("RightHand(Clone)").gameObject;
+                //GameObject hand = go.transform.Find("RightHand(Clone)").gameObject;
+                GameObject hand = HandChecker.GetRightHand(go);
                 String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
                 //Now create a specific instruction to reach with the right hand
                 MInstruction reachRight = new MInstruction(MInstructionFactory.GenerateID(), "reach right", "Pose/Reach")
@@ -154,73 +180,88 @@ namespace Movement
         /// </summary>
         public void Release()
         {
-            GameObject go;
-            try
+            if (!pickedUp)
             {
-                //Get selected object
-                go = selectObject.GetObject();
-            }
-            catch (NullReferenceException ex)
-            {
-                SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
-                return;
-            }
+                GameObject go;
+                try
+                {
+                    //Get selected object
+                    go = selectObject.GetObject();
+                }
+                catch (NullReferenceException ex)
+                {
+                    SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
+                    return;
+                }
 
-            //List for instructions
-            List<MInstruction> list = new List<MInstruction>();
-            
-            //List for hands on object
-            List<GameObject> hands = new List<GameObject>();
+                //If move target is selected, switch to parent
+                if (MoveTargetChecker.IsMoveTarget(go))
+                {
+                    go = go.transform.parent.gameObject;
+                }
 
-            if (HandChecker.HasLeftHand(go))
-            {
-                MInstruction releaseLeft =
-                    new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
-                    {
-                        Properties = PropertiesCreator.Create("Hand", "Left", CoSimTopic.OnStart,
-                            _handPoseIdManager.CurrentHandIdLeft + ":" + CoSimAction.EndInstruction)
-                        //Properties = PropertiesCreator.Create("Hand", "Left")
-                    };
-                
-                //Add instructions to position fingers
-                list.AddRange(ReleaseHandPose("Left"));
-                
-                //Add instruction to release left hand
-                list.Add(releaseLeft);
-                
-                //Remove left hand game object from object
-                hands.Add(go.transform.GetChildRecursiveByName("LeftHand(Clone)").gameObject);
-            }
+                //List for instructions
+                List<MInstruction> list = new List<MInstruction>();
+
+                //List for hands on object
+                List<GameObject> hands = new List<GameObject>();
+
+                if (HandChecker.HasLeftHand(go))
+                {
+                    MInstruction releaseLeft =
+                        new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
+                        {
+                            Properties = PropertiesCreator.Create("Hand", "Left", CoSimTopic.OnStart,
+                                _handPoseIdManager.CurrentHandIdLeft + ":" + CoSimAction.EndInstruction)
+                            //Properties = PropertiesCreator.Create("Hand", "Left")
+                        };
+
+                    //Add instructions to position fingers
+                    list.AddRange(ReleaseHandPose("Left"));
+
+                    //Add instruction to release left hand
+                    list.Add(releaseLeft);
+
+                    //Remove left hand game object from object
+                    //hands.Add(go.transform.Find("LeftHand(Clone)").gameObject);
+                    hands.Add(HandChecker.GetLeftHand(go));
+                }
 
 
-            if (HandChecker.HasRightHand(go))
-            {
-                MInstruction releaseRight =
-                    new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
-                    {
-                        Properties = PropertiesCreator.Create("Hand", "Right", CoSimTopic.OnStart,
-                            _handPoseIdManager.CurrentHandIdRight + ":" + CoSimAction.EndInstruction)
-                        //Properties = PropertiesCreator.Create("Hand", "Right")
-                    };
-                
-                //Add instructions to position fingers
-                list.AddRange(ReleaseHandPose("Right"));
-                
-                //Add instruction to release right hand
-                list.Add(releaseRight);
-                
-                //Remove right hand game object from object
-                hands.Add(go.transform.GetChildRecursiveByName("RightHand(Clone)").gameObject);
+                if (HandChecker.HasRightHand(go))
+                {
+                    MInstruction releaseRight =
+                        new MInstruction(MInstructionFactory.GenerateID(), "release object", "Object/Release")
+                        {
+                            Properties = PropertiesCreator.Create("Hand", "Right", CoSimTopic.OnStart,
+                                _handPoseIdManager.CurrentHandIdRight + ":" + CoSimAction.EndInstruction)
+                            //Properties = PropertiesCreator.Create("Hand", "Right")
+                        };
+
+                    //Add instructions to position fingers
+                    list.AddRange(ReleaseHandPose("Right"));
+
+                    //Add instruction to release right hand
+                    list.Add(releaseRight);
+
+                    //Remove right hand game object from object
+                    //hands.Add(go.transform.Find("RightHand(Clone)").gameObject);
+                    hands.Add(HandChecker.GetRightHand(go));
+                }
+
+                //Destroy the hands after moving an object
+                foreach (var hand in hands)
+                {
+                    Destroy(hand);
+                }
+
+                //Add instructions to queue
+                queueController.AddItem(list, "Release " + go.name);
             }
-        
-            //Destroy the hands after moving an object
-            foreach (var hand in hands)
+            else
             {
-                Destroy(hand);
-            }
-            
-            //Add instructions to queue
-            queueController.AddItem(list, "Release "+ go.name);
+                SSTools.ShowMessage("Object needs to be moved first!", SSTools.Position.bottom, SSTools.Time.twoSecond);
+            }    
         }
 
         /// <summary>
@@ -240,6 +281,12 @@ namespace Movement
                 return;
             }
             
+            //If move target is selected, switch to parent
+            if (MoveTargetChecker.IsMoveTarget(obj))
+            {
+                obj = obj.transform.parent.gameObject;
+            }
+            
             if (!HandChecker.HasHands(obj))
             {
                 SSTools.ShowMessage("No hands placed", SSTools.Position.bottom, SSTools.Time.twoSecond);
@@ -250,7 +297,7 @@ namespace Movement
             try
             {
                 //Get move target
-                positionTarget = obj.transform.GetChildRecursiveByName("moveTarget").gameObject;
+                positionTarget = obj.transform.Find("moveTarget").gameObject;
             }
             catch (NullReferenceException ex)
             {
@@ -300,6 +347,8 @@ namespace Movement
                 };
                 list.Add(moveObject);
             }
+            //Indicates that an object has been moved and thus the Carry Instruction is finished
+            pickedUp = false;
             
             //Add instructions to queue
             queueController.AddItem(list, "Place " + obj.name);
@@ -320,6 +369,12 @@ namespace Movement
             {
                 SSTools.ShowMessage("No object selected", SSTools.Position.bottom, SSTools.Time.twoSecond);
                 return;
+            }
+            
+            //If move target is selected, switch to parent
+            if (MoveTargetChecker.IsMoveTarget(obj))
+            {
+                obj = obj.transform.parent.gameObject;
             }
             
             if (!HandChecker.HasHands(obj))
@@ -371,6 +426,8 @@ namespace Movement
                     };
                 list.Add(carryInstruction);
             }
+            //Indicates that an object has been picked up, so it cannot be released
+            pickedUp = true;
             
             //Add instructions to queue
             queueController.AddItem(list, "Pick up " + obj.name);
@@ -385,7 +442,8 @@ namespace Movement
             if (side.Equals("Left"))
             {
                 //Get UnitySceneAccess ID of hand
-                GameObject hand = go.transform.GetChildRecursiveByName("LeftHand(Clone)").gameObject;
+                //GameObject hand = go.transform.Find("LeftHand(Clone)").gameObject;
+                GameObject hand = HandChecker.GetLeftHand(go);
 
                 //The desired Hand pose (rotations of the finger Joints)
                 UnityHandPose leftHandPose = hand.GetComponent<UnityHandPose>();
@@ -418,7 +476,8 @@ namespace Movement
             if (side.Equals("Right"))
             {
                 //Get UnitySceneAccess ID of hand
-                GameObject hand = go.transform.GetChildRecursiveByName("RightHand(Clone)").gameObject;
+                //GameObject hand = go.transform.Find("RightHand(Clone)").gameObject;
+                GameObject hand = HandChecker.GetRightHand(go);
                 //String objectID = hand.GetComponent<MMISceneObject>().MSceneObject.ID;
                 
                 //The desired Hand pose (rotations of the finger Joints)
@@ -489,6 +548,7 @@ namespace Movement
         {    
             testAvatarBehavior.Abort();
             queueController.Clear();
+            
         }
         
         /// <summary>
@@ -497,17 +557,18 @@ namespace Movement
         public void Play()
         {
             testAvatarBehavior.RunInstruction(queueController.GETQueue());
-            WalkTargetManager.getInstance().GetWalkTarget();
-            foreach (var target in WalkTargetManager.getInstance().GetWalkTarget())
-            {
-                target.transform.localScale = new Vector3(0,0,0);
-            }
+            QueueStart?.Invoke();
+            WalkTargetManager.getInstance().MinWalkTargets();
             
         }
 
+        /// <summary>
+        ///     Clear queue and scale walk targets
+        /// </summary>
         private void QueueFinishedHandler()
         {
             queueController.Clear();
+            WalkTargetManager.getInstance().MaxWalkTargets();
         }
     }
 }

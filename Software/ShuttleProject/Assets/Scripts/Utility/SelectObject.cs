@@ -80,7 +80,7 @@ public class SelectObject : MonoBehaviour
                     if (_go != null)
                     {
                         //Look after the child if the object is a hand
-                        if (HandChecker.IsHand(_go))
+                        if (HandChecker.IsAnyHand(_go))
                         {
                             _mRendererChild.material.color = _originalColor;
                             _child = null;
@@ -118,7 +118,7 @@ public class SelectObject : MonoBehaviour
                   
 
                     //Look after the child if the object is a hand 
-                    if (HandChecker.IsHand(_go))
+                    if (HandChecker.IsAnyHand(_go))
                     {
                         _child = _go.transform.GetChild(0);
                         _mRendererChild = _child.GetComponent<MeshRenderer>();
@@ -146,7 +146,7 @@ public class SelectObject : MonoBehaviour
                 if (_go != null)
                 {
                     //Look after the child if the object is a hand
-                    if (HandChecker.IsHand(_go))
+                    if (HandChecker.IsAnyHand(_go))
                     {
                         _mRendererChild.material.color = _originalColor;
                         _child = null;
