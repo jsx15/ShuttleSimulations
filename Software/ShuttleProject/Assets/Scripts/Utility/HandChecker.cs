@@ -61,11 +61,21 @@ namespace Scripts
             return false;
         }
 
+        /// <summary>
+        ///     Checks if object has hands as children
+        /// </summary>
+        /// <param name="go">Object to be checked</param>
+        /// <returns>True if object has ahnds</returns>
         public static bool HasHands(GameObject go)
         {
             return HasLeftHand(go) || HasRightHand(go);
         }
 
+        /// <summary>
+        ///     Returns the lefthand of an object
+        /// </summary>
+        /// <param name="go">Object to get the hand from</param>
+        /// <returns>lefthand of go</returns>
         public static GameObject GetLeftHand(GameObject go)
         {
             if (go.transform.Find("LeftHand(Clone)") != null)
@@ -75,6 +85,11 @@ namespace Scripts
             return go.transform.Find("LeftHandSmallObject(Clone)").gameObject;
         }
         
+        /// <summary>
+        ///     Returns the righthand of an object
+        /// </summary>
+        /// <param name="go">Object to get the hand from</param>
+        /// <returns>righthand of go</returns>
         public static GameObject GetRightHand(GameObject go)
         {
             if (go.transform.Find("RightHand(Clone)") != null)
