@@ -96,7 +96,7 @@ public class SelectObject : MonoBehaviour
         {
             if (!(Camera.main is null)) _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(_ray, out _hit, 100.0f))
+            if (Physics.Raycast(_ray, out _hit, 100.0f) && !_hit.transform.gameObject.name.Equals("Plane"))
             {
                 if (_hit.transform)
                 {
