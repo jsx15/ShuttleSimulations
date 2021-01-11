@@ -152,8 +152,6 @@ namespace Scripts
             _block = true;
             Thread.Sleep(100);
             _block = false;
-        } 
-        
-        
+        }
     }
 }
