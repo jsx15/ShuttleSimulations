@@ -8,17 +8,17 @@ public class ExpandableMenu : MonoBehaviour
     private static readonly int Open = Animator.StringToHash("Open");
     
     /// <summary>
-    ///     
+    ///     Indicates if a DropDown-Menu is open
     /// </summary>
     private bool open = false;
     
     /// <summary>
-    /// 
+    ///     The Animator that is responsible for the DropDown-Menus
     /// </summary>
     public Animator animator;
 
     /// <summary>
-    /// 
+    ///     Changes from open to closed and the other way round
     /// </summary>
     public void ChangeState()
     {
