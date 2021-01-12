@@ -11,11 +11,6 @@ public class HandMovement
     ///     _parent = The hand itself
     /// </summary>
     private readonly GameObject _go, _parent;
-    
-    /// <summary>
-    ///     The List of all the bones in a hand
-    /// </summary>
-    private List<UnityBone> _bones;
 
     /// <summary>
     ///     _gravity  = States if the object has gravity
@@ -43,10 +38,10 @@ public class HandMovement
         _go = go;
         _goDirectionOld = _go.transform.up;
         _parent = go.transform.parent.gameObject;
-        _bones = new List<UnityBone>(go.GetComponentsInChildren<UnityBone>());
+        var bones = new List<UnityBone>(go.GetComponentsInChildren<UnityBone>());
         SafeCollider();
 
-        foreach (UnityBone bone in _bones.Skip(1))
+        foreach (UnityBone bone in bones.Skip(1))
         {
             if (bone.name.Contains("Proximal") || bone.name.Contains("ThumbMid"))
             {
@@ -97,32 +92,36 @@ public class HandMovement
             RaycastHit hitInfoHand;
 
             // cast ray from camera position to mouse position
-            Ray rayMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hitInfoMouse;
-
-            if (Physics.Raycast(rayHand, out hitInfoHand, 0.2f))
+            if (!(Camera.main is null))
             {
-                if (Physics.Raycast(rayMouse, out hitInfoMouse))
+                Ray rayMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hitInfoMouse;
+
+                if (Physics.Raycast(rayHand, out hitInfoHand, 0.2f))
                 {
-                    // check if hitInfoMouse points to parent object of hand
-                    if (hitInfoMouse.collider.gameObject.GetInstanceID().Equals(_parent.GetInstanceID()))
+                    if (Physics.Raycast(rayMouse, out hitInfoMouse))
                     {
-                        // set object position to mouse position with a certain distance to the parent object
-                        _go.transform.position = hitInfoMouse.point + hitInfoMouse.normal * 0.02f;
-                        // ensure that the object is facing towards the parent object
-                        _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoMouse.normal);
-                        // restore previous rotation. needed when the object was manually rotated beforehand.
+                        // check if hitInfoMouse points to parent object of hand
+                        if (hitInfoMouse.collider.gameObject.GetInstanceID().Equals(_parent.GetInstanceID()))
+                        {
+                            // set object position to mouse position with a certain distance to the parent object
+                            _go.transform.position = hitInfoMouse.point + hitInfoMouse.normal * 0.02f;
+                            // ensure that the object is facing towards the parent object
+                            _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoMouse.normal);
+                            // restore previous rotation. needed when the object was manually rotated beforehand.
+                            _go.transform.Rotate(Vector3.Angle(_goDirectionOld,_go.transform.up), 0, 0);
+                        }
+                    }
+                    // needed to ensure that the object cant leave the dimensions of the parent if the mouse is not on the parent 
+                    else
+                    {
+                        _go.transform.position = hitInfoHand.point  + hitInfoHand.normal * 0.02f;
+                        _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoHand.normal);
                         _go.transform.Rotate(Vector3.Angle(_goDirectionOld,_go.transform.up), 0, 0);
                     }
                 }
-                // needed to ensure that the object cant leave the dimensions of the parent if the mouse is not on the parent 
-                else
-                {
-                    _go.transform.position = hitInfoHand.point  + hitInfoHand.normal * 0.02f;
-                    _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoHand.normal);
-                    _go.transform.Rotate(Vector3.Angle(_goDirectionOld,_go.transform.up), 0, 0);
-                }
             }
+
             // restore collider
             RestoreCollider();
         }
@@ -142,6 +141,7 @@ public class HandMovement
         }
         catch
         {
+            // ignored
         }
     }
 
@@ -157,6 +157,7 @@ public class HandMovement
         }
         catch
         {
+            // ignored
         }
     }
 
