@@ -24,11 +24,6 @@ namespace Movement
         private Vector3 _target;
         
         /// <summary>
-        ///     Parent object of the hand corresponding to the finger.
-        /// </summary>
-        private Vector3 _initialTarget;
-        
-        /// <summary>
         ///     List of every UnityBone in  a finger.
         /// </summary>
         private List<UnityBone> _fingerBones;
@@ -59,7 +54,6 @@ namespace Movement
             _fingerBonesRotation = new List<Quaternion>();
             _tip = _fingerBones[3];
             _target = GetTarget(GetComponentInParent<Transform>());
-            _initialTarget = _target;
             _selectObject = GameObject.Find("Main Camera").GetComponent<SelectObject>();
             foreach (UnityBone bone in _fingerBones)
             {
