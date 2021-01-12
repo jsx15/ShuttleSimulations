@@ -10,10 +10,8 @@ namespace Scripts
         /// </summary>
         public SelectObject selectObject;
         
-        /// <summary>
-        ///    
-        /// </summary>
-        private bool _hasRigidBody = false;
+        //Originally used to check if the mother object of a hand has a rigidbody
+        //private bool _hasRigidBody = false;
         
         /// <summary>
         ///     Offset
@@ -46,7 +44,7 @@ namespace Scripts
                     {
                         //Destroy the RigidBody
                         Destroy(go.GetComponent<Rigidbody>());
-                        _hasRigidBody = true;
+                        //_hasRigidBody = true;
                     }
 
                     Vector3 rotationLeft = new Vector3() ;
@@ -85,7 +83,7 @@ namespace Scripts
                     {
                         //Destroy the RigidBody
                         Destroy(go.GetComponent<Rigidbody>());
-                        _hasRigidBody = true;
+                        //_hasRigidBody = true;
                     }
 
                     Vector3 rotationRight = new Vector3();
@@ -126,7 +124,7 @@ namespace Scripts
                     {
                         //Destroy the RigidBody
                         Destroy(go.GetComponent<Rigidbody>());
-                        _hasRigidBody = true;
+                        //_hasRigidBody = true;
                     }
 
                     Vector3 rotationRight = new Vector3();
@@ -166,7 +164,7 @@ namespace Scripts
                     {
                         //Destroy the RigidBody
                         Destroy(go.GetComponent<Rigidbody>());
-                        _hasRigidBody = true;
+                        //_hasRigidBody = true;
                     }
 
                     Vector3 rotationLeft = new Vector3() ;
