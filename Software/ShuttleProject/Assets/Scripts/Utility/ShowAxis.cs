@@ -63,12 +63,15 @@ public class ShowAxis
             
             //min is minimum bounds - seeable length
             var min = _bounds.GetMinBounds().x - 0.4f;
+
+            //store pos
+            var pos = _obj.transform.position;
             
             //set start of x-Axis line
-            var start = new Vector3(max, _obj.transform.position.y, _obj.transform.position.z);
+            var start = new Vector3(max, pos.y, pos.z);
             
             //set end of x-Axis line
-            var end = new Vector3(min, _obj.transform.position.y, _obj.transform.position.z);
+            var end = new Vector3(min, pos.y, pos.z);
             
             //Draw line
             DrawLine(_xAxis, start, end, Color.red);
@@ -108,11 +111,14 @@ public class ShowAxis
             //min is minimum bounds - seeable length
             var min = _bounds.GetMinBounds().y - 0.4f;
             
+            //store pos
+            var pos = _obj.transform.position;
+
             //set start of y-Axis line
-            var start = new Vector3(_obj.transform.position.x, max, _obj.transform.position.z);
+            var start = new Vector3(pos.x, max, pos.z);
             
             //set end of y-Axis line
-            var end = new Vector3(_obj.transform.position.x, min, _obj.transform.position.z);
+            var end = new Vector3(pos.x, min, pos.z);
             
             //Draw line
             DrawLine(_yAxis, start, end, Color.green);
@@ -152,11 +158,14 @@ public class ShowAxis
             //min is minimum bounds - seeable length
             var min = _bounds.GetMinBounds().z - 0.4f;
             
+            //store pos
+            var pos = _obj.transform.position;
+            
             //set start of z-Axis line
-            var start = new Vector3(_obj.transform.position.x, _obj.transform.position.y, max);
+            var start = new Vector3(pos.x, pos.y, max);
             
             //set end of z-Axis line
-            var end = new Vector3(_obj.transform.position.x, _obj.transform.position.y, min);
+            var end = new Vector3(pos.x, pos.y, min);
             
             //Draw line
             DrawLine(_zAxis, start, end, Color.blue);
@@ -182,8 +191,7 @@ public class ShowAxis
     /// <param name="start">Start of Axis</param>
     /// <param name="end">End of Axis</param>
     /// <param name="color">Color of Axis</param>
-    /// <param name="duration">Duration of Axis</param>
-    private static void DrawLine(GameObject axis, Vector3 start, Vector3 end, Color color, float duration = 0.2f)
+    private static void DrawLine(GameObject axis, Vector3 start, Vector3 end, Color color)
     {
         //set position of Axis
         axis.transform.position = start;
