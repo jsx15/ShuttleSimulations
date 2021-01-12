@@ -30,7 +30,7 @@ public class HandMovement
     private Vector3 _goDirectionOld;
     
     /// <summary>
-    /// Constructor for initializing parameters and adding the IKManager script to each finger of the hand object
+    ///     Constructor for initializing parameters and adding the IKManager script to each finger of the hand object
     /// </summary>
     /// <param name="go">GameObject which logically should be a hand</param>
     public HandMovement(GameObject go)
@@ -54,7 +54,7 @@ public class HandMovement
     }
 
     /// <summary>
-    /// Handle hand rotation
+    ///     Handle hand rotation
     /// </summary>
     public void HandleRotateHand()
     {
@@ -78,8 +78,8 @@ public class HandMovement
 
     
     /// <summary>
-    /// casts a Ray from Object in predetermined direction.
-    /// colliders from originating object will be disabled in order to let the rays not hit the objects own collider
+    ///     casts a Ray from Object in predetermined direction.
+    ///     colliders from originating object will be disabled in order to let the rays not hit the objects own collider
     /// </summary>
     public void CastRayFromObject()
     {

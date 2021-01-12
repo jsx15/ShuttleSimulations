@@ -105,7 +105,7 @@ namespace Movement
         }
         
         /// <summary>
-        /// Calculates the Slope for movement
+        ///     Calculates the Slope for movement
         /// </summary>
         /// <param name="bone"></param>
         /// <returns>returns calculated slope</returns>
@@ -123,7 +123,7 @@ namespace Movement
         }
         
         /// <summary>
-        /// Determines the target of the fingertip via Raycast. If the Raycast returns null the target is defaulted to the transform of the hands parent object
+        ///     Determines the target of the fingertip via Raycast. If the Raycast returns null the target is defaulted to the transform of the hands parent object
         /// </summary>
         /// <param name="transformTarget">transform of the object from which the Raycast will originate</param>
         /// <returns></returns>
