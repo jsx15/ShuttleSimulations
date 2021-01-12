@@ -109,7 +109,7 @@ public class HandMovement
                             // ensure that the object is facing towards the parent object
                             _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoMouse.normal);
                             // restore previous rotation. needed when the object was manually rotated beforehand.
-                            _go.transform.Rotate(Vector3.Angle(_goDirectionOld,_go.transform.up), 0, 0);
+                            _go.transform.Rotate(Vector3.Angle(_go.transform.up,_goDirectionOld), 0, 0);
                         }
                     }
                     // needed to ensure that the object cant leave the dimensions of the parent if the mouse is not on the parent 
@@ -117,7 +117,7 @@ public class HandMovement
                     {
                         _go.transform.position = hitInfoHand.point  + hitInfoHand.normal * 0.02f;
                         _go.transform.rotation = Quaternion.FromToRotation(Vector3.left, hitInfoHand.normal);
-                        _go.transform.Rotate(Vector3.Angle(_goDirectionOld,_go.transform.up), 0, 0);
+                        _go.transform.Rotate(Vector3.Angle(_go.transform.up,_goDirectionOld), 0, 0);
                     }
                 }
             }
