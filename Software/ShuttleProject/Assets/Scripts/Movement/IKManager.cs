@@ -99,7 +99,7 @@ namespace Movement
         }
         
         /// <summary>
-        /// Calculates the Slope for movement
+        ///     Calculates the Slope for movement
         /// </summary>
         /// <param name="bone"></param>
         /// <returns>returns calculated slope</returns>
@@ -108,19 +108,28 @@ namespace Movement
             float deltaTheta = 0.1f;
             _target = GetTarget(_tip.transform);
 
-            float distance1 = Vector3.Distance(_tip.transform.position , _target);
+            float distance1 = Vector3.Distance(GetPositionOfBone(_tip), _target);
             bone.transform.Rotate(Vector3.forward * deltaTheta);
 
-            float distance2 = Vector3.Distance(_tip.transform.position, _target);
+            float distance2 = Vector3.Distance(GetPositionOfBone(_tip), _target);
             bone.transform.Rotate(Vector3.forward * -deltaTheta);
             return (distance2 - distance1) / deltaTheta;
         }
-        
         /// <summary>
-        /// Determines the target of the fingertip via Raycast. If the Raycast returns null the target is defaulted to the transform of the hands parent object
+        ///     Returns position of the provided UnityBone
+        /// </summary>
+        /// <param name="bone">UnityBone</param>
+        /// <returns>returns Position of parameter bone</returns>
+        private Vector3 GetPositionOfBone(UnityBone bone)
+        {
+            return bone.transform.position;
+        }
+
+        /// <summary>
+        ///     Determines the target of the fingertip via Raycast. If the Raycast returns null the target is defaulted to the transform of the hands parent object
         /// </summary>
         /// <param name="transformTarget">transform of the object from which the Raycast will originate</param>
-        /// <returns></returns>
+        /// <returns>returns Position of the calculated Target </returns>
         private Vector3 GetTarget(Transform transformTarget)
         {
             _rate = 500.0f;
