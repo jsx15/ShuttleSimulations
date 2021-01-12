@@ -559,6 +559,7 @@ namespace Movement
             testAvatarBehavior.RunInstruction(queueController.GETQueue());
             QueueStart?.Invoke();
             WalkTargetManager.getInstance().MinWalkTargets();
+            selectObject.ResetColor();
             
         }
 
