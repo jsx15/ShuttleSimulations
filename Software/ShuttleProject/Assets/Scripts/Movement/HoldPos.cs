@@ -46,7 +46,7 @@ public class HoldPos : MonoBehaviour
         _go = _camera.GetComponent<SelectObject>().GetObject();
         
         // check if _go is a move target object
-        if (MoveTargetChecker.IsMoveTarget(_go))
+        if (MoveTargetChecker.IsMoveTarget(_go) && (Input.GetKey(KeyCode.M) || Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.Y) || Input.GetKey(KeyCode.Z)))
         {
             var trans = transform;
             // save position of move target in _pos

@@ -556,11 +556,11 @@ namespace Movement
         /// </summary>
         public void Play()
         {
+            selectObject.ResetColor();
             testAvatarBehavior.RunInstruction(queueController.GETQueue());
             QueueStart?.Invoke();
             WalkTargetManager.getInstance().MinWalkTargets();
-            selectObject.ResetColor();
-            
+
         }
 
         /// <summary>
