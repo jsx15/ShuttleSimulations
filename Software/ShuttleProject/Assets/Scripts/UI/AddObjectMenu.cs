@@ -50,7 +50,7 @@ namespace Scripts
                 //Set bounds and position
                 ObjectBounds _bounds = new ObjectBounds(selectObject.GetObject().transform.gameObject);
                 float size = _bounds.GetMaxBounds().x - _bounds.GetMinBounds().x;
-                Vector3 newPos = new Vector3(selectObject.GetObject().transform.position.x - size - 0.15f*size, 0.025f, selectObject.GetObject().transform.position.z);
+                Vector3 newPos = new Vector3(selectObject.GetObject().transform.position.x - 0.8f * size, 0.025f, selectObject.GetObject().transform.position.z);
                 target.transform.position = newPos;
                 
                 //Hide button
